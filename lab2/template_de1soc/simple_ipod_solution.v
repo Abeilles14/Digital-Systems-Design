@@ -224,49 +224,79 @@ wire Sample_Clk_Signal;
 //
 //
 
+parameter clk_22khz_freq = 32'h0471;
 
+logic clk_22khz;
+logic [22:0] read_address;
+logic [31:0] flash_data;
+logic start_read_flag, addr_retrieved_flag, read_addr_flag, read_data_flag, reset_flag, direction_flag;
 
-
-
-
-wire            flash_mem_read;
-wire            flash_mem_waitrequest;
-wire    [22:0]  flash_mem_address;
-wire    [31:0]  flash_mem_readdata;
-wire            flash_mem_readdatavalid;
-wire    [3:0]   flash_mem_byteenable;
-
+wire flash_mem_read;
+wire flash_mem_waitrequest;
+wire [22:0] flash_mem_address;
+wire [31:0] flash_mem_readdata;
+wire flash_mem_readdatavalid;
+wire [3:0] flash_mem_byteenable;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
-assign flash_mem_burstcount = 6'b00_0001;
+assign flash_mem_byteenable = 4'b0;
 
 
-//==================================================================
+//generate 22kHz clk
+freq_divider generate_22khz_clock(.clk(CLK_50M),
+								  .div_clk_count(clk_22khz_freq),
+								  .div_clk_out(clk_22khz));
+
+//sync 22kHz clk to 50MHz clk
+synchronizer sync_clocks(.vcc(1'b1),
+						 .gnd(1'b0),
+						 .async_sig(out_22khz_clk),
+						 .outclk(CLK_50M),
+						 .out_sync_sig(start_read_flag));		//TODO??
+
+//iterate through addresses
+address_counter count_addr (
+	.clk(CLK_50M),				//50 MHz
+	.dir(direction_flag),				//going fwd or bck
+	.read_next_addr(read_addr_flag),		//flag to check if ready to read next addr
+	.current_address(read_address),			//
+	.read_data_flag(addr_retrieved_flag),		//address to read data from
+	.reset(reset_flag));
+
+//read addresses and data from flash
+read_flash(
+	.clk50M(CLK_50M),               //50 MHz
+	.clk22K(clk_22khz),
+	.start_read_flag(start_read_flag),
+	.addr_retrieved_flag(addr_retrieved_flag),
+    .read_data_flag(flash_mem_readdatavalid),
+    .read_addr_flag(flash_mem_read),
+	.flash_data(flash_mem_readdata),
+	.audio_out(audio_out),
+	.reset(reset_flag));
+
+
 
 flash flash_inst (
     .clk_clk                 (CLK_50M),
     .reset_reset_n           (1'b1),
     .flash_mem_write         (1'b0),
     .flash_mem_burstcount    (1'b1),
-    .flash_mem_waitrequest   (flash_mem_waitrequest),	//out
-    .flash_mem_read          (flash_mem_read),
-    .flash_mem_address       (flash_mem_address),
+    .flash_mem_waitrequest   (flash_mem_waitrequest),	//output, not using
+    .flash_mem_read          (flash_mem_read),			//input ready to read address
+    .flash_mem_address       (flash_mem_address),		//input address to read
     .flash_mem_writedata     (),
-    .flash_mem_readdata      (flash_mem_readdata),	//out
-    .flash_mem_readdatavalid (flash_mem_readdatavalid),	//out
-    .flash_mem_byteenable    (flash_mem_byteenable)		//for alternate fsm design
+    .flash_mem_readdata      (flash_mem_readdata),		//output data when readdatavalid
+    .flash_mem_readdatavalid (flash_mem_readdatavalid),	//output ready to read data
+    .flash_mem_byteenable    (flash_mem_byteenable)		//don't care
 );
-            
 
-assign Sample_Clk_Signal = Clock_1KHz;
 
 //Audio Generation Signal
 //Note that the audio needs signed data - so convert 1 bit to 8 bits signed
-wire [7:0] audio_data = {~Sample_Clk_Signal,{7{Sample_Clk_Signal}}}; //generate signed sample audio signal
-
-
+wire [7:0] audio_data = audio_out;
 
 //======================================================================================
 // 
