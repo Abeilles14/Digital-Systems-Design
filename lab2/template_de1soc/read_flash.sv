@@ -1,14 +1,14 @@
 //read addr from flash
-`define WAIT_ADDR_READ 3'b000
-`define READ_ADDR 3'b001
-`define WAIT_DATA_READ 3'b010
-`define READ_DATA_EVEN 3'b011
-`define READ_DATA_ODD 3'b100
-`define WAIT_SYNC 3'b101
-`define IDLE 3'b110
+`define IDLE 5'b00_000
+`define READ_ADDR 5'b00_001
+`define WAIT_DATA_READ 5'b10_000
+`define WAIT_CLK_22K_EVEN 5'b01_000
+`define READ_DATA_EVEN 5'b00_110
+`define WAIT_CLK_22K_ODD 5'b11_000
+`define READ_DATA_ODD 5'b00_010
 
 module read_flash
-    (input logic clk50M,               //50 MHz
+    (input logic clk50M,
     input logic clk22K,
     input logic start_read_flag,
     input logic addr_retrieved_flag,
@@ -18,56 +18,65 @@ module read_flash
     output logic [15:0] audio_out,
     input logic reset);
 
-    logic [2:0] state;
+    logic [4:0] state;
     logic [15:0] data_out;
 
     wire data_output_flag;
+    wire data_even_flag;
+
+    assign read_addr_flag = state[0];       //READ_ADDR, WAIT_DATA_READ
+    assign data_output_flag = state[1];     //trigger posedge for data out
+    assign data_even_flag = state[2];
+    assign data_out = data_even_flag ? flash_data[15:0] : flash_data [31:16];
+
+    initial begin
+        state = `IDLE;
+    end
 
     always_ff @(posedge clk50M or posedge reset)
     begin
         if(reset)
         begin
-            state <= `WAIT_ADDR_READ;
+            state <= `IDLE;
         end
         else
+        begin
             case(state)
                 `IDLE: begin                //wait for start reading flag from synchronizer
                     if (start_read_flag)
                         state <= `READ_ADDR;
                     else
-                    begin
-                        state <= `WAIT_ADDR_READ;
-                        flash_mem_read <= 1'b1;
-                    end
+                        state <= `IDLE;
                 end
-                `READ_ADDR: begin                   //wait until readdatavalid before retrieving data
-                    if(read_data_flag)
-                        state <= `READ_DATA_EVEN;
+                `READ_ADDR: begin
+                    if(addr_retrieved_flag)             //wait until address retrieved
+                        state <= `WAIT_DATA_READ;
                     else
                         state <= `READ_ADDR;
                 end
-                `READ_DATA_EVEN: begin              //read even data
-                    if (read_data_flag)
-                    begin
-                        state <= `READ_DATA_ODD;
-                        data_output_flag = 1'b1;
-                        data_out = flash_data[15:0];
-                    end
+                `WAIT_DATA_READ: begin           //wait for datavalid
+                    if(read_data_flag)
+                        state <= `WAIT_CLK_22K_EVEN;
                     else
+                        state <= `WAIT_DATA_READ;
+                end
+                `WAIT_CLK_22K_EVEN: begin                //wait until clk 22KHz posedge
+                    if(clk22K)
                         state <= `READ_DATA_EVEN;
-                end
-                `READ_DATA_ODD: begin               //read odd data
-                    if (read_data_flag)
-                    begin
-                        state <= `IDLE;
-                        data_output_flag = 1'b1;
-                        data_out = flash_data[31:16];
-                    end
                     else
-                        state <= `READ_DATA_ODD;
+                        state <= `WAIT_CLK_22K_EVEN; 
                 end
-                `OUTPUT_DATA: begin              //write even and odd data to audio
-                    data_output_flag <= 1'b1;
+                `READ_DATA_EVEN: begin              //read even data, send to audio
+                    state <= `WAIT_CLK_22K_ODD;
+                end
+                `WAIT_CLK_22K_ODD: begin                //wait until clk 22KHz posedge
+                    if(clk22K)
+                        state <= `READ_DATA_ODD;
+                    else
+                        state <= `WAIT_CLK_22K_ODD; 
+                end
+                `READ_DATA_ODD: begin               //read odd data, send to audio
+                    state <= `IDLE;
                 end
                 default: begin
                     state <= `IDLE;
@@ -76,7 +85,7 @@ module read_flash
         end
     end
 
-    always_ff @(posedge data_output_flag)
+    always_ff @(posedge data_output_flag)       //output data when flag set on READ DATA EVEN and ODD
     begin
         audio_out = data_out;
     end
