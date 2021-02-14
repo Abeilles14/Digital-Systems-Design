@@ -3,14 +3,14 @@
 `define DOWN 1'b0
 
 //start and end addresses
-`define START 32'h00000
-`define END 32'h7FFFF
+`define START 23'h00000
+`define END 23'h7FFFF
 
 module address_counter
 	(input logic clk,				//50 MHz
 	input logic dir,				//going fwd or bck
 	input logic read_addr_flag,		//flag to check if ready to read next addr
-	output logic [31:0] current_address,		//address to read data from
+	output logic [22:0] current_address,		//address to read data from
 	output logic addr_retrieved_flag,	//address has been read
 	input logic reset);
 
@@ -31,11 +31,12 @@ module address_counter
 					if (current_address == `END)		//if at last address, go to first
 						current_address <= `START;
 					else
-						current_address <= current_address + 32'h01;		//incr addr by 1
+						current_address <= current_address + 23'h01;		//incr addr by 1
 						addr_retrieved_flag <= 1'b1;
 				end
 				else
 					addr_retrieved_flag <= 1'b0;
+					current_address <= current_address;
 			end
 			`DOWN: begin
 				if (read_addr_flag)
@@ -43,11 +44,12 @@ module address_counter
 					if (current_address == `START)		//if at first address, go to last
 						current_address <= `END;
 					else
-						current_address <= current_address - 32'h01;		//decr addr by 1
+						current_address <= current_address - 23'h01;		//decr addr by 1
 						addr_retrieved_flag <= 1'b1;
 				end
 				else
 				addr_retrieved_flag = 1'b0;
+				current_address <= current_address;
 			end
 			default: begin
 				current_address <= `START;

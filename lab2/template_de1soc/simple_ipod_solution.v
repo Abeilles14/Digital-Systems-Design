@@ -227,7 +227,6 @@ wire Sample_Clk_Signal;
 parameter clk_22khz_freq = 32'h0471;
 
 logic clk_22khz;
-logic [22:0] read_address;
 logic [31:0] flash_data;
 logic [15:0] audio_out;
 logic start_read_flag, addr_retrieved_flag, reset_flag, direction_flag;
@@ -238,11 +237,16 @@ wire [22:0] flash_mem_address;
 wire [31:0] flash_mem_readdata;
 wire flash_mem_readdatavalid;
 wire [3:0] flash_mem_byteenable;
+wire [31:0] flash_mem_writedata;
+wire flash_mem_write;
 
 //FLASH READ only
-assign flash_mem_byteenable = 4'b0;
+assign flash_mem_write = 1'b0;
+assign flash_mem_writedata = 32'b0;
+assign flash_mem_byteenable = 6'b000001;
+
 assign reset_flag = 1'b0;			//TEMP
-assign direction_flag = 1'b1;	//TEMMP
+assign direction_flag = 1'b1;	//TEMP
 
 
 //generate 22kHz clk
@@ -258,21 +262,39 @@ synchronizer sync_clocks(.vcc(1'b1),
 						 .outclk(CLK_50M),
 						 .out_sync_sig(start_read_flag));
 
+// async_trap_and_reset_gen_1_pulse 
+// sync_clocks
+// (
+//  .async_sig(clk_22khz), 
+//  .outclk(CLK_50M), 
+//  .out_sync_sig(start_read_flag), 
+//  .auto_reset(1'b1), 
+//  .reset(1'b1)
+//  );
+
+// doublesync 
+// sync_clocks
+// (.indata(start),
+// .outdata(CLK_50M),
+// .clk(clk_22khz),
+// .reset(1'b1));
+
+
 //iterate through addresses
 address_counter count_addr (
 	.clk(CLK_50M),				//50 MHz
 	.dir(direction_flag),				//going fwd or bck
 	.read_addr_flag(flash_mem_read),		//flag to check if ready to read next addr
-	.current_address(read_address),
+	.current_address(flash_mem_address),
 	.addr_retrieved_flag(addr_retrieved_flag),		//address to read data from
 	.reset(reset_flag));
 
 //read addresses and data from flash
-read_flash(
-	.clk50M(CLK_50M),               //50 MHz
+read_flash read_FLASH(
+	.clk50M(CLK_50M), 
 	.clk22K(clk_22khz),
 	.start_read_flag(start_read_flag),
-	.addr_retrieved_flag(addr_retrieved_flag),
+	.addr_retrieved_flag(addr_retrieved_flag),	//address retrieved
     .read_data_flag(flash_mem_readdatavalid),
     .read_addr_flag(flash_mem_read),
 	.flash_data(flash_mem_readdata),

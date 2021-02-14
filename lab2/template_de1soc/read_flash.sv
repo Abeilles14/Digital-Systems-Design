@@ -24,7 +24,7 @@ module read_flash
     wire data_output_flag;
     wire data_even_flag;
 
-    assign read_addr_flag = state[0];       //READ_ADDR, WAIT_DATA_READ
+    assign read_addr_flag = (state[0] && !addr_retrieved_flag);   //if READ_ADDR and addr NOT retrieved yet, get addr
     assign data_output_flag = state[1];     //trigger posedge for data out
     assign data_even_flag = state[2];
     assign data_out = data_even_flag ? flash_data[15:0] : flash_data [31:16];
