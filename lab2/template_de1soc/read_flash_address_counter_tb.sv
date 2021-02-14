@@ -1,4 +1,4 @@
-module simple_ipod_solution_tb();
+module read_flash_address_counter_tb();
 	//read_falsh
 	//module signals
 	logic clk50M;               //50 MHz

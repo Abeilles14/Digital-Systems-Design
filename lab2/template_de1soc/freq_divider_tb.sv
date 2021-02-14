@@ -1,11 +1,11 @@
 //freq divider tb
-module clock_divider_tb ();
+module freq_divider_tb ();
 	logic inclk;
 	logic outclk;
 	logic [31:0] div_clk_count;
 	logic reset;
 
-	clock_divider DUT(
+	freq_divider DUT(
 		.inclk(inclk),
 		.div_clk_count(div_clk_count),
 		.outclk(outclk),
@@ -28,7 +28,8 @@ module clock_divider_tb ();
 	begin
 		reset = 1'b1;
 
-		div_clk_count = 32'hBAB9;		//Do (523Hz)
+		div_clk_count = 32'h0471;	//high at 11000ps
+		//32'hBAB9 //523Hz
 		#5
 		$display("Output is %d, expected %d", outclk, 0);		//ps delay count for 523Hz
 
