@@ -3,6 +3,7 @@ module simple_ipod_solution(
 
     //////////// CLOCK //////////
     CLOCK_50,
+    TD_CLK27,
 
     //////////// LED //////////
     LEDR,
@@ -63,6 +64,7 @@ module simple_ipod_solution(
 
 //////////// CLOCK //////////
 input                       CLOCK_50;
+input 						TD_CLK27;
 
 //////////// LED //////////
 output           [9:0]      LEDR;
@@ -224,12 +226,15 @@ wire Sample_Clk_Signal;
 //
 //
 
+logic CLK_27M;
+assign CLK_27M = TD_CLK27;
+
 parameter clk_22khz_freq = 32'h0471;
 
-logic clk_22khz;
+logic clk_22khz, clk_22khz_sync;
 logic [31:0] flash_data;
-logic [15:0] audio_out;
-logic start_read_flag, addr_retrieved_flag, reset_flag, direction_flag;
+logic [16:0] audio_out;
+logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
 
 wire flash_mem_read;
 wire flash_mem_waitrequest;
@@ -247,12 +252,20 @@ assign flash_mem_byteenable = 6'b000001;
 
 assign reset_flag = 1'b0;			//TEMP
 assign direction_flag = 1'b1;	//TEMP
+assign read_addr_start = 1'b1;	//TEAMP
 
+wire [31:0] divisor;
+
+divider divider_with_control(.speed_up(speed_up_event),
+							 .speed_down(speed_down_event), 
+							 .reset(speed_reset_event),
+							 .divider(divisor), 
+							 .clock(CLK_50M));
 
 //generate 22kHz clk
 freq_divider generate_22khz_clock(.inclk(CLK_50M),
 								  .outclk(clk_22khz),
-								  .div_clk_count(clk_22khz_freq),
+								  .div_clk_count(divisor),
 								  .reset(1'b1));
 
 //sync 22kHz clk to 50MHz clk
@@ -260,46 +273,40 @@ synchronizer sync_clocks(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(clk_22khz),
 						 .outclk(CLK_50M),
+						 .out_sync_sig(clk_22khz_sync));
+
+synchronizer sync_states(.vcc(1'b1),
+						 .gnd(1'b0),
+						 .async_sig(addr_ready_flag),
+						 .outclk(CLK_50M),
 						 .out_sync_sig(start_read_flag));
 
-// async_trap_and_reset_gen_1_pulse 
-// sync_clocks
-// (
-//  .async_sig(clk_22khz), 
-//  .outclk(CLK_50M), 
-//  .out_sync_sig(start_read_flag), 
-//  .auto_reset(1'b1), 
-//  .reset(1'b1)
-//  );
-
-// doublesync 
-// sync_clocks
-// (.indata(start),
-// .outdata(CLK_50M),
-// .clk(clk_22khz),
-// .reset(1'b1));
-
+// synchronizer sync_keyboard(.vcc(1'b1),
+// 						 .gnd(1'b0),
+// 						 .async_sig(kbd_data_ready),
+// 						 .outclk(clk_22khz_sync),
+// 						 .out_sync_sig(read_keyboard_flag));
 
 //iterate through addresses
 address_counter count_addr (
-	.clk(CLK_50M),				//50 MHz
+	.clk(clk_22khz_sync),				//50 MHz
 	.dir(direction_flag),				//going fwd or bck
-	.read_addr_flag(flash_mem_read),		//flag to check if ready to read next addr
+	.read_addr_start(read_addr_start),	
+	.addr_ready_flag(addr_ready_flag),
 	.current_address(flash_mem_address),
-	.addr_retrieved_flag(addr_retrieved_flag),		//address to read data from
+	.flash_data(flash_data),
+	.audio_out(audio_out),
 	.reset(reset_flag));
 
 //read addresses and data from flash
 read_flash read_FLASH(
-	.clk50M(CLK_50M), 
-	.clk22K(clk_22khz),
+	.clk50M(CLK_50M),
 	.start_read_flag(start_read_flag),
-	.addr_retrieved_flag(addr_retrieved_flag),	//address retrieved
-    .read_data_flag(flash_mem_readdatavalid),
+	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
     .read_addr_flag(flash_mem_read),
-	.flash_data(flash_mem_readdata),
-	.audio_out(audio_out),
-	.reset(reset_flag));
+    .wait_request(flash_mem_waitrequest),
+	.flash_data_in(flash_mem_readdata),
+	.flash_data_out(flash_data));
 
 flash flash_inst (
     .clk_clk                 (CLK_50M),
@@ -318,7 +325,8 @@ flash flash_inst (
 
 //Audio Generation Signal
 //Note that the audio needs signed data - so convert 1 bit to 8 bits signed
-wire [7:0] audio_data = audio_out[15:8];
+assign Sample_Clk_Signal = Clock_1KHz;
+wire [7:0] audio_data = audio_out[15:0];
 
 //======================================================================================
 // 
@@ -488,8 +496,8 @@ LCD_Scope_Encapsulated_pacoblaze_wrapper LCD_LED_scope(
                           .scope_channelB(scope_channelB), //don't touch
                           
                   //scope information generation
-                          .ScopeInfoA({character_1,character_K,character_H,character_lowercase_z}),
-                          .ScopeInfoB({character_S,character_W,character_1,character_space}),
+                          .ScopeInfoA(audio_data),
+                          .ScopeInfoB(flash_mem_address),
                           
                  //enable_scope is used to freeze the scope just before capturing 
                  //the waveform for display (otherwise the sampling would be unreliable)
