@@ -250,10 +250,6 @@ assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
-//assign reset_flag = 1'b0;			//TEMP
-//assign direction_flag = 1'b1;	//TEMP
-//assign read_addr_start = 1'b1;	//TEAMP
-
 wire [31:0] divisor;
 
 divider divider_with_control(.speed_up(speed_up_event),
@@ -309,11 +305,11 @@ read_flash read_FLASH(
 	.flash_data_out(flash_data));
 
 keyboard_control keyboard_input(
-	.clk(clk_22khz_sync),
+	.clk22K(clk_22khz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
 	.read_addr_start(read_addr_start),
-	.direction(direction_flag),
+	.dir(direction_flag),
 	.reset(reset_flag));
 
 flash flash_inst (

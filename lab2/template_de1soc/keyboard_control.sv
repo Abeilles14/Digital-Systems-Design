@@ -1,68 +1,104 @@
-`define B 8'h42
-`define D 8'h44
-`define E 8'h45
-`define F 8'h46
-`define R 8'h52
+`define F_E 3'b011		//play forward
+`define F_D	3'b010		//pause going forward
+
+`define B_E 3'b001		//play backward
+`define B_D 3'b000		//pause going backward
+
+`define F_R	3'b111		//reset going forward
+`define B_R	3'b101				//reset going backward
 
 //TAKES THESE THE ASCI CODE AS INPUT, AND OUTPUTS STOP/START/RESTART TO THE DATA OUTPUT
 module keyboard_control
-	(input logic clk,
+	(input logic clk22K,
 	 input logic read_keyboard_flag,
 	 input logic [7:0] character,
 	 output logic read_addr_start,
-	 output logic direction,
+	 output logic dir,
 	 output logic reset);
 
-	logic reset_async; 
-	
+	logic start, restart, direction;
+	logic [2:0] state;
+
+	parameter character_B =8'h42;
+	parameter character_D =8'h44;
+	parameter character_E =8'h45;
+	parameter character_F =8'h46;
+	parameter character_R =8'h52;
+
+	assign start = state[0];
+	assign direction = state[1];
+	assign restart = state[2];
+
 	initial begin
-        reset = 1'b0;
-		read_addr_start = 1'b0;
-		direction = 1'b1;
+        state = `F_D;		//initially wait for keyboard input E to go forward
     end
 
 	always_ff @(posedge read_keyboard_flag)
 	begin
-		case(character)
-			`B: begin
-				direction <= 1'b0;
-				{reset_async, read_addr_start} <= {reset_async, read_addr_start};
+		case(state)
+			`F_E: begin
+				case(character)
+					character_D:
+						state <= `F_D;
+					character_B:
+						state <= `B_E;
+					character_R:
+						state <= `F_R;
+					default:
+						state <= `F_E;
+				endcase
 			end
-			`D: begin
-				read_addr_start <= 1'b10;
-				{reset_async, direction} <= {reset_async, direction};
+			`F_D: begin
+				case(character)
+					character_E:
+						state <= `F_E;
+					character_B:
+						state <= `B_D;
+					character_R:
+						state <= `F_R;
+					default:
+						state <= `F_D;
+				endcase
 			end
-			`E: begin
-				read_addr_start <= 1'b1;
-				{reset_async, direction} <= {reset_async, direction};
+			`B_E: begin
+				case(character)
+					character_D:
+						state <= `B_D;
+					character_F:
+						state <= `F_E;
+					character_R:
+						state <= `B_R;
+					default:
+						state <= `B_E;
+				endcase
 			end
-			`F: begin
-				direction <= 1'b1;
-				{reset_async, read_addr_start} <= {reset_async, read_addr_start};
+			`B_D: begin
+				case(character)
+					character_D:
+						state <= `F_D;
+					character_B:
+						state <= `B_E;
+					character_R:
+						state <= `F_R;
+					default:
+						state <= `B_D;
+				endcase
 			end
-			`R: begin
-				reset_async <= !reset_async;
-				{direction, read_addr_start} <= {direction, read_addr_start};
+			`F_R: begin
+				state <= `F_R;
 			end	
+			`B_R: begin
+				state <= `B_E;
+			end	
+			default:
+				state <= `F_D;
 		endcase
 	end
 	
-
-	wire restart_1, restart_2	;
-	
-	//PULSE FOR RESTART
-	synchronizer sync_restart_sig(
-		.async_sig(reset_async),
-		.outclk(clk),
-		.out_sync_sig(restart_1));	
-	synchronizer sync_restart_sig1(
-		.async_sig(!reset_async),
-		.outclk(clk),
-		.out_sync_sig(restart_2));
-	
-	always @(clk)
+	always_ff @(posedge clk22K)
 	begin
-		reset = restart_1 | restart_2;	
+		read_addr_start <= start;
+		dir <= direction;
+		reset <= restart;
 	end
-
 endmodule
