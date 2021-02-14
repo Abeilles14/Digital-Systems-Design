@@ -229,8 +229,6 @@ wire Sample_Clk_Signal;
 logic CLK_27M;
 assign CLK_27M = TD_CLK27;
 
-parameter clk_22khz_freq = 32'h0471;
-
 logic clk_22khz, clk_22khz_sync;
 logic [31:0] flash_data;
 logic [16:0] audio_out;
@@ -250,42 +248,43 @@ assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
-wire [31:0] divisor;
+parameter clk_22khz_freq = 32'h0471;
 
-divider divider_with_control(.speed_up(speed_up_event),
-							 .speed_down(speed_down_event), 
-							 .reset(speed_reset_event),
-							 .divider(divisor), 
-							 .clock(CLK_50M));
+wire [31:0] div_clk_count;
+
+speed_controller div_control(.clk50M(CLK_50M),			//controls sampling speed
+							 .up(speed_up_event),
+							 .down(speed_down_event),
+							 .div(div_clk_count), 		//outputs new clk division
+							 .rst(speed_reset_event));
 
 //generate 22kHz clk
 freq_divider generate_22khz_clock(.inclk(CLK_50M),
 								  .outclk(clk_22khz),
-								  .div_clk_count(divisor),
+								  .div_clk_count(32'h0471),
 								  .reset(1'b1));
 
-//sync 22kHz clk to 50MHz clk
 synchronizer sync_clocks(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(clk_22khz),
 						 .outclk(CLK_50M),
-						 .out_sync_sig(clk_22khz_sync));
+						 .out_sync_sig(clk_22khz_sync));	//syncs 22kHz clk to 50MHz clk
 
 synchronizer sync_states(.vcc(1'b1),
 						 .gnd(1'b0),
-						 .async_sig(addr_ready_flag),
+						 .async_sig(addr_ready_flag),		//done incrementing address
 						 .outclk(CLK_50M),
-						 .out_sync_sig(start_read_flag));
+						 .out_sync_sig(start_read_flag));	//ready to begin reading next address & start FSM
 
 synchronizer sync_keyboard(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(kbd_data_ready),
 						 .outclk(clk_22khz_sync),
-						 .out_sync_sig(read_keyboard_flag));
+						 .out_sync_sig(read_keyboard_flag));	//ready to listen to keyboard input
 
 //iterate through addresses
 address_counter count_addr (
-	.clk(clk_22khz_sync),				//50 MHz
+	.clk22K(clk_22khz_sync),				//50 MHz
 	.dir(direction_flag),				//going fwd or bck
 	.read_addr_start(read_addr_start),	
 	.addr_ready_flag(addr_ready_flag),
@@ -300,7 +299,6 @@ read_flash read_FLASH(
 	.start_read_flag(start_read_flag),
 	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
     .read_addr_flag(flash_mem_read),
-    .wait_request(flash_mem_waitrequest),
 	.flash_data_in(flash_mem_readdata),
 	.flash_data_out(flash_data));
 

@@ -5,9 +5,8 @@
 `define B_D 3'b000		//pause going backward
 
 `define F_R	3'b111		//reset going forward
-`define B_R	3'b101				//reset going backward
+`define B_R	3'b101		//reset going backward
 
-//TAKES THESE THE ASCI CODE AS INPUT, AND OUTPUTS STOP/START/RESTART TO THE DATA OUTPUT
 module keyboard_control
 	(input logic clk22K,
 	 input logic read_keyboard_flag,
@@ -74,18 +73,18 @@ module keyboard_control
 			end
 			`B_D: begin
 				case(character)
-					character_D:
-						state <= `F_D;
-					character_B:
+					character_E:
 						state <= `B_E;
+					character_F:
+						state <= `F_D;
 					character_R:
-						state <= `F_R;
+						state <= `B_R;
 					default:
 						state <= `B_D;
 				endcase
 			end
 			`F_R: begin
-				state <= `F_R;
+				state <= `F_E;
 			end	
 			`B_R: begin
 				state <= `B_E;

@@ -7,7 +7,7 @@
 `define END 23'h7FFFF
 
 module address_counter
-	(input logic clk,				//50 MHz
+	(input logic clk22K,				//50 MHz
 	input logic dir,
 	input logic read_addr_start,		//keyboard pause/start
 	output logic addr_ready_flag,		//flag to check if ready to read next addr
@@ -24,7 +24,7 @@ module address_counter
 		addr_ready_flag = 1'b0;
 	end
 
-	always_ff @(posedge clk or posedge reset)
+	always_ff @(posedge clk22K or posedge reset)
 	begin
 		if(reset)	//start from address 0
 		begin
