@@ -250,9 +250,9 @@ assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
-assign reset_flag = 1'b0;			//TEMP
-assign direction_flag = 1'b1;	//TEMP
-assign read_addr_start = 1'b1;	//TEAMP
+//assign reset_flag = 1'b0;			//TEMP
+//assign direction_flag = 1'b1;	//TEMP
+//assign read_addr_start = 1'b1;	//TEAMP
 
 wire [31:0] divisor;
 
@@ -281,11 +281,11 @@ synchronizer sync_states(.vcc(1'b1),
 						 .outclk(CLK_50M),
 						 .out_sync_sig(start_read_flag));
 
-// synchronizer sync_keyboard(.vcc(1'b1),
-// 						 .gnd(1'b0),
-// 						 .async_sig(kbd_data_ready),
-// 						 .outclk(clk_22khz_sync),
-// 						 .out_sync_sig(read_keyboard_flag));
+synchronizer sync_keyboard(.vcc(1'b1),
+						 .gnd(1'b0),
+						 .async_sig(kbd_data_ready),
+						 .outclk(clk_22khz_sync),
+						 .out_sync_sig(read_keyboard_flag));
 
 //iterate through addresses
 address_counter count_addr (
@@ -308,6 +308,14 @@ read_flash read_FLASH(
 	.flash_data_in(flash_mem_readdata),
 	.flash_data_out(flash_data));
 
+keyboard_control keyboard_input(
+	.clk(clk_22khz_sync),
+	.read_keyboard_flag(read_keyboard_flag),
+	.character(kbd_received_ascii_code),
+	.read_addr_start(read_addr_start),
+	.direction(direction_flag),
+	.reset(reset_flag));
+
 flash flash_inst (
     .clk_clk                 (CLK_50M),
     .reset_reset_n           (1'b1),
@@ -320,7 +328,7 @@ flash flash_inst (
     .flash_mem_readdata      (flash_mem_readdata),		//output data when readdatavalid
     .flash_mem_readdatavalid (flash_mem_readdatavalid),	//output ready to read data
     .flash_mem_byteenable    (flash_mem_byteenable)		//don't care
-);
+	);
 
 
 //Audio Generation Signal
