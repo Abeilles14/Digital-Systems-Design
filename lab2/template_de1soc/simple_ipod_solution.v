@@ -263,14 +263,14 @@ speed_controller div_control_22khz(.clk50M(CLK_50M),
 									.rst(speed_reset_event));
 
 //generate 22kHz clk
-freq_divider generate_22khz_clock(.inclk(CLK_27M),		//use CLK_50M
+freq_divider generate_22khz_clock(.inclk(CLK_27M),		//can use CLK_50M
 								  .outclk(clk_22khz),
-								  .div_clk_count(div_clk_22khz),	//22khz init for 27M 332'h0265
+								  .div_clk_count(div_clk_22khz),	//22khz init for 27M 32'h0265
 								  .reset(1'b1));
 //generate 44kHz clk
-freq_divider generate_44khz_clock(.inclk(CLK_27M),		//use CLK_50M
+freq_divider generate_44khz_clock(.inclk(CLK_27M),		//can use CLK_50M
 								  .outclk(clk_44khz),
-								  .div_clk_count(div_clk_44khz),	//22khz base 32'h0471
+								  .div_clk_count(div_clk_44khz),	//44khz base 32'h0132
 								  .reset(1'b1));
 
 //sync address incremented flag and addr ready to read flag
@@ -290,7 +290,7 @@ synchronizer sync_clocks_44khz(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(clk_44khz),
 						 .outclk(CLK_50M),
-						 .out_sync_sig(clk_44khz_sync));	//syncs 22kHz clk to 50MHz clk
+						 .out_sync_sig(clk_44khz_sync));	//syncs 44kHz clk to 50MHz clk
 
 
 synchronizer sync_keyboard(.vcc(1'b1),
