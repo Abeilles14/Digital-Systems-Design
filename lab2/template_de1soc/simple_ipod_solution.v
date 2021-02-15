@@ -248,24 +248,18 @@ assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
 assign CLK_27M = TD_CLK27;		//TD_CLK27 pin to use a CLK_27M clk
+assign div_clk_44khz = div_clk_22khz << 2;
 
-parameter clk_22khz_freq = 32'h0471;
-parameter clk_44khz_freq = 32'h0996;
+parameter clk_22khz_freq_50M = 32'h0471;
+parameter clk_22khz_freq_27M = 32'h0265;
+parameter clk_44khz_freq_50M = 32'h0238;
+parameter clk_44khz_freq_27M = 32'h0132;
 
 //control sampling speed with initial freq 22khz
 speed_controller div_control_22khz(.clk50M(CLK_50M),
-									.init(clk_22khz_freq),
 									.up(speed_up_event),
 									.down(speed_down_event),
 									.div(div_clk_22khz), 		//outputs new clk division
-									.rst(speed_reset_event));
-
-//control sampling speed with initial freq 44khz
-speed_controller div_control_44khz(.clk50M(CLK_50M),
-									.init(clk_44khz_freq),
-									.up(speed_up_event),
-									.down(speed_down_event),
-									.div(div_clk_44khz), 		//outputs new clk division
 									.rst(speed_reset_event));
 
 //generate 22kHz clk
@@ -303,12 +297,12 @@ synchronizer sync_clocks_44khz(.vcc(1'b1),
 synchronizer sync_keyboard(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(kbd_data_ready),
-						 .outclk(clk_22khz_sync),
+						 .outclk(clk_44khz_sync),
 						 .out_sync_sig(read_keyboard_flag));	//ready to listen to keyboard input
 
 //iterate through addresses
 address_counter count_addr (
-	.clk22K(clk_22khz_sync),				//50 MHz
+	.clk22K(clk_22khz_sync),			//50 MHz
 	.dir(direction_flag),				//going fwd or bck
 	.read_addr_start(read_addr_start),	
 	.addr_ready_flag(addr_ready_flag),
@@ -327,7 +321,7 @@ read_flash read_FLASH(
 	.flash_data_out(flash_data));
 
 keyboard_control keyboard_input(
-	.clk22K(clk_22khz_sync),
+	.clk(clk_44khz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
 	.read_addr_start(read_addr_start),
@@ -690,14 +684,13 @@ begin
     Clock_1Hz <= ~Clock_1Hz;
 end
 
+//seven segment display sampling rate divisor
+assign Seven_Seg_Data[0] = div_clk_44khz[3:0];
+assign Seven_Seg_Data[1] = div_clk_44khz[7:4];
+assign Seven_Seg_Data[2] = div_clk_44khz[11:8];
+assign Seven_Seg_Data[3] = div_clk_44khz[15:12];
+assign Seven_Seg_Data[4] = div_clk_44khz[19:16];
 
-assign Seven_Seg_Data[0] = regd_actual_7seg_output[3:0];
-assign Seven_Seg_Data[1] = regd_actual_7seg_output[7:4];
-assign Seven_Seg_Data[2] = regd_actual_7seg_output[11:8];
-assign Seven_Seg_Data[3] = regd_actual_7seg_output[15:12];
-assign Seven_Seg_Data[4] = regd_actual_7seg_output[19:16];
-assign Seven_Seg_Data[5] = regd_actual_7seg_output[23:20];
-    
 assign actual_7seg_output =  scope_sampling_clock_count;
 
 

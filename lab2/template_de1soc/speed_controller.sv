@@ -1,22 +1,21 @@
 module speed_controller(
 	input logic clk50M,
-	input logic init,
 	input logic up,
 	input logic down,
 	output logic [31:0] div,
 	input logic rst);
 
-	parameter base = 32'h0471;
+	parameter div_clk_22khz = 32'h0471;
 	
 	initial begin
-		div = base;
+		div = div_clk_22khz;
 	end
 	
 	always @(posedge clk50M)
 	begin
 			
 		if(rst)
-			div <= base;
+			div <= div_clk_22khz;
 		else if(up)
 			div <= div - 2;
 		else if(down)

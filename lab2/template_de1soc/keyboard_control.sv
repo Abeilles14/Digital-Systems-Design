@@ -8,7 +8,7 @@
 `define B_R	3'b101		//reset going backward
 
 module keyboard_control
-	(input logic clk22K,
+	(input logic clk,
 	 input logic read_keyboard_flag,
 	 input logic [7:0] character,
 	 output logic read_addr_start,
@@ -94,7 +94,7 @@ module keyboard_control
 		endcase
 	end
 	
-	always_ff @(posedge clk22K)
+	always_ff @(posedge clk)
 	begin
 		read_addr_start <= start;
 		dir <= direction;
