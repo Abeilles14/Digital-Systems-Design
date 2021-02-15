@@ -226,13 +226,12 @@ wire Sample_Clk_Signal;
 //
 //
 
-logic CLK_27M;
-assign CLK_27M = TD_CLK27;
-
-logic clk_22khz, clk_22khz_sync;
+logic clk_22khz, clk_44khz, clk_22khz_sync, clk_44khz_sync;
+logic[31:0] div_clk_22khz, div_clk_44khz;
 logic [31:0] flash_data;
 logic [16:0] audio_out;
 logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
+logic CLK_27M;
 
 wire flash_mem_read;
 wire flash_mem_waitrequest;
@@ -248,33 +247,58 @@ assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
+assign CLK_27M = TD_CLK27;		//TD_CLK27 pin to use a CLK_27M clk
+
 parameter clk_22khz_freq = 32'h0471;
+parameter clk_44khz_freq = 32'h0996;
 
-wire [31:0] div_clk_count;
+//control sampling speed with initial freq 22khz
+speed_controller div_control_22khz(.clk50M(CLK_50M),
+									.init(clk_22khz_freq),
+									.up(speed_up_event),
+									.down(speed_down_event),
+									.div(div_clk_22khz), 		//outputs new clk division
+									.rst(speed_reset_event));
 
-speed_controller div_control(.clk50M(CLK_50M),			//controls sampling speed
-							 .up(speed_up_event),
-							 .down(speed_down_event),
-							 .div(div_clk_count), 		//outputs new clk division
-							 .rst(speed_reset_event));
+//control sampling speed with initial freq 44khz
+speed_controller div_control_44khz(.clk50M(CLK_50M),
+									.init(clk_44khz_freq),
+									.up(speed_up_event),
+									.down(speed_down_event),
+									.div(div_clk_44khz), 		//outputs new clk division
+									.rst(speed_reset_event));
 
 //generate 22kHz clk
-freq_divider generate_22khz_clock(.inclk(CLK_50M),
+freq_divider generate_22khz_clock(.inclk(CLK_50M),		//use CLK_50M
 								  .outclk(clk_22khz),
-								  .div_clk_count(32'h0471),
+								  .div_clk_count(div_clk_22khz),	//22khz base 32'h0471
+								  .reset(1'b1));
+//generate 44kHz clk
+freq_divider generate_44khz_clock(.inclk(CLK_50M),		//use CLK_50M
+								  .outclk(clk_44khz),
+								  .div_clk_count(div_clk_44khz),	//22khz base 32'h0471
 								  .reset(1'b1));
 
-synchronizer sync_clocks(.vcc(1'b1),
-						 .gnd(1'b0),
-						 .async_sig(clk_22khz),
-						 .outclk(CLK_50M),
-						 .out_sync_sig(clk_22khz_sync));	//syncs 22kHz clk to 50MHz clk
-
+//sync address incremented flag and addr ready to read flag
 synchronizer sync_states(.vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(addr_ready_flag),		//done incrementing address
 						 .outclk(CLK_50M),
 						 .out_sync_sig(start_read_flag));	//ready to begin reading next address & start FSM
+
+synchronizer sync_clocks_22khz(.vcc(1'b1),
+						 .gnd(1'b0),
+						 .async_sig(clk_22khz),
+						 .outclk(CLK_50M),
+						 .out_sync_sig(clk_22khz_sync));	//syncs 22kHz clk to 50MHz clk
+
+
+synchronizer sync_clocks_44khz(.vcc(1'b1),
+						 .gnd(1'b0),
+						 .async_sig(clk_44khz),
+						 .outclk(CLK_50M),
+						 .out_sync_sig(clk_44khz_sync));	//syncs 22kHz clk to 50MHz clk
+
 
 synchronizer sync_keyboard(.vcc(1'b1),
 						 .gnd(1'b0),
@@ -310,7 +334,7 @@ keyboard_control keyboard_input(
 	.dir(direction_flag),
 	.reset(reset_flag));
 
-flash flash_inst (
+flash flash_inst(
     .clk_clk                 (CLK_50M),
     .reset_reset_n           (1'b1),
     .flash_mem_write         (1'b0),

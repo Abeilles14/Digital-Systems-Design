@@ -12,7 +12,6 @@ module address_counter
 	input logic read_addr_start,		//keyboard pause/start
 	output logic addr_ready_flag,		//flag to check if ready to read next addr
 	output logic [22:0] current_address,		//address to read data from
-	//output logic addr_retrieved_flag,	//address has been read
 	input logic [31:0] flash_data,
 	output logic [15:0] audio_out,
 	input logic reset);

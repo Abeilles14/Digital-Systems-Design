@@ -1,7 +1,7 @@
 //read addr from flash
-`define IDLE 5'b00_000
-`define READ_ADDR 5'b00_001
-`define READ_DATA 5'b00_011
+`define IDLE 3'b000
+`define READ_ADDR 3'b001
+`define READ_DATA 3'b011
 
 module read_flash
     (input logic clk50M,
@@ -11,7 +11,7 @@ module read_flash
     input logic [31:0] flash_data_in,
     output logic [31:0] flash_data_out);
 
-    logic [4:0] state;
+    logic [2:0] state;
     logic [15:0] data_out;
     logic data_output_flag;
 
