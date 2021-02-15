@@ -5,7 +5,8 @@ module speed_controller(
 	output logic [31:0] div,
 	input logic rst);
 
-	parameter div_clk_22khz = 32'h0265;		//sampling rate for 27M
+	//parameter div_clk_22khz = 32'h0265;		//sampling rate for 27M
+	parameter div_clk_22khz = 32'h0132;			//sampling rate for 44khz 27M
 	
 	initial begin
 		div = div_clk_22khz;

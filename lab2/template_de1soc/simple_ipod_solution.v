@@ -248,7 +248,7 @@ assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
 assign CLK_27M = TD_CLK27;		//TD_CLK27 pin to use a CLK_27M clk
-assign div_clk_44khz = div_clk_22khz << 2;
+//assign div_clk_44khz = div_clk_22khz << 2;
 
 parameter clk_22khz_freq_50M = 32'h0471;
 parameter clk_22khz_freq_27M = 32'h0265;
@@ -259,13 +259,13 @@ parameter clk_44khz_freq_27M = 32'h0132;
 speed_controller div_control_22khz(.clk50M(CLK_50M),
 									.up(speed_up_event),
 									.down(speed_down_event),
-									.div(div_clk_22khz), 		//outputs new clk division
+									.div(div_clk_44khz), 		//outputs new clk division
 									.rst(speed_reset_event));
 
 //generate 22kHz clk
 freq_divider generate_22khz_clock(.inclk(CLK_27M),		//use CLK_50M
 								  .outclk(clk_22khz),
-								  .div_clk_count(div_clk_22khz),	//22khz base 32'h0471
+								  .div_clk_count(div_clk_22khz),	//22khz init for 27M 332'h0265
 								  .reset(1'b1));
 //generate 44kHz clk
 freq_divider generate_44khz_clock(.inclk(CLK_27M),		//use CLK_50M
@@ -301,7 +301,7 @@ synchronizer sync_keyboard(.vcc(1'b1),
 
 //iterate through addresses
 address_counter count_addr (
-	.clk22K(clk_22khz_sync),			//50 MHz
+	.clk22K(clk_44khz_sync),			//50 MHz
 	.dir(direction_flag),				//going fwd or bck
 	.read_addr_start(read_addr_start),	
 	.addr_ready_flag(addr_ready_flag),
