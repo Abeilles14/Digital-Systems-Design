@@ -21,6 +21,7 @@ module address_counter
 	initial begin
 		current_address = `START;
 		addr_ready_flag = 1'b0;
+		data_even_flag = 1'b0;
 	end
 
 	always_ff @(posedge clk22K or posedge reset)

@@ -12,7 +12,6 @@ module read_flash
     output logic [31:0] flash_data_out);
 
     logic [2:0] state;
-    logic [15:0] data_out;
     logic data_output_flag;
 
     assign read_addr_flag = state[0];   //if READ_ADDR get addr
