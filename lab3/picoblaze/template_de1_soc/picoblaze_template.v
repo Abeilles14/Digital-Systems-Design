@@ -6,11 +6,11 @@ picoblaze_template
 #(
 parameter clk_freq_in_hz = 25000000
 ) (
-				output reg[7:0] led,
+				output reg[9:0] led,
+        output reg led_0,
 				input clk,
-				input [7:0] input_data,
-			   output wire [23:0] sseg
-
+				input [31:0] input_data
+        //input interrupt_flag
 			     );
 
 
@@ -101,6 +101,10 @@ pacoblaze3 led_8seg_kcpsm
       end
  end
 
+
+
+ //interrupts
+
  always @ (posedge clk or posedge interrupt_ack)  //FF with clock "clk" and reset "interrupt_ack"
  begin
       if (interrupt_ack) //if we get reset, reset interrupt in order to wait for next clock.
@@ -149,16 +153,6 @@ end
 
         //port 40 hex 
         if (write_strobe & port_id[6])  //clock enable 
-          sseg[7:0] <= out_port;
-			      
-		  //port 20 hex 
-		  if (write_strobe & port_id[5])  //clock enable 
-          sseg[15:8] <= out_port;
-			      
-		  //port 10 hex 			
-        if (write_strobe & port_id[4])  //clock enable 
-          sseg[23:16] <= out_port;
-			      
+          led_0 <= out_port;
   end
-
 endmodule
