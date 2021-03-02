@@ -347,24 +347,12 @@ flash flash_inst(
 assign Sample_Clk_Signal = Clock_1KHz;
 wire [7:0] audio_data = audio_out[15:0];
 
-
-//get audio sample abs value
-
-always_comb begin
-  if (audio_out[15] == 1'b1) begin
-    abs_sample = -audio_out;
-  end
-  else begin
-    abs_sample = audio_out;
-  end
-end
-
 //using picoblaze
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   .led(LED[9:2]),
   .led_0(LED[0]),
   .clk(CLK_50M),
-  .input_data(abs_sample[15:8]),      //pass in the 32 bit flash data audio output
+  .input_data(audio_out[15:8]),      //pass in the 32 bit flash data audio output
   .interrupt(start_read_flag)); //interrupt routine flag
 
 //======================================================================================
