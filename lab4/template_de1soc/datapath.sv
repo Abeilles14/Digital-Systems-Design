@@ -12,9 +12,9 @@ module datapath(
 //initialize s_memory
 init_memory init_s_mem (
     .clk(clk),
-    .address(s_mem_addr),
-    .data(s_mem_data_in),
-    .wren(s_mem_write),
+    .address(s_init_addr),
+    .data(s_init_data_in),
+    .wren(s_init_write),
     .start_flag(init_start_flag),
     .done_flag(init_done_flag),
     .reset(reset));
@@ -22,16 +22,19 @@ init_memory init_s_mem (
 //s_memory swap
 swap_memory swap_s_mem (
     .clk(clk),
-    .address(s_mem_addr),
-    .data_in(s_mem_data_in),
+    .address(s_swap_addr),
+    .data_in(s_swap_data_in),
     .data_out(s_mem_data_out),
-    .wren(s_mem_write),
+    .wren(s_swap_write),
     .secret_key(secret_key),
     .start_flag(swap_start_flag),
     .done_flag(swap_done_flag),
     .reset(reset));
 
 	logic [5:0] state;
+	logic [7:0] s_init_addr, s_init_data_in, s_init_write;
+	logic [7:0] s_swap_addr, s_swap_data_in, s_swap_write;
+
 	logic init_start_flag, swap_start_flag;
 	logic init_done_flag, swap_done_flag;
 
@@ -44,6 +47,9 @@ swap_memory swap_s_mem (
 	assign swap_start_flag = 0;//state[1];
 
 	//need to assign ? for which data will be written to s_mem depending on state!!!!
+	assign s_mem_addr = (state == S_MEM_INIT) ? s_init_addr : s_swap_addr;
+	assign s_mem_data_in = (state == S_MEM_INIT) ? s_init_data_in : s_swap_data_in;
+	assign s_mem_write = (state == S_MEM_INIT) ? s_swap_write : s_swap_write;
 
 	initial begin
 		state = IDLE;	
