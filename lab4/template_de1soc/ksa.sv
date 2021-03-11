@@ -65,14 +65,12 @@ assign reset_n = KEY[3];
 //
 //====================================================================================
 
-logic s_mem_write;
+logic s_mem_write, datapath_start_flag;
 logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
+logic [23:0] secret_key;
 
-init_memory init_s_mem (
-    .clk(clk),
-    .address(s_mem_addr),
-    .data(s_mem_data_in),
-    .wren(s_mem_write));
+//assign secret_key = {14'b0, SW[9:0]};
+assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 s_memory s_mem (
     .address(s_mem_addr),
@@ -80,6 +78,16 @@ s_memory s_mem (
     .data(s_mem_data_in),
     .wren(s_mem_write),
     .q(s_mem_data_out));
+
+datapath controller (
+    .clk(clk),
+    .s_mem_addr(s_mem_addr),
+    .s_mem_data_in(s_mem_data_in),
+    .s_mem_data_out(s_mem_data_out),
+    .s_mem_write(s_mem_write),
+    .secret_key(secret_key),
+    .datapath_start_flag(1'b1),
+    .reset(reset_n));
 
 //=====================================================================================
 //

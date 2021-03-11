@@ -1,59 +1,74 @@
-//start and end addresses
-`define START_ADDR 8'h00
+`define START_ADDR 8'h00		//start and end addresses
 `define END_ADDR 8'hFF
 
 module init_memory(
 	input logic clk,
 	output logic [7:0] address,
 	output logic [7:0] data,
-	output logic wren
+	output logic wren,
+	input logic start_flag,
+	output logic done_flag,
+	input reset
 );
 
-	parameter IDLE = 3'b00_0;
-	parameter START = 3'b01_1;
-	parameter INCREMENT = 3'b10_1;
-	parameter DONE = 3'b11_0;
-
-	logic [2:0] state;
+	logic [3:0] state;
 	logic [7:0] counter;
+
+	parameter IDLE = 4'b00_00;
+	parameter START = 4'b01_01;
+	parameter INCREMENT = 4'b10_01;
+	parameter DONE = 4'b11_10;
 
 	assign wren = state[0];
 	assign address = counter;
-    assign data = counter;  
+    assign data = counter;
+    assign done_flag = state[1]; 
 
 	initial begin
 		state = IDLE;	
-		wren = 1'b0;
 		counter = `START_ADDR;
 	end
 
-	always_ff @(posedge clk)
+	always_ff @(posedge clk, posedge reset)
 	begin
-		case(state)
-			IDLE: begin
-				counter <= counter;
-				state <= START;
-			end
-			START: begin				//write to addr 0
-				counter <= `START_ADDR;
-				state <= INCREMENT;
-			end
-			INCREMENT: begin
-				if (counter == `END_ADDR)
-					state <= DONE;
-				else
-					counter <= counter + 8'h01;		//incr addr by 1
+		if (reset)
+		begin
+			state = IDLE;
+			counter = `START_ADDR;
+		end
+		else
+		begin
+			case(state)
+				IDLE: begin
+					counter <= counter;
+					if (start_flag)
+						state <= START;
+					else
+						state <= IDLE;
+				end
+				START: begin				//write to addr 0
+					counter <= `START_ADDR;
 					state <= INCREMENT;
 				end
-			DONE: begin
-				counter <= counter;
-				state <= DONE;
-			end
-			default: begin
-				counter <= counter;
-				state <= IDLE;
-			end
-		endcase
+				INCREMENT: begin
+					if (counter == `END_ADDR)
+						state <= DONE;
+					else
+						counter <= counter + 8'h01;		//incr addr by 1
+						state <= INCREMENT;
+					end
+				DONE: begin
+					counter <= counter;
+
+					//add start flag/return to IDLE?
+					state <= DONE;
+				end
+				default: begin
+					counter <= counter;
+					state <= IDLE;
+				end
+			endcase
+		end
 	end
 endmodule
 

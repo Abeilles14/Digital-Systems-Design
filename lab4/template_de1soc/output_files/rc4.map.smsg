@@ -1,0 +1,7 @@
+Warning (10273): Verilog HDL warning at swap_memory.sv(67): extended using "x" or "z"
+Warning (10273): Verilog HDL warning at swap_memory.sv(68): extended using "x" or "z"
+Warning (10273): Verilog HDL warning at swap_memory.sv(78): extended using "x" or "z"
+Warning (10273): Verilog HDL warning at swap_memory.sv(79): extended using "x" or "z"
+Warning (10268): Verilog HDL information at swap_memory.sv(71): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at datapath.sv(52): always construct contains both blocking and non-blocking assignments
+Warning (10268): Verilog HDL information at init_memory.sv(32): always construct contains both blocking and non-blocking assignments
