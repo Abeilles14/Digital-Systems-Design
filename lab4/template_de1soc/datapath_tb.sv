@@ -40,9 +40,9 @@ module datapath_tb();
   	end
 
 	initial begin
-		#1000;
+		#3000;
 		
-		// wait (dut.state == 11'b000_0011_0000);
+		//wait (dut.state == 11'b000_0011_0000);
 		// $stop;
 	end
 endmodule

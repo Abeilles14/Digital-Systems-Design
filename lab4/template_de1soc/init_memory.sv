@@ -22,7 +22,7 @@ module init_memory(
 	assign wren = state[0];
 	assign address = counter;
     assign data = counter;
-    assign done_flag = 1'b0;//state[1]; 
+    assign done_flag = state[1]; 
 
 	initial begin
 		state = IDLE;	
@@ -54,8 +54,10 @@ module init_memory(
 					if (counter == `END_ADDR)
 						state <= DONE;
 					else
+					begin
 						counter <= counter + 8'h01;		//incr addr by 1
 						state <= INCREMENT;
+					end
 					end
 				DONE: begin
 					counter <= counter;

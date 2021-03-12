@@ -45,9 +45,8 @@ swap_memory swap_s_mem (
 	parameter DONE = 6'b011_000;
 
 	assign init_start_flag = state[0];
-	assign swap_start_flag = 1'b0;//state[1];
+	assign swap_start_flag = state[1];
 
-	//need to assign ? for which data will be written to s_mem depending on state!!!!
 	assign s_mem_addr = (state == S_MEM_INIT) ? s_init_addr : s_swap_addr;
 	assign s_mem_data_in = (state == S_MEM_INIT) ? s_init_data_in : s_swap_data_in;
 	assign s_mem_write = (state == S_MEM_INIT) ? s_init_write : s_swap_write;
