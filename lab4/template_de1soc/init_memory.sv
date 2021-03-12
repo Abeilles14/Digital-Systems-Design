@@ -8,7 +8,7 @@ module init_memory(
 	output logic wren,
 	input logic start_flag,
 	output logic done_flag,
-	input reset
+	input logic reset
 );
 
 	logic [3:0] state;
@@ -22,7 +22,7 @@ module init_memory(
 	assign wren = state[0];
 	assign address = counter;
     assign data = counter;
-    assign done_flag = state[1]; 
+    assign done_flag = 1'b0;//state[1]; 
 
 	initial begin
 		state = IDLE;	

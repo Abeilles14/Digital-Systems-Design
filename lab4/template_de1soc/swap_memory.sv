@@ -1,20 +1,3 @@
-// j = 0
-// for i = 0 to 255 {
-	// j = (j + s[i] + secret_key[i % 3] ) mod 256             //keylength is 3 in our impl.
-	// 	var swap_val = s[i]
-	// 	s[i] = s[j]
-	// 	s[j] = swap_val
-// }
-
-// IDLE
-// GET s[i]
-// ADD SUM J = (j + s[i] + secret_key[i%3])%256
-// store s[i] in temp swap_val, GET s[j],
-// store s[i] = s[j]
-// store s[j] = swap_val
-// INCREMENT
-// DONE
-
 `define START_ADDR 8'h00		//start and end addresses
 `define END_ADDR 8'hFF
 
@@ -27,7 +10,7 @@ module swap_memory(
 	input logic [23:0] secret_key,
 	input logic start_flag,
 	output logic done_flag,
-	input reset
+	input logic reset
 );
 
 	logic [8:0] state;

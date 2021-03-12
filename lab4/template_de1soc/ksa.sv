@@ -71,6 +71,7 @@ logic [23:0] secret_key;
 
 //assign secret_key = {14'b0, SW[9:0]};
 assign secret_key = 24'h000249;     //temp hardcoded secret key
+assign datapath_start_flag = 1'b1;
 
 s_memory s_mem (
     .address(s_mem_addr),
@@ -86,8 +87,8 @@ datapath controller (
     .s_mem_data_out(s_mem_data_out),
     .s_mem_write(s_mem_write),
     .secret_key(secret_key),
-    .datapath_start_flag(1'b1),
-    .reset(reset_n));
+    .datapath_start_flag(datapath_start_flag),
+    .reset(!reset_n));
 
 //=====================================================================================
 //
