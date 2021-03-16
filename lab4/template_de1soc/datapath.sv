@@ -6,6 +6,7 @@ module datapath(
 	output logic s_mem_write,
 	output logic [7:0] d_mem_addr,
 	output logic [7:0] d_mem_data_in,
+	input logic [7:0] d_mem_data_out,
 	output logic d_mem_write,
 	output logic [7:0] e_mem_addr,
 	input logic [7:0] e_mem_data_out,
@@ -54,6 +55,7 @@ decrypt_memory decrypt_d_mem (
     .s_data_in(s_decrypt_data_in),		//data in s_mem data
     .s_data_out(s_mem_data_out),		//data out s_mem q
     .d_data_in(d_mem_data_in),			//data in decrypted RAM d_mem data
+    .d_data_out(d_mem_data_out),
     .e_data_out(e_mem_data_out),		//data out encrypted ROM e_mem q
     .s_wren(s_decrypt_write),			//write enable s
     .d_wren(d_mem_write),				//write enable d

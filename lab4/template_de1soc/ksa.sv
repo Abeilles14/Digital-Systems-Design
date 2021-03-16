@@ -102,6 +102,7 @@ datapath controller (
     .s_mem_write(s_mem_write),
     .d_mem_addr(d_mem_addr),
     .d_mem_data_in(d_mem_data_in),
+    .d_mem_data_out(d_mem_data_out),
     .d_mem_write(d_mem_write),
     .e_mem_addr(e_mem_addr),
     .e_mem_data_out(e_mem_data_out),

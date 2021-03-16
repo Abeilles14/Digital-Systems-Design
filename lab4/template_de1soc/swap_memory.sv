@@ -37,7 +37,7 @@ module swap_memory(
 	parameter INCREMENT = 10'b01010_00000;
 	parameter DONE = 10'b01011_10000;
 
-	assign keylength = 8'd3;
+	assign keylength = 8'h03;
 
 	//assign write_addr_i = state[1];
 	//assign write_data_i = state[0];
@@ -129,7 +129,7 @@ module swap_memory(
 
 					data_in <= data_in;
 
-					case(i_index % 8'h03)
+					case(i_index % keylength)
 						8'h00: begin
 							j_index <= j_index + i_data + secret_key[23:16];
 						end
@@ -175,6 +175,7 @@ module swap_memory(
 					j_index <= j_index;
 					i_data <= i_data;
 
+					//need to prepare for next state to swap at i_index??
 					address <= j_index;
 					data_in <= data_in;
 
@@ -188,6 +189,7 @@ module swap_memory(
 					i_data <= i_data;
 					j_data <= j_data;
 
+					//prepare for next state to swap at j_index??
 					address <= i_index;
 					data_in <= j_data;
 
