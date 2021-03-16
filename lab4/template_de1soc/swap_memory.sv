@@ -1,5 +1,3 @@
-
-
 `define START_ADDR 8'h00		//start and end addresses
 `define END_ADDR 8'hFF
 
@@ -33,9 +31,7 @@ module swap_memory(
 	parameter WAIT_J_ADDR = 10'b11000_00000;
 	parameter GET_J_DATA = 10'b00101_01000;	//read data out to data j
 
-	parameter SET_I_ADDR_SWAP = 10'b00110_00100;
 	parameter SWAP_DATA_I = 10'b00111_00110;	//write data j in addr i
-	parameter SET_J_ADDR_SWAP = 10'b01000_00110;
 	parameter SWAP_DATA_J = 10'b01001_00101;	//write data i in addr j
 
 	parameter INCREMENT = 10'b01010_00000;
@@ -66,14 +62,14 @@ module swap_memory(
 	begin
 		if (reset)
 		begin
-			state = IDLE;
-			i_index = `START_ADDR;
-			j_index = `START_ADDR;
-			i_data = 8'bx;
-			j_data = 8'bx;
+			state <= IDLE;
+			i_index <= `START_ADDR;
+			j_index <= `START_ADDR;
+			i_data <= 8'bx;
+			j_data <= 8'bx;
 
-			address = 8'bx;
-			data_in = 8'bx;
+			address <= 8'bx;
+			data_in <= 8'bx;
 		end
 		else
 		begin
@@ -184,20 +180,8 @@ module swap_memory(
 
 					j_data <= data_out;
 
-					state <= SET_I_ADDR_SWAP;
-				end
-				SET_I_ADDR_SWAP: begin
-					i_index <= i_index;
-					j_index <= j_index;
-					i_data <= i_data;
-					j_data <= j_data;
-
-					address <= i_index;
-					data_in <= j_data;
-
 					state <= SWAP_DATA_I;
 				end
-
 				SWAP_DATA_I: begin			//addr = i_index, write data_in = j_data
 					i_index <= i_index;
 					j_index <= j_index;
@@ -208,20 +192,9 @@ module swap_memory(
 					data_in <= j_data;
 
 					if(data_out == j_data)		//ensure j_data stored in s_mem
-						state <= SET_J_ADDR_SWAP;
+						state <= SWAP_DATA_J;
 					else
-						state <= SET_I_ADDR_SWAP;
-				end
-				SET_J_ADDR_SWAP: begin
-					i_index <= i_index;
-					j_index <= j_index;
-					i_data <= i_data;
-					j_data <= j_data;
-
-					address <= j_index;
-					data_in <= i_data;
-
-					state <= SWAP_DATA_J;
+						state <= SWAP_DATA_I;
 				end
 				SWAP_DATA_J: begin			//addr = j_index, write data_in = i_data
 					i_index <= i_index;
@@ -235,7 +208,7 @@ module swap_memory(
 					if(data_out == i_data)		//ensure i_data stored in s_mem
 						state <= INCREMENT;
 					else
-						state <= SET_J_ADDR_SWAP;
+						state <= SWAP_DATA_J;
 				end
 				INCREMENT: begin
 					j_index <= j_index;
