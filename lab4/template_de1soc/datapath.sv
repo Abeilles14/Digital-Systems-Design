@@ -16,10 +16,11 @@ module datapath(
 
 	logic [5:0] state;
 	logic [7:0] s_init_addr, s_init_data_in;
-	logic [7:0] s_swap_addr, s_swap_data_in;
-	logic [7:0] d_decrypt_addr, d_decrypt_data_in;
+	logic [7:0] s_swap_addr, s_swap_data_in, s_decrypt_data_in;
+	logic [7:0] decrypt_addr;		//can be s_addr, d_addr, or e_addr
 	logic [7:0] e_decrypt_addr;
-	logic s_init_write, s_swap_write, d_decrypt_write;
+	logic s_init_write, s_swap_write, s_decrypt_write;
+	logic d_decrypt_write;
 
 	logic init_start_flag, swap_start_flag, decrypt_start_flag;
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
@@ -49,11 +50,13 @@ swap_memory swap_s_mem (
 //d_memory swap
 decrypt_memory decrypt_d_mem (
     .clk(clk),
-    .address(d_decrypt_addr),
-    .d_data_in(d_decrypt_data_in),
-    .s_data_out(s_mem_data_out),
-    .e_data_out(e_mem_data_out),
-    .wren(d_decrypt_write),
+    .address(decrypt_addr),				//s_mem, d_mem, e_mem address
+    .s_data_in(s_decrypt_data_in),		//data in s_mem data
+    .s_data_out(s_mem_data_out),		//data out s_mem q
+    .d_data_in(d_mem_data_in),			//data in decrypted RAM d_mem data
+    .e_data_out(e_mem_data_out),		//data out encrypted ROM e_mem q
+    .s_wren(s_decrypt_write),			//write enable s
+    .d_wren(d_mem_write),				//write enable d
     .start_flag(decrypt_start_flag),
     .done_flag(decrypt_done_flag),
     .reset(reset));
@@ -66,11 +69,14 @@ decrypt_memory decrypt_d_mem (
 
 	assign init_start_flag = state[0];
 	assign swap_start_flag = state[1];
-	assign decrypte_start_flag = state[2];
+	assign decrypt_start_flag = state[2];
 
-	assign s_mem_addr = (state == S_MEM_INIT) ? s_init_addr : s_swap_addr;		//s mem address state dependent 
-	assign s_mem_data_in = (state == S_MEM_INIT) ? s_init_data_in : s_swap_data_in;		//s mem data state dependent 
-	assign s_mem_write = (state == S_MEM_INIT) ? s_init_write : s_swap_write;		//s mem write state dependent
+	assign s_mem_addr = (state == S_MEM_INIT) ? s_init_addr : ((state == S_MEM_SWAP) ? s_swap_addr : decrypt_addr);		//s mem address state dependent 
+	assign s_mem_data_in = (state == S_MEM_INIT) ? s_init_data_in : ((state == S_MEM_SWAP) ? s_swap_data_in : s_decrypt_data_in);		//s mem data state dependent 
+	assign s_mem_write = (state == S_MEM_INIT) ? s_init_write : ((state == S_MEM_SWAP) ? s_swap_write : s_decrypt_write);		//s mem write state dependent
+
+	assign d_mem_addr = decrypt_addr;	//will only be written to when d_mem_write
+	assign e_mem_addr = decrypt_addr;	//will only be used when writing to d_mem with d_mem_write
 
 	initial begin
 		state = IDLE;	
@@ -103,7 +109,7 @@ decrypt_memory decrypt_d_mem (
 				end
 				S_MEM_DECRYPT: begin
 					if (decrypt_done_flag)
-						state <= S_MEM_DONE;
+						state <= DONE;
 					else
 						state <= S_MEM_DECRYPT;
 				end
