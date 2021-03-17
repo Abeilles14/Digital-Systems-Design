@@ -1,3 +1,26 @@
+	// radix define States {
+	// 	11'b00000_000000 "IDLE",
+	// 	11'b00001_000000 "SET_I_ADDR",
+	// 	11'b00010_000000 "WAIT_I_ADDR",
+	// 	11'b00011_000000 "GET_I_DATA",
+	// 	11'b00100_000000 "SET_J_ADDR",
+	// 	11'b00101_000000 "WAIT_J_ADDR",
+	// 	11'b00110_000000 "GET_J_DATA",
+	// 	11'b10001_000100 "SET_SWAP_I_ADDR",
+	// 	11'b00111_001100 "SWAP_DATA_I",
+	// 	11'b10010_000010 "SET_SWAP_J_ADDR",
+	// 	11'b01000_001010 "SWAP_DATA_J",
+	// 	11'b01001_000000 "SET_F_ADDR",
+	// 	11'b01010_000000 "WAIT_F_ADDR",
+	// 	11'b01011_010000 "GET_F_VALUE",
+	// 	11'b01100_010000 "SET_K_ADDR",
+	// 	11'b01101_010000 "WAIT_K_ADDR",
+	// 	11'b01110_010001 "DECRYPT",
+	// 	11'b01111_000000 "INCREMENT",
+	// 	11'b10000_100000 "DONE",
+	//  -default hex
+	// }
+
 module decrypt_memory_tb();
 	logic clk;
 	logic [7:0] address;		//s_mem address
@@ -25,7 +48,6 @@ module decrypt_memory_tb();
 	    .start_flag(start_flag),
 	    .done_flag(done_flag),
 	    .reset(reset));
-
 
 	initial				//initial block
 	begin

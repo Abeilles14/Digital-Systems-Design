@@ -189,7 +189,7 @@ module swap_memory(
 					i_data <= i_data;
 					j_data <= j_data;
 
-					//prepare for next state to swap at j_index??
+					//prepare for next state to swap at j_index
 					address <= i_index;
 					data_in <= j_data;
 
