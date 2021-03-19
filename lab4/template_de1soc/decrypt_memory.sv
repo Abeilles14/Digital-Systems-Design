@@ -11,6 +11,7 @@ module decrypt_memory(
 	input logic [7:0] e_data_out,		//data out encrypted ROM e_mem q
 	output logic s_wren,
 	output logic d_wren,				//write enable d
+	output logic invalid_flag,			//returns true if character not in range
 	input logic start_flag,
 	output logic done_flag,
 	input logic reset
@@ -30,25 +31,27 @@ module decrypt_memory(
 	parameter WAIT_J_ADDR = 11'b00101_000000;
 	parameter GET_J_DATA = 11'b00110_000000;		//read data out to data j
 
-	parameter SET_SWAP_I_ADDR = 11'b10001_000100;
-	parameter SWAP_DATA_I = 11'b00111_001100;		//write data j in addr i
-	parameter SET_SWAP_J_ADDR = 11'b10010_000010;
-	parameter SWAP_DATA_J = 11'b01000_001010;		//write data i in addr j
+	parameter SET_SWAP_I_ADDR = 11'b00111_000100;
+	parameter SWAP_DATA_I = 11'b01000_001100;		//write data j in addr i
+	parameter SET_SWAP_J_ADDR = 11'b01001_000010;
+	parameter SWAP_DATA_J = 11'b01010_001010;		//write data i in addr j
 
-	parameter SET_F_ADDR = 11'b01001_000000;		//addr = s[i]+s[j]
-	parameter WAIT_F_ADDR = 11'b01010_000000;
-	parameter GET_F_VALUE = 11'b01011_010000;		//get f = s[s[i]+s[j]]
+	parameter SET_F_ADDR = 11'b01011_000000;		//addr = s[i]+s[j]
+	parameter WAIT_F_ADDR = 11'b01100_000000;
+	parameter GET_F_VALUE = 11'b01101_010000;		//get f = s[s[i]+s[j]]
 	
-	parameter SET_K_ADDR = 11'b01100_010000;
-	parameter WAIT_K_ADDR = 11'b01101_010000;	
+	parameter SET_K_ADDR = 11'b01110_010000;
+	parameter WAIT_K_ADDR = 11'b01111_010000;	
 
-	parameter DECRYPT = 11'b01110_010001;		//decrypted_output[k] = f^encrypted_input[k]
+	parameter DECRYPT = 11'b10000_010001;		//decrypted_output[k] = f^encrypted_input[k]
 
-	parameter INCREMENT = 11'b01111_000000;
-	parameter DONE = 11'b10000_100000;
+	parameter VALIDATE = 11'b10001_000000;
 
-	parameter TEST_SET_ADDR = 11'b11110_000000;
-	parameter TEST_SET_DATA = 11'b11111_000001;	//d_wren
+	parameter INCREMENT = 11'b10010_000000;
+	parameter DONE = 11'b10011_100000;
+
+	// parameter TEST_SET_ADDR = 11'b11110_000000;
+	// parameter TEST_SET_DATA = 11'b11111_000001;	//d_wren
 
 	assign d_wren = state[0];			//state DECRYPT
 	assign s_wren = state[3];			//state SWAP_DATA_I, SWAP_DATA_J
@@ -69,9 +72,9 @@ module decrypt_memory(
 		i_data = 8'bx;
 		j_data = 8'bx;
 
-		f_value = 8'hxx;
-		s_data_in = 8'hxx;
-		d_data_in = 8'hxx;
+		f_value = 8'hx;
+		s_data_in = 8'hx;
+		d_data_in = 8'hx;
 
 		address = 8'bx;
 	end
@@ -86,12 +89,12 @@ module decrypt_memory(
 			i_index <= `START_ADDR;
 			j_index <= `START_ADDR;
 
-			i_data <= i_data;
-			j_data <= j_data;
+			i_data <= 8'bx;
+			j_data <= 8'bx;
 
-			f_value <= f_value;
-			s_data_in <= s_data_in;
-			d_data_in <= d_data_in;
+			f_value <= 8'bx;
+			s_data_in <= 8'bx;
+			d_data_in <= 8'bx;
 
 			address <= 8'bx;
 		end
@@ -103,14 +106,13 @@ module decrypt_memory(
 					i_index <= `START_ADDR;
 					j_index <= `START_ADDR;
 
-					i_data <= i_data;
-					j_data <= j_data;
+					i_data <= 8'bx;
+					j_data <= 8'bx;
 
-					f_value <= f_value;
-					s_data_in <= s_data_in;
-					d_data_in <= d_data_in;
-
-					address <= address;
+					f_value <= 8'bx;
+					s_data_in <= 8'bx;
+					d_data_in <= 8'bx;
+					address <= 8'bx;
 
 					if (start_flag)
 						state <= SET_I_ADDR;
@@ -177,7 +179,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					j_index <= j_index + i_data;////	//j = j+s[i]
-					address <= j_index + i_data;//j_index;////				//set address = j
+					address <= j_index + i_data;////	//set address = j
 
 					state <= WAIT_J_ADDR;
 				end
@@ -222,7 +224,7 @@ module decrypt_memory(
 					j_data <= j_data;
 
 					f_value <= f_value;
-					s_data_in <= j_data;//s_data_in;
+					s_data_in <= j_data;
 					d_data_in <= d_data_in;
 
 					address <= i_index;////
@@ -382,6 +384,26 @@ module decrypt_memory(
 					else
 						state <= DECRYPT;
 				end
+				VALIDATE: begin				//check if char in range [97,122] or 32
+					k_index <= k_index;
+					i_index <= i_index;
+					j_index <= j_index;
+
+					i_data <= i_data;
+					j_data <= j_data;
+
+					f_value <= f_value;
+					s_data_in <= s_data_in;
+					d_data_in <= d_data_in;
+
+					address <= address;
+
+					if((d_data_out >= 8'd97 && d_data_out <= 8'd122) || d_data_out == 8'd32)
+						state <= INCREMENT;		//valid character range
+					else
+						invalid_flag <= 1'b1;
+						state <= DONE;
+				end
 				INCREMENT: begin
 					i_index <= i_index;
 					j_index <= j_index;
@@ -421,7 +443,7 @@ module decrypt_memory(
 					address <= address;
 
 					//add start flag/return to IDLE?
-					state <= DONE;
+					state <= IDLE;
 				end
 				default: begin
 					k_index <= k_index;

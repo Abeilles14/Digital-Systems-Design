@@ -65,14 +65,12 @@ assign reset_n = KEY[3];
 //
 //====================================================================================
 
-logic s_mem_write, d_mem_write, datapath_start_flag;
+logic s_mem_write, d_mem_write, datapath_start_flag, datapath_done_flag, key_found_flag;
 logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
 logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
 logic [7:0] e_mem_addr, e_mem_data_out;
 logic [23:0] secret_key;
 
-//assign secret_key = {14'b0, SW[9:0]};
-assign secret_key = 24'h000249;     //temp hardcoded secret key
 assign datapath_start_flag = 1'b1;
 
 s_memory s_mem (
@@ -107,8 +105,29 @@ datapath controller (
     .e_mem_addr(e_mem_addr),
     .e_mem_data_out(e_mem_data_out),
     .secret_key(secret_key),
+    .key_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),
+    .datapath_done_flag(datapath_done_flag),
     .reset(!reset_n));
+
+always_ff @(posedge clk, posedge reset_n)
+begin
+    if(reset_n)
+    begin
+        LED[0] <= 1'b0;
+        LED[7] <= 1'b0;
+    end
+    else
+    begin
+        if (datapath_done_flag)
+        begin
+            if (key_found_flag)
+                LED[0] <= 1'b1;
+            else
+                LED[7] <= 1'b1;
+        end
+    end
+end
 
 //=====================================================================================
 //
@@ -116,22 +135,21 @@ datapath controller (
 //
 //=====================================================================================
 
-// logic [7:0] Seven_Seg_Val[5:0];
-// logic [3:0] Seven_Seg_Data[5:0];
+logic [7:0] Seven_Seg_Val[5:0];
     
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst0(.ssOut(Seven_Seg_Val[0]), .nIn(Seven_Seg_Data[0]));
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst1(.ssOut(Seven_Seg_Val[1]), .nIn(Seven_Seg_Data[1]));
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst2(.ssOut(Seven_Seg_Val[2]), .nIn(Seven_Seg_Data[2]));
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst3(.ssOut(Seven_Seg_Val[3]), .nIn(Seven_Seg_Data[3]));
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst4(.ssOut(Seven_Seg_Val[4]), .nIn(Seven_Seg_Data[4]));
-// SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst5(.ssOut(Seven_Seg_Val[5]), .nIn(Seven_Seg_Data[5]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst0(.ssOut(Seven_Seg_Val[0]), .nIn(secret_key[3:0]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst1(.ssOut(Seven_Seg_Val[1]), .nIn(secret_key[7:4]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst2(.ssOut(Seven_Seg_Val[2]), .nIn(secret_key[11:8]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst3(.ssOut(Seven_Seg_Val[3]), .nIn(secret_key[15:12]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst4(.ssOut(Seven_Seg_Val[4]), .nIn(secret_key[19:16]));
+SevenSegmentDisplayDecoder SevenSegmentDisplayDecoder_inst5(.ssOut(Seven_Seg_Val[5]), .nIn(secret_key[23:20]));
 
-// assign HEX0 = Seven_Seg_Val[0];
-// assign HEX1 = Seven_Seg_Val[1];
-// assign HEX2 = Seven_Seg_Val[2];
-// assign HEX3 = Seven_Seg_Val[3];
-// assign HEX4 = Seven_Seg_Val[4];
-// assign HEX5 = Seven_Seg_Val[5];
+assign HEX0 = Seven_Seg_Val[0];
+assign HEX1 = Seven_Seg_Val[1];
+assign HEX2 = Seven_Seg_Val[2];
+assign HEX3 = Seven_Seg_Val[3];
+assign HEX4 = Seven_Seg_Val[4];
+assign HEX5 = Seven_Seg_Val[5];
 
 endmodule
 

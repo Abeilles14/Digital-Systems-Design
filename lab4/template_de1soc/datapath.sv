@@ -10,12 +10,14 @@ module datapath(
 	output logic d_mem_write,
 	output logic [7:0] e_mem_addr,
 	input logic [7:0] e_mem_data_out,
-	input logic [23:0] secret_key,
+	output logic [23:0] secret_key,
+	output logic key_flag,
 	input logic datapath_start_flag,
+	output logic datapath_done_flag,
 	input logic reset
 );
 
-	logic [5:0] state;
+	logic [6:0] state;
 	logic [7:0] s_init_addr, s_init_data_in;
 	logic [7:0] s_swap_addr, s_swap_data_in, s_decrypt_data_in;
 	logic [7:0] decrypt_addr;		//can be s_addr, d_addr, or e_addr
@@ -25,6 +27,7 @@ module datapath(
 
 	logic init_start_flag, swap_start_flag, decrypt_start_flag;
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
+	logic invalid_key_flag;
 
 //initialize s_memory
 init_memory init_s_mem (
@@ -59,19 +62,21 @@ decrypt_memory decrypt_d_mem (
     .e_data_out(e_mem_data_out),		//data out encrypted ROM e_mem q
     .s_wren(s_decrypt_write),			//write enable s
     .d_wren(d_mem_write),				//write enable d
+    .invalid_flag(invalid_key_flag),	//if char not in range, key invalid
     .start_flag(decrypt_start_flag),
     .done_flag(decrypt_done_flag),
     .reset(reset));
 
-	parameter IDLE = 6'b000_000;
-	parameter S_MEM_INIT = 6'b001_001;
-	parameter S_MEM_SWAP = 6'b010_010;
-	parameter S_MEM_DECRYPT = 6'b011_100;
-	parameter DONE = 6'b100_000;
+	parameter IDLE = 7'b000_0000;
+	parameter S_MEM_INIT = 7'b001_0001;
+	parameter S_MEM_SWAP = 7'b010_0010;
+	parameter S_MEM_DECRYPT = 7'b011_0100;
+	parameter DONE = 7'b100_1000;
 
 	assign init_start_flag = state[0];
 	assign swap_start_flag = state[1];
 	assign decrypt_start_flag = state[2];
+	assign datapath_done_flag = state[3];
 
 	assign s_mem_addr = (state == S_MEM_INIT) ? s_init_addr : ((state == S_MEM_SWAP) ? s_swap_addr : decrypt_addr);		//s mem address state dependent 
 	assign s_mem_data_in = (state == S_MEM_INIT) ? s_init_data_in : ((state == S_MEM_SWAP) ? s_swap_data_in : s_decrypt_data_in);		//s mem data state dependent 
@@ -80,14 +85,22 @@ decrypt_memory decrypt_d_mem (
 	assign d_mem_addr = decrypt_addr;	//will only be written to when d_mem_write
 	assign e_mem_addr = decrypt_addr;	//will only be used when writing to d_mem with d_mem_write
 
+	//assign secret_key = 24'h000249;     //temp hardcoded secret key
+
 	initial begin
+		secret_key = 24'h000000;
+		key_flag = 1'b0;
 		state = IDLE;	
 	end
 
 	always_ff @(posedge clk, posedge reset)
 	begin
 		if (reset)
-			state = IDLE;
+		begin
+			secret_key <= 24'h000000;
+			key_flag <= 1'b0;
+			state <= IDLE;
+		end
 		else
 		begin
 			case(state)
@@ -111,7 +124,24 @@ decrypt_memory decrypt_d_mem (
 				end
 				S_MEM_DECRYPT: begin
 					if (decrypt_done_flag)
-						state <= DONE;
+					begin
+						if(invalid_key_flag)
+						begin
+							if(secret_key == 24'h3FFFFF)	//if all keys tested
+							begin
+								key_flag <= 1'b0;		//set LED - key not found!
+								state <= DONE;
+							end
+							else
+							begin
+								secret_key <= secret_key + 1'b1;	//incr try next key
+								state <= S_MEM_SWAP;
+							end
+						end
+						else
+							key_flag <= 1'b1;	//set LED key found!
+							state <= DONE;
+					end
 					else
 						state <= S_MEM_DECRYPT;
 				end

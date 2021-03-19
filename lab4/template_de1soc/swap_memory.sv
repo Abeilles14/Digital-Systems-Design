@@ -77,11 +77,11 @@ module swap_memory(
 				IDLE: begin					//wait for start_flag
 					i_index <= `START_ADDR;
 					j_index <= `START_ADDR;
-					i_data <= i_data;
-					j_data <= j_data;
+					i_data <= 8'bx;
+					j_data <= 8'bx;
 
-					address <= address;
-					data_in <= data_in;
+					address <= 8'bx;
+					data_in <= 8'bx;
 
 					if (start_flag)
 						state <= SET_I_ADDR;
@@ -241,7 +241,7 @@ module swap_memory(
 					data_in <= data_in;
 
 					//add start flag/return to IDLE?
-					state <= DONE;
+					state <= IDLE;
 				end
 				default: begin
 					i_index <= i_index;
