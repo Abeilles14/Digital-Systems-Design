@@ -70,6 +70,7 @@ logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
 logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
 logic [7:0] e_mem_addr, e_mem_data_out;
 logic [23:0] secret_key;
+logic test_LED2;
 
 assign datapath_start_flag = 1'b1;
 
@@ -105,26 +106,41 @@ datapath controller (
     .e_mem_addr(e_mem_addr),
     .e_mem_data_out(e_mem_data_out),
     .secret_key(secret_key),
-    .key_flag(key_found_flag),
+    .cracked_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),
     .datapath_done_flag(datapath_done_flag),
-    .reset(!reset_n));
+    .reset(!reset_n),
+    .test2(test_LED2));
+
+initial begin
+    LED[1:0] <= 2'b0;
+    LED[7:6] <= 2'b0;
+end
 
 always_ff @(posedge clk, posedge reset_n)
 begin
+    LED[4] <= key_found_flag;
+    LED[3] <= datapath_done_flag;
+    LED[2] <= test_LED2;
     if(reset_n)
     begin
-        LED[0] <= 1'b0;
-        LED[7] <= 1'b0;
+        LED[1:0] <= 2'b0;
+        LED[7:6] <= 2'b0;
+        LED[3] <= 1'b0;
+        LED[4] <= 1'b0;
     end
     else
     begin
         if (datapath_done_flag)
         begin
             if (key_found_flag)
-                LED[0] <= 1'b1;
+            begin
+                LED[1:0] <= 2'b11;
+            end
             else
-                LED[7] <= 1'b1;
+            begin
+                LED[7:6] <= 2'b11;
+            end
         end
     end
 end

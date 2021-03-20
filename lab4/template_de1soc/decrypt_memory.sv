@@ -77,6 +77,7 @@ module decrypt_memory(
 		d_data_in = 8'hx;
 
 		address = 8'bx;
+		invalid_flag = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
@@ -97,6 +98,7 @@ module decrypt_memory(
 			d_data_in <= 8'bx;
 
 			address <= 8'bx;
+			invalid_flag <= 1'b0;
 		end
 		else
 		begin
@@ -112,7 +114,9 @@ module decrypt_memory(
 					f_value <= 8'bx;
 					s_data_in <= 8'bx;
 					d_data_in <= 8'bx;
+
 					address <= 8'bx;
+					invalid_flag <= 1'b0;
 
 					if (start_flag)
 						state <= SET_I_ADDR;
@@ -380,7 +384,7 @@ module decrypt_memory(
 					address <= k_index;////
 
 					if(d_data_out == d_data_in)		//ensure d_data stored in d_mem
-						state <= INCREMENT;
+						state <= VALIDATE;
 					else
 						state <= DECRYPT;
 				end
@@ -399,10 +403,15 @@ module decrypt_memory(
 					address <= address;
 
 					if((d_data_out >= 8'd97 && d_data_out <= 8'd122) || d_data_out == 8'd32)
+					begin
+						invalid_flag <= 1'b0;
 						state <= INCREMENT;		//valid character range
+					end
 					else
+					begin
 						invalid_flag <= 1'b1;
 						state <= DONE;
+					end
 				end
 				INCREMENT: begin
 					i_index <= i_index;

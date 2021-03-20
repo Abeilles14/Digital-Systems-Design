@@ -11,11 +11,12 @@ module datapath(
 	output logic [7:0] e_mem_addr,
 	input logic [7:0] e_mem_data_out,
 	output logic [23:0] secret_key,
-	output logic key_flag,
+	output logic cracked_flag,
 	input logic datapath_start_flag,
 	output logic datapath_done_flag,
-	input logic reset
-);
+	input logic reset,
+	output logic test2
+	);
 
 	logic [6:0] state;
 	logic [7:0] s_init_addr, s_init_data_in;
@@ -89,8 +90,9 @@ decrypt_memory decrypt_d_mem (
 
 	initial begin
 		secret_key = 24'h000000;
-		key_flag = 1'b0;
-		state = IDLE;	
+		cracked_flag = 1'b0;//
+		state = IDLE;
+		test2 = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
@@ -98,8 +100,9 @@ decrypt_memory decrypt_d_mem (
 		if (reset)
 		begin
 			secret_key <= 24'h000000;
-			key_flag <= 1'b0;
+			cracked_flag <= 1'b0;
 			state <= IDLE;
+			test2 <= 1'b0;
 		end
 		else
 		begin
@@ -129,24 +132,27 @@ decrypt_memory decrypt_d_mem (
 						begin
 							if(secret_key == 24'h3FFFFF)	//if all keys tested
 							begin
-								key_flag <= 1'b0;		//set LED - key not found!
+								cracked_flag <= 1'b0;		//set LED - key not found!
 								state <= DONE;
 							end
 							else
 							begin
 								secret_key <= secret_key + 1'b1;	//incr try next key
-								state <= S_MEM_SWAP;
+								state <= S_MEM_INIT;
 							end
 						end
 						else
-							key_flag <= 1'b1;	//set LED key found!
+						begin
+							cracked_flag <= 1'b1;	//set LED key found!
 							state <= DONE;
+						end
 					end
 					else
 						state <= S_MEM_DECRYPT;
 				end
 				DONE: begin
 					state <= DONE;
+					test2 <= !test2;
 				end
 				default: begin
 					state <= IDLE;

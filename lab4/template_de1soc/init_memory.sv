@@ -40,7 +40,8 @@ module init_memory(
 		begin
 			case(state)
 				IDLE: begin
-					counter <= counter;
+					counter <= `START_ADDR;
+
 					if (start_flag)
 						state <= START;
 					else
@@ -63,7 +64,7 @@ module init_memory(
 					counter <= counter;
 
 					//add start flag/return to IDLE?
-					state <= DONE;
+					state <= IDLE;
 				end
 				default: begin
 					counter <= counter;
