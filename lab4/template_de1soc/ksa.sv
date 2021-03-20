@@ -70,7 +70,7 @@ logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
 logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
 logic [7:0] e_mem_addr, e_mem_data_out;
 logic [23:0] secret_key;
-logic test_LED2;
+logic test_LED3, test_LED4, test_LED5;
 
 assign datapath_start_flag = 1'b1;
 
@@ -106,44 +106,29 @@ datapath controller (
     .e_mem_addr(e_mem_addr),
     .e_mem_data_out(e_mem_data_out),
     .secret_key(secret_key),
-    .cracked_flag(key_found_flag),
+    .key_found_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),
     .datapath_done_flag(datapath_done_flag),
     .reset(!reset_n),
-    .test2(test_LED2));
+    .test3(test_LED3),
+    .test4(test_LED4),
+    .test5(test_LED5));
 
-initial begin
-    LED[1:0] <= 2'b0;
-    LED[7:6] <= 2'b0;
-end
+assign LED[1:0] = (datapath_done_flag && key_found_flag) ? 2'b11 : 2'b00;
+assign LED[7:6] = (datapath_done_flag && !key_found_flag) ? 2'b11 : 2'b00;
 
-always_ff @(posedge clk, posedge reset_n)
-begin
-    LED[4] <= key_found_flag;
-    LED[3] <= datapath_done_flag;
-    LED[2] <= test_LED2;
-    if(reset_n)
-    begin
-        LED[1:0] <= 2'b0;
-        LED[7:6] <= 2'b0;
-        LED[3] <= 1'b0;
-        LED[4] <= 1'b0;
-    end
-    else
-    begin
-        if (datapath_done_flag)
-        begin
-            if (key_found_flag)
-            begin
-                LED[1:0] <= 2'b11;
-            end
-            else
-            begin
-                LED[7:6] <= 2'b11;
-            end
-        end
-    end
-end
+assign LED[3] = test_LED3;
+assign LED[4] = test_LED4;
+assign LED[5] = test_LED5;
+
+  // TEST BENCH
+    /*
+    RAM WorkingRAM(address, clk, data, wren, q);
+
+    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) DecryptedRAM(decryptionAddress, clk, decryptionData, decryptionWrite, decryptedOutput);
+
+    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) MessageROM(messageAddress, clk, messageMem);
+    */  
 
 //=====================================================================================
 //

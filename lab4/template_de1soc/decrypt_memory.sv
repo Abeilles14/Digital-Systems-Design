@@ -11,7 +11,7 @@ module decrypt_memory(
 	input logic [7:0] e_data_out,		//data out encrypted ROM e_mem q
 	output logic s_wren,
 	output logic d_wren,				//write enable d
-	output logic invalid_flag,			//returns true if character not in range
+	output logic key_found_flag,		//index k at 31 without invalid char, found a key
 	input logic start_flag,
 	output logic done_flag,
 	input logic reset
@@ -77,7 +77,7 @@ module decrypt_memory(
 		d_data_in = 8'hx;
 
 		address = 8'bx;
-		invalid_flag = 1'b0;
+		key_found_flag = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
@@ -98,7 +98,7 @@ module decrypt_memory(
 			d_data_in <= 8'bx;
 
 			address <= 8'bx;
-			invalid_flag <= 1'b0;
+			key_found_flag <= 1'b0;
 		end
 		else
 		begin
@@ -116,7 +116,7 @@ module decrypt_memory(
 					d_data_in <= 8'bx;
 
 					address <= 8'bx;
-					invalid_flag <= 1'b0;
+					key_found_flag <= 1'b0;
 
 					if (start_flag)
 						state <= SET_I_ADDR;
@@ -404,12 +404,10 @@ module decrypt_memory(
 
 					if((d_data_out >= 8'd97 && d_data_out <= 8'd122) || d_data_out == 8'd32)
 					begin
-						invalid_flag <= 1'b0;
 						state <= INCREMENT;		//valid character range
 					end
 					else
 					begin
-						invalid_flag <= 1'b1;
 						state <= DONE;
 					end
 				end
@@ -429,6 +427,7 @@ module decrypt_memory(
 					if (k_index == `END_K_ADDR - 1)
 					begin
 						k_index <= k_index;
+						key_found_flag <= 1'b1;
 						state <= DONE;
 					end
 					else

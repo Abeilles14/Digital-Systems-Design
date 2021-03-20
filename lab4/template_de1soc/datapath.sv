@@ -11,11 +11,13 @@ module datapath(
 	output logic [7:0] e_mem_addr,
 	input logic [7:0] e_mem_data_out,
 	output logic [23:0] secret_key,
-	output logic cracked_flag,
+	output logic key_found_flag,
 	input logic datapath_start_flag,
 	output logic datapath_done_flag,
 	input logic reset,
-	output logic test2
+	output logic test3,
+	output logic test4,
+	output logic test5
 	);
 
 	logic [6:0] state;
@@ -63,7 +65,7 @@ decrypt_memory decrypt_d_mem (
     .e_data_out(e_mem_data_out),		//data out encrypted ROM e_mem q
     .s_wren(s_decrypt_write),			//write enable s
     .d_wren(d_mem_write),				//write enable d
-    .invalid_flag(invalid_key_flag),	//if char not in range, key invalid
+    .key_found_flag(key_found_flag),		//index k at 31 without invalid char, found a key
     .start_flag(decrypt_start_flag),
     .done_flag(decrypt_done_flag),
     .reset(reset));
@@ -90,9 +92,8 @@ decrypt_memory decrypt_d_mem (
 
 	initial begin
 		secret_key = 24'h000000;
-		cracked_flag = 1'b0;//
 		state = IDLE;
-		test2 = 1'b0;
+		test3 = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
@@ -100,9 +101,8 @@ decrypt_memory decrypt_d_mem (
 		if (reset)
 		begin
 			secret_key <= 24'h000000;
-			cracked_flag <= 1'b0;
 			state <= IDLE;
-			test2 <= 1'b0;
+			test3 <= 1'b0;
 		end
 		else
 		begin
@@ -126,25 +126,16 @@ decrypt_memory decrypt_d_mem (
 						state <= S_MEM_SWAP;
 				end
 				S_MEM_DECRYPT: begin
-					if (decrypt_done_flag)
+					if (decrypt_done_flag && key_found_flag)
+						state <= DONE;
+					else if (decrypt_done_flag && !key_found_flag)
 					begin
-						if(invalid_key_flag)
-						begin
-							if(secret_key == 24'h3FFFFF)	//if all keys tested
-							begin
-								cracked_flag <= 1'b0;		//set LED - key not found!
-								state <= DONE;
-							end
-							else
-							begin
-								secret_key <= secret_key + 1'b1;	//incr try next key
-								state <= S_MEM_INIT;
-							end
-						end
+						if(secret_key == 24'h3FFFFF)
+							state <= DONE;
 						else
 						begin
-							cracked_flag <= 1'b1;	//set LED key found!
-							state <= DONE;
+							secret_key <= secret_key + 1'b1;
+							state <= S_MEM_INIT;
 						end
 					end
 					else
@@ -152,7 +143,6 @@ decrypt_memory decrypt_d_mem (
 				end
 				DONE: begin
 					state <= DONE;
-					test2 <= !test2;
 				end
 				default: begin
 					state <= IDLE;
