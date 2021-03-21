@@ -1,7 +1,7 @@
 module datapath(
 	input logic clk,
 	output logic [23:0] secret_key,
-	input logic key_start_value,
+	input logic [23:0] key_start_value,
 	output logic key_found_flag,
 	input logic datapath_start_flag,
 	output logic datapath_done_flag,
@@ -158,7 +158,7 @@ decrypt_memory decrypt_d_mem (
 					end
 					else if (decrypt_done_flag && !key_found_flag)
 					begin
-						if(secret_key == 24'h3FFFFF)
+						if((secret_key == key_start_value) || (secret_key == 24'h3FFFFF))
 						begin
 							state <= DONE;
 						end
