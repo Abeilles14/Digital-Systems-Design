@@ -1,13 +1,14 @@
 module datapath(
 	input logic clk,
 	output logic [23:0] secret_key,
+	input logic key_start_value,
 	output logic key_found_flag,
 	input logic datapath_start_flag,
 	output logic datapath_done_flag,
+	input logic stop,
 	input logic reset
 	);
 
-	////
 	logic [7:0] s_mem_addr;
 	logic [7:0] s_mem_data_in;
 	logic [7:0] s_mem_data_out;
@@ -18,7 +19,6 @@ module datapath(
 	logic d_mem_write;
 	logic [7:0] e_mem_addr;
 	logic [7:0] e_mem_data_out;
-	////
 
 	logic [6:0] state;
 
@@ -33,20 +33,7 @@ module datapath(
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
 	logic invalid_key_flag;
 
-	///////////////TESTBENCH////////////////
-	// logic s_mem_write, d_mem_write;
-	// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
-	// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
-	// logic [7:0] e_mem_addr, e_mem_data_out;
-
-	// RAM s_mem (s_mem_addr, clk, d_mem_data_in, s_mem_write, s_mem_data_out);
-
- //    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (d_mem_addr, clk, d_mem_data_in, d_mem_write, d_mem_data_out);
-
- //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
-    ///////////////////////////////////////
-
-// RAM AND ROM
+////////////////// RAM AND ROM /////////////////
 s_memory s_mem (
     .address(s_mem_addr),
     .clock(clk),
@@ -65,6 +52,8 @@ e_memory e_mem (
     .address(e_mem_addr),
     .clock(clk),
     .q(e_mem_data_out));
+
+////////////// INIT, SWAP, DECRYPT FSM //////////////
 
 //initialize s_memory
 init_memory init_s_mem (
@@ -125,7 +114,7 @@ decrypt_memory decrypt_d_mem (
 	//assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 	initial begin
-		secret_key = 24'h000000;
+		secret_key = key_start_value;
 		state = IDLE;
 	end
 
@@ -133,8 +122,12 @@ decrypt_memory decrypt_d_mem (
 	begin
 		if (reset)
 		begin
-			secret_key <= 24'h000000;
+			secret_key <= key_start_value;
 			state <= IDLE;
+		end
+		else if (stop)
+		begin
+			state <= DONE;
 		end
 		else
 		begin
@@ -160,14 +153,12 @@ decrypt_memory decrypt_d_mem (
 				S_MEM_DECRYPT: begin
 					if (decrypt_done_flag && key_found_flag)
 					begin
-						//test3 <= !test3;
 						state <= DONE;
 					end
 					else if (decrypt_done_flag && !key_found_flag)
 					begin
 						if(secret_key == 24'h3FFFFF)
 						begin
-							//test4 <= !test4;
 							state <= DONE;
 						end
 						else
@@ -189,3 +180,18 @@ decrypt_memory decrypt_d_mem (
 		end
 	end
 endmodule
+
+
+	///////////////TESTBENCH////////////////
+	// logic s_mem_write, d_mem_write;
+	// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
+	// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
+	// logic [7:0] e_mem_addr, e_mem_data_out;
+
+	// RAM s_mem (s_mem_addr, clk, d_mem_data_in, s_mem_write, s_mem_data_out);
+
+ //    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (d_mem_addr, clk, d_mem_data_in, d_mem_write, d_mem_data_out);
+
+ //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
+    ///////////////////////////////////////
+

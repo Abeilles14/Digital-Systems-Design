@@ -64,25 +64,21 @@ assign reset_n = KEY[3];
 // Lab 4 code
 //
 //====================================================================================
-// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
-// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
-// logic [7:0] e_mem_addr, e_mem_data_out;
-// logic s_mem_write, d_mem_write;
-logic datapath_start_flag, datapath_done_flag, key_found_flag;
+logic start_flag, done_flag, key_found_flag;
 logic [23:0] secret_key;
 
-assign datapath_start_flag = 1'b1;
+assign start_flag = 1'b1;
 
-datapath controller (
+multicore_controller quadcore_decryption (
     .clk(clk),
     .secret_key(secret_key),
     .key_found_flag(key_found_flag),
-    .datapath_start_flag(datapath_start_flag),
-    .datapath_done_flag(datapath_done_flag),
+    .multicore_start_flag(start_flag),
+    .multicore_done_flag(done_flag),
     .reset(!reset_n));
 
-assign LED[1:0] = (datapath_done_flag && key_found_flag) ? 2'b11 : 2'b00;
-assign LED[7:6] = (datapath_done_flag && !key_found_flag) ? 2'b11 : 2'b00;
+assign LED[1:0] = (done_flag && key_found_flag) ? 2'b11 : 2'b00;
+assign LED[7:6] = (done_flag && !key_found_flag) ? 2'b11 : 2'b00;
 
 //=====================================================================================
 //
