@@ -16,8 +16,8 @@ module datapath(
 	output logic datapath_done_flag,
 	input logic reset,
 	output logic test3,
-	output logic test4,
-	output logic test5
+    output logic test4,
+    output logic test5
 	);
 
 	logic [6:0] state;
@@ -31,6 +31,20 @@ module datapath(
 	logic init_start_flag, swap_start_flag, decrypt_start_flag;
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
 	logic invalid_key_flag;
+
+
+	///////////////TESTBENCH////////////////
+	// logic s_mem_write, d_mem_write;
+	// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
+	// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
+	// logic [7:0] e_mem_addr, e_mem_data_out;
+
+	// RAM s_mem (s_mem_addr, clk, d_mem_data_in, s_mem_write, s_mem_data_out);
+
+ //    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (d_mem_addr, clk, d_mem_data_in, d_mem_write, d_mem_data_out);
+
+ //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
+    ///////////////////////////////////////
 
 //initialize s_memory
 init_memory init_s_mem (
@@ -68,7 +82,9 @@ decrypt_memory decrypt_d_mem (
     .key_found_flag(key_found_flag),		//index k at 31 without invalid char, found a key
     .start_flag(decrypt_start_flag),
     .done_flag(decrypt_done_flag),
-    .reset(reset));
+    .reset(reset),
+    .test3(test3),
+    .test4(test4));
 
 	parameter IDLE = 7'b000_0000;
 	parameter S_MEM_INIT = 7'b001_0001;
@@ -91,18 +107,22 @@ decrypt_memory decrypt_d_mem (
 	//assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 	initial begin
-		secret_key = 24'h000000;
+		secret_key = 24'h00000;
 		state = IDLE;
-		test3 = 1'b0;
+		//test3 = 1'b0;
+		//test4 = 1'b0;
+		test5 = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
 	begin
 		if (reset)
 		begin
-			secret_key <= 24'h000000;
+			secret_key <= 24'h00000;
 			state <= IDLE;
-			test3 <= 1'b0;
+			//test3 <= 1'b0;
+			//test4 <= 1'b0;
+			test5 <= 1'b0;
 		end
 		else
 		begin
@@ -127,11 +147,17 @@ decrypt_memory decrypt_d_mem (
 				end
 				S_MEM_DECRYPT: begin
 					if (decrypt_done_flag && key_found_flag)
+					begin
+						//test3 <= !test3;
 						state <= DONE;
+					end
 					else if (decrypt_done_flag && !key_found_flag)
 					begin
 						if(secret_key == 24'h3FFFFF)
+						begin
+							//test4 <= !test4;
 							state <= DONE;
+						end
 						else
 						begin
 							secret_key <= secret_key + 1'b1;
@@ -139,10 +165,17 @@ decrypt_memory decrypt_d_mem (
 						end
 					end
 					else
+					//if(decrypt_done_flag)//
+					//begin//
+						//state <= DONE;//
+						//test4 <= 1'b1;
+					//end//
+					//else//
 						state <= S_MEM_DECRYPT;
 				end
 				DONE: begin
 					state <= DONE;
+					test5 <= 1'b1;
 				end
 				default: begin
 					state <= IDLE;

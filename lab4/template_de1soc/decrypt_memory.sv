@@ -14,7 +14,9 @@ module decrypt_memory(
 	output logic key_found_flag,		//index k at 31 without invalid char, found a key
 	input logic start_flag,
 	output logic done_flag,
-	input logic reset
+	input logic reset,
+	output logic test3,
+	output logic test4
 );
 
 	logic [10:0] state;
@@ -78,6 +80,8 @@ module decrypt_memory(
 
 		address = 8'bx;
 		key_found_flag = 1'b0;
+		test3 = 1'b0;
+		test4 = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
@@ -99,6 +103,8 @@ module decrypt_memory(
 
 			address <= 8'bx;
 			key_found_flag <= 1'b0;
+			test3 <= 1'b0;
+			test4 <= 1'b0;
 		end
 		else
 		begin
@@ -116,7 +122,7 @@ module decrypt_memory(
 					d_data_in <= 8'bx;
 
 					address <= 8'bx;
-					key_found_flag <= 1'b0;
+					key_found_flag <= key_found_flag;	//keep value from DONE since loops
 
 					if (start_flag)
 						state <= SET_I_ADDR;
@@ -136,6 +142,7 @@ module decrypt_memory(
 
 					i_index <= i_index + 8'h01;////
 					address <= i_index + 8'h01;////			//set address = i
+					key_found_flag <= 1'b0;
 
 					state <= WAIT_I_ADDR;
 				end
@@ -152,6 +159,7 @@ module decrypt_memory(
 
 					i_index <= i_index;
 					address <= i_index;////			//set address = i
+					key_found_flag <= key_found_flag;
 
 					state <= GET_I_DATA;
 				end
@@ -168,6 +176,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= i_index;////
+					key_found_flag <= key_found_flag;
 
 					state <= SET_J_ADDR;
 				end
@@ -184,6 +193,7 @@ module decrypt_memory(
 
 					j_index <= j_index + i_data;////	//j = j+s[i]
 					address <= j_index + i_data;////	//set address = j
+					key_found_flag <= key_found_flag;
 
 					state <= WAIT_J_ADDR;
 				end
@@ -200,6 +210,7 @@ module decrypt_memory(
 					
 					j_index <= j_index;
 					address <= j_index;////			//set address = j
+					key_found_flag <= key_found_flag;
 
 					state <= GET_J_DATA;
 				end
@@ -216,6 +227,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= j_index;
+					key_found_flag <= key_found_flag;
 
 					state <= SET_SWAP_I_ADDR;
 				end
@@ -232,6 +244,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= i_index;////
+					key_found_flag <= key_found_flag;
 
 					state <= SWAP_DATA_I;
 				end
@@ -248,6 +261,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= i_index;////
+					key_found_flag <= key_found_flag;
 
 					if(s_data_out == j_data)		//ensure j_data stored in s_mem
 						state <= SET_SWAP_J_ADDR;
@@ -267,6 +281,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= j_index;////
+					key_found_flag <= key_found_flag;
 
 					state <= SWAP_DATA_J;
 				end
@@ -283,6 +298,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= j_index;////
+					key_found_flag <= key_found_flag;
 
 					if(s_data_out == i_data)		//ensure i_data stored in s_mem
 						state <= SET_F_ADDR;
@@ -318,6 +334,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= i_data + j_data;////
+					key_found_flag <= key_found_flag;
 
 					state <= GET_F_VALUE;
 				end
@@ -334,6 +351,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= address;
+					key_found_flag <= key_found_flag;
 
 					state <= SET_K_ADDR;
 				end
@@ -350,6 +368,7 @@ module decrypt_memory(
 					d_data_in <= f_value ^ e_data_out;////
 
 					address <= k_index;////
+					key_found_flag <= key_found_flag;
 
 					state <= WAIT_K_ADDR;
 				end
@@ -366,6 +385,7 @@ module decrypt_memory(
 					d_data_in <= f_value ^ e_data_out;////
 
 					address <= k_index;////
+					key_found_flag <= key_found_flag;
 
 					state <= DECRYPT;
 				end
@@ -382,6 +402,7 @@ module decrypt_memory(
 					d_data_in <= f_value ^ e_data_out;
 
 					address <= k_index;////
+					key_found_flag <= key_found_flag;
 
 					if(d_data_out == d_data_in)		//ensure d_data stored in d_mem
 						state <= VALIDATE;
@@ -401,6 +422,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= address;
+					key_found_flag <= 1'b0;
 
 					if((d_data_out >= 8'd97 && d_data_out <= 8'd122) || d_data_out == 8'd32)
 					begin
@@ -408,6 +430,7 @@ module decrypt_memory(
 					end
 					else
 					begin
+						test4 <= !test4;
 						state <= DONE;
 					end
 				end
@@ -426,6 +449,7 @@ module decrypt_memory(
 
 					if (k_index == `END_K_ADDR - 1)
 					begin
+						test3 <= !test3;
 						k_index <= k_index;
 						key_found_flag <= 1'b1;
 						state <= DONE;
@@ -433,6 +457,7 @@ module decrypt_memory(
 					else
 					begin
 						k_index <= k_index + 8'h01;		//incr addr by 1
+						key_found_flag <= key_found_flag;
 						state <= SET_I_ADDR;
 					end
 				end
@@ -449,6 +474,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= address;
+					key_found_flag <= key_found_flag;
 
 					//add start flag/return to IDLE?
 					state <= IDLE;
@@ -466,6 +492,7 @@ module decrypt_memory(
 					d_data_in <= d_data_in;
 
 					address <= address;
+					key_found_flag <= key_found_flag;
 
 					state <= IDLE;
 				end

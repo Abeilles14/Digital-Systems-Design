@@ -1,9 +1,11 @@
-`timescale 1 ps / 1 ps
 module ksa_tb();
 logic clk, reset_n;						
-logic s_mem_write, datapath_start_flag;
+logic s_mem_write, d_mem_write, datapath_start_flag, datapath_done_flag, key_found_flag;
 logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
+logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
+logic [7:0] e_mem_addr, e_mem_data_out;
 logic [23:0] secret_key;
+
 
 s_memory s_mem_DUT (
     .address(s_mem_addr),
@@ -12,7 +14,15 @@ s_memory s_mem_DUT (
     .wren(s_mem_write),
     .q(s_mem_data_out));
 
-datapath controller_DUT (
+  // TEST BENCH
+    
+    RAM s_mem (address, clk, data, wren, q);
+
+    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (decryptionAddress, clk, decryptionData, decryptionWrite, decryptedOutput);
+
+    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (messageAddress, clk, messageMem);
+
+datapath DUT (
     .clk(clk),
     .s_mem_addr(s_mem_addr),
     .s_mem_data_in(s_mem_data_in),

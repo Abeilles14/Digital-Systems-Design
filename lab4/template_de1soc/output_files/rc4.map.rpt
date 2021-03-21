@@ -1,5 +1,5 @@
 Analysis & Synthesis report for rc4
-Fri Mar 19 23:34:16 2021
+Sat Mar 20 17:47:45 2021
 Quartus II 64-Bit Version 14.1.0 Build 186 12/03/2014 SJ Web Edition
 
 
@@ -71,13 +71,13 @@ agreement for further details.
 +------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                 ;
 +---------------------------------+--------------------------------------------+
-; Analysis & Synthesis Status     ; Successful - Fri Mar 19 23:34:16 2021      ;
+; Analysis & Synthesis Status     ; Successful - Sat Mar 20 17:47:45 2021      ;
 ; Quartus II 64-Bit Version       ; 14.1.0 Build 186 12/03/2014 SJ Web Edition ;
 ; Revision Name                   ; rc4                                        ;
 ; Top-level Entity Name           ; ksa                                        ;
 ; Family                          ; Cyclone V                                  ;
 ; Logic utilization (in ALMs)     ; N/A                                        ;
-; Total registers                 ; 395                                        ;
+; Total registers                 ; 398                                        ;
 ; Total pins                      ; 67                                         ;
 ; Total virtual pins              ; 0                                          ;
 ; Total block memory bits         ; 6,144                                      ;
@@ -259,16 +259,16 @@ agreement for further details.
 +---------------------------------------------+--------------------------+
 ; Resource                                    ; Usage                    ;
 +---------------------------------------------+--------------------------+
-; Estimate of Logic utilization (ALMs needed) ; 466                      ;
+; Estimate of Logic utilization (ALMs needed) ; 470                      ;
 ;                                             ;                          ;
-; Combinational ALUT usage for logic          ; 768                      ;
-;     -- 7 input functions                    ; 5                        ;
-;     -- 6 input functions                    ; 102                      ;
-;     -- 5 input functions                    ; 138                      ;
-;     -- 4 input functions                    ; 192                      ;
-;     -- <=3 input functions                  ; 331                      ;
+; Combinational ALUT usage for logic          ; 772                      ;
+;     -- 7 input functions                    ; 4                        ;
+;     -- 6 input functions                    ; 107                      ;
+;     -- 5 input functions                    ; 134                      ;
+;     -- 4 input functions                    ; 195                      ;
+;     -- <=3 input functions                  ; 332                      ;
 ;                                             ;                          ;
-; Dedicated logic registers                   ; 395                      ;
+; Dedicated logic registers                   ; 398                      ;
 ;                                             ;                          ;
 ; I/O pins                                    ; 67                       ;
 ; Total MLAB memory bits                      ; 0                        ;
@@ -278,7 +278,7 @@ agreement for further details.
 ;                                             ;                          ;
 ; Maximum fan-out node                        ; altera_internal_jtag~TDO ;
 ; Maximum fan-out                             ; 272                      ;
-; Total fan-out                               ; 4937                     ;
+; Total fan-out                               ; 4966                     ;
 ; Average fan-out                             ; 3.71                     ;
 +---------------------------------------------+--------------------------+
 
@@ -288,7 +288,7 @@ agreement for further details.
 +-----------------------------------------------------------------------------------------------------+-------------------+--------------+-------------------+------------+------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+
 ; Compilation Hierarchy Node                                                                          ; LC Combinationals ; LC Registers ; Block Memory Bits ; DSP Blocks ; Pins ; Virtual Pins ; Full Hierarchy Name                                                                                                                                                                                                      ; Library Name ;
 +-----------------------------------------------------------------------------------------------------+-------------------+--------------+-------------------+------------+------+--------------+--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+--------------+
-; |ksa                                                                                                ; 768 (5)           ; 395 (0)      ; 6144              ; 0          ; 67   ; 0            ; |ksa                                                                                                                                                                                                                     ; work         ;
+; |ksa                                                                                                ; 772 (5)           ; 398 (0)      ; 6144              ; 0          ; 67   ; 0            ; |ksa                                                                                                                                                                                                                     ; work         ;
 ;    |SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst0|                                    ; 7 (7)             ; 0 (0)        ; 0                 ; 0          ; 0    ; 0            ; |ksa|SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst0                                                                                                                                                         ; work         ;
 ;    |SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst1|                                    ; 7 (7)             ; 0 (0)        ; 0                 ; 0          ; 0    ; 0            ; |ksa|SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst1                                                                                                                                                         ; work         ;
 ;    |SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst2|                                    ; 7 (7)             ; 0 (0)        ; 0                 ; 0          ; 0    ; 0            ; |ksa|SevenSegmentDisplayDecoder:SevenSegmentDisplayDecoder_inst2                                                                                                                                                         ; work         ;
@@ -301,8 +301,8 @@ agreement for further details.
 ;             |altsyncram_kq83:altsyncram1|                                                           ; 0 (0)             ; 0 (0)        ; 2048              ; 0          ; 0    ; 0            ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|altsyncram_kq83:altsyncram1                                                                                                           ; work         ;
 ;             |sld_mod_ram_rom:mgl_prim2|                                                             ; 41 (23)           ; 34 (25)      ; 0                 ; 0          ; 0    ; 0            ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2                                                                                                             ; work         ;
 ;                |sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|                                 ; 18 (18)           ; 9 (9)        ; 0                 ; 0          ; 0    ; 0            ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr                                                          ; work         ;
-;    |datapath:controller|                                                                            ; 454 (64)          ; 184 (30)     ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller                                                                                                                                                                                                 ; work         ;
-;       |decrypt_memory:decrypt_d_mem|                                                                ; 175 (175)         ; 84 (84)      ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller|decrypt_memory:decrypt_d_mem                                                                                                                                                                    ; work         ;
+;    |datapath:controller|                                                                            ; 458 (66)          ; 187 (31)     ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller                                                                                                                                                                                                 ; work         ;
+;       |decrypt_memory:decrypt_d_mem|                                                                ; 177 (177)         ; 86 (86)      ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller|decrypt_memory:decrypt_d_mem                                                                                                                                                                    ; work         ;
 ;       |init_memory:init_s_mem|                                                                      ; 16 (16)           ; 12 (12)      ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller|init_memory:init_s_mem                                                                                                                                                                          ; work         ;
 ;       |swap_memory:swap_s_mem|                                                                      ; 199 (125)         ; 58 (58)      ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller|swap_memory:swap_s_mem                                                                                                                                                                          ; work         ;
 ;          |lpm_divide:Mod0|                                                                          ; 74 (0)            ; 0 (0)        ; 0                 ; 0          ; 0    ; 0            ; |ksa|datapath:controller|swap_memory:swap_s_mem|lpm_divide:Mod0                                                                                                                                                          ; work         ;
@@ -375,10 +375,10 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 395   ;
+; Total registers                              ; 398   ;
 ; Number of registers using Synchronous Clear  ; 15    ;
 ; Number of registers using Synchronous Load   ; 72    ;
-; Number of registers using Asynchronous Clear ; 211   ;
+; Number of registers using Asynchronous Clear ; 214   ;
 ; Number of registers using Asynchronous Load  ; 0     ;
 ; Number of registers using Clock Enable       ; 280   ;
 ; Number of registers using Preset             ; 0     ;
@@ -402,29 +402,29 @@ Note: For table entries with two numbers listed, the numbers in parentheses indi
 +--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
 ; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output                                                                                                                                                                                                             ;
 +--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[1]                                                                                                       ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_shift_cntr_reg[3]                                                                                            ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[0]                                                                                                       ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[3]                                                                                                       ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_shift_cntr_reg[1]                                                                                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[7]                                                                                                       ;
 ; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_shift_cntr_reg[2]                                                                                            ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[5]                                                                                                       ;
-; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_shift_cntr_reg[1]                                                                                            ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_reg[7]                                                                                                       ;
+; 3:1                ; 4 bits    ; 8 LEs         ; 4 LEs                ; 4 LEs                  ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_data_shift_cntr_reg[3]                                                                                            ;
 ; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_addr_reg[2]                                                                                                       ;
 ; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_addr_reg[6]                                                                                                       ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_addr_reg[4]                                                                                                       ;
-; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|word_counter[3]                                                        ;
-; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|word_counter[3]                                                        ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|ram_rom_addr_reg[3]                                                                                                       ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|word_counter[2]                                                        ;
+; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|word_counter[4]                                                        ;
 ; 5:1                ; 5 bits    ; 15 LEs        ; 10 LEs               ; 5 LEs                  ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|word_counter[4]                                                        ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|swap_memory:swap_s_mem|data_in[1]                                                                                                                                                                             ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|decrypt_memory:decrypt_d_mem|s_data_in[0]                                                                                                                                                                     ;
-; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|swap_memory:swap_s_mem|address[3]                                                                                                                                                                             ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|swap_memory:swap_s_mem|data_in[0]                                                                                                                                                                             ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|decrypt_memory:decrypt_d_mem|s_data_in[2]                                                                                                                                                                     ;
+; 3:1                ; 8 bits    ; 16 LEs        ; 0 LEs                ; 16 LEs                 ; Yes        ; |ksa|datapath:controller|swap_memory:swap_s_mem|address[4]                                                                                                                                                                             ;
 ; 17:1               ; 8 bits    ; 88 LEs        ; 0 LEs                ; 88 LEs                 ; Yes        ; |ksa|datapath:controller|init_memory:init_s_mem|counter[6]                                                                                                                                                                             ;
 ; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |ksa|s_memory:s_mem|altsyncram:altsyncram_component|altsyncram_m5b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|WORD_SR[2]                                                             ;
 ; 24:1               ; 4 bits    ; 64 LEs        ; 28 LEs               ; 36 LEs                 ; Yes        ; |ksa|d_memory:d_mem|altsyncram:altsyncram_component|altsyncram_75b4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|WORD_SR[2]                                                             ;
 ; 24:1               ; 4 bits    ; 64 LEs        ; 32 LEs               ; 32 LEs                 ; Yes        ; |ksa|e_memory:e_mem|altsyncram:altsyncram_component|altsyncram_0bd4:auto_generated|sld_mod_ram_rom:mgl_prim2|sld_rom_sr:\ram_rom_logic_gen:name_gen:info_rom_sr|WORD_SR[3]                                                             ;
 ; 8:1                ; 8 bits    ; 40 LEs        ; 40 LEs               ; 0 LEs                  ; Yes        ; |ksa|datapath:controller|decrypt_memory:decrypt_d_mem|address[6]                                                                                                                                                                       ;
-; 3:1                ; 17 bits   ; 34 LEs        ; 34 LEs               ; 0 LEs                  ; No         ; |ksa|datapath:controller|s_mem_addr[1]                                                                                                                                                                                                 ;
+; 3:1                ; 17 bits   ; 34 LEs        ; 34 LEs               ; 0 LEs                  ; No         ; |ksa|datapath:controller|s_mem_data_in[1]                                                                                                                                                                                              ;
 ; 4:1                ; 2 bits    ; 4 LEs         ; 4 LEs                ; 0 LEs                  ; No         ; |ksa|datapath:controller|Selector5                                                                                                                                                                                                     ;
-; 256:1              ; 8 bits    ; 1360 LEs      ; 16 LEs               ; 1344 LEs               ; No         ; |ksa|datapath:controller|swap_memory:swap_s_mem|Selector4                                                                                                                                                                              ;
+; 256:1              ; 8 bits    ; 1360 LEs      ; 16 LEs               ; 1344 LEs               ; No         ; |ksa|datapath:controller|swap_memory:swap_s_mem|Selector7                                                                                                                                                                              ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |ksa|sld_hub:auto_hub|alt_sld_fab:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:instrumentation_fabric|alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|hub_minor_ver_reg[0]                    ;
 ; 3:1                ; 2 bits    ; 4 LEs         ; 2 LEs                ; 2 LEs                  ; Yes        ; |ksa|sld_hub:auto_hub|alt_sld_fab:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:instrumentation_fabric|alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|hub_minor_ver_reg[3]                    ;
 ; 4:1                ; 5 bits    ; 10 LEs        ; 10 LEs               ; 0 LEs                  ; Yes        ; |ksa|sld_hub:auto_hub|alt_sld_fab:\instrumentation_fabric_with_node_gen:fabric_gen_new_way:instrumentation_fabric|alt_sld_fab_sldfabric:sldfabric|sld_jtag_hub:\jtag_hub_gen:real_sld_jtag_hub|mixer_addr_reg_internal[0]              ;
@@ -872,35 +872,35 @@ Note: In order to hide this table in the UI and the text report file, please set
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; arriav_ff             ; 286                         ;
-;     CLR               ; 88                          ;
+; arriav_ff             ; 289                         ;
+;     CLR               ; 91                          ;
 ;     ENA               ; 83                          ;
 ;     ENA CLR           ; 35                          ;
 ;     ENA CLR SCLR      ; 8                           ;
 ;     ENA CLR SLD       ; 24                          ;
 ;     ENA SLD           ; 48                          ;
-; arriav_lcell_comb     ; 629                         ;
+; arriav_lcell_comb     ; 633                         ;
 ;     arith             ; 169                         ;
 ;         0 data inputs ; 7                           ;
 ;         1 data inputs ; 95                          ;
 ;         2 data inputs ; 49                          ;
 ;         3 data inputs ; 7                           ;
 ;         4 data inputs ; 11                          ;
-;     extend            ; 3                           ;
-;         7 data inputs ; 3                           ;
-;     normal            ; 457                         ;
+;     extend            ; 2                           ;
+;         7 data inputs ; 2                           ;
+;     normal            ; 462                         ;
 ;         0 data inputs ; 1                           ;
 ;         1 data inputs ; 6                           ;
-;         2 data inputs ; 60                          ;
+;         2 data inputs ; 61                          ;
 ;         3 data inputs ; 36                          ;
-;         4 data inputs ; 164                         ;
-;         5 data inputs ; 114                         ;
-;         6 data inputs ; 76                          ;
+;         4 data inputs ; 167                         ;
+;         5 data inputs ; 110                         ;
+;         6 data inputs ; 81                          ;
 ; boundary_port         ; 130                         ;
 ; stratixv_ram_block    ; 24                          ;
 ;                       ;                             ;
 ; Max LUT depth         ; 18.40                       ;
-; Average LUT depth     ; 4.59                        ;
+; Average LUT depth     ; 4.52                        ;
 +-----------------------+-----------------------------+
 
 
@@ -949,7 +949,7 @@ Note: In order to hide this table in the UI and the text report file, please set
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit Analysis & Synthesis
     Info: Version 14.1.0 Build 186 12/03/2014 SJ Web Edition
-    Info: Processing started: Fri Mar 19 23:33:55 2021
+    Info: Processing started: Sat Mar 20 17:47:25 2021
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off rc4 -c rc4
 Info (11104): Parallel Compilation has detected 8 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 4 of the 4 physical processors detected instead.
 Info (12021): Found 2 design units, including 1 entities, in source file e_memory.vhd
@@ -973,12 +973,12 @@ Info (12021): Found 2 design units, including 1 entities, in source file s_memor
     Info (12022): Found design unit 1: s_memory-SYN
     Info (12023): Found entity 1: s_memory
 Info (12127): Elaborating entity "ksa" for the top level hierarchy
-Warning (10230): Verilog HDL assignment warning at ksa.sv(148): truncated value with size 8 to match size of target (7)
-Warning (10230): Verilog HDL assignment warning at ksa.sv(149): truncated value with size 8 to match size of target (7)
-Warning (10230): Verilog HDL assignment warning at ksa.sv(150): truncated value with size 8 to match size of target (7)
-Warning (10230): Verilog HDL assignment warning at ksa.sv(151): truncated value with size 8 to match size of target (7)
-Warning (10230): Verilog HDL assignment warning at ksa.sv(152): truncated value with size 8 to match size of target (7)
-Warning (10230): Verilog HDL assignment warning at ksa.sv(153): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(139): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(140): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(141): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(142): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(143): truncated value with size 8 to match size of target (7)
+Warning (10230): Verilog HDL assignment warning at ksa.sv(144): truncated value with size 8 to match size of target (7)
 Warning (10030): Net "LED[2]" at ksa.sv(53) has no driver or initial value, using a default initial value '0'
 Warning (10034): Output port "LEDR[9..8]" at ksa.sv(32) has no driver
 Info (12128): Elaborating entity "s_memory" for hierarchy "s_memory:s_mem"
@@ -1195,10 +1195,6 @@ Info (12133): Instantiated megafunction "e_memory:e_mem|altsyncram:altsyncram_co
     Info (12134): Parameter "WIDTH_WORD" = "8"
     Info (12134): Parameter "WIDTHAD" = "8"
 Info (12128): Elaborating entity "datapath" for hierarchy "datapath:controller"
-Warning (10240): Verilog HDL Always Construct warning at datapath.sv(99): inferring latch(es) for variable "test3", which holds its previous value in one or more paths through the always construct
-Warning (10034): Output port "test4" at datapath.sv(19) has no driver
-Warning (10034): Output port "test5" at datapath.sv(21) has no driver
-Info (10041): Inferred latch for "test3" at datapath.sv(99)
 Info (12128): Elaborating entity "init_memory" for hierarchy "datapath:controller|init_memory:init_s_mem"
 Info (12128): Elaborating entity "swap_memory" for hierarchy "datapath:controller|swap_memory:swap_s_mem"
 Info (12128): Elaborating entity "decrypt_memory" for hierarchy "datapath:controller|decrypt_memory:decrypt_d_mem"
@@ -1242,9 +1238,6 @@ Info (12021): Found 1 design units, including 1 entities, in source file db/alt_
 Warning (12241): 6 hierarchies have connectivity warnings - see the Connectivity Checks report folder
 Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "LEDR[2]" is stuck at GND
-    Warning (13410): Pin "LEDR[3]" is stuck at GND
-    Warning (13410): Pin "LEDR[4]" is stuck at GND
-    Warning (13410): Pin "LEDR[5]" is stuck at GND
     Warning (13410): Pin "LEDR[8]" is stuck at GND
     Warning (13410): Pin "LEDR[9]" is stuck at GND
 Info (286031): Timing-Driven Synthesis is running on partition "Top"
@@ -1254,17 +1247,17 @@ Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 9 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
 Warning (15752): Ignored 12 Virtual Pin logic option assignments
     Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[6]".
-    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[5]".
+    Warning (15751): Ignored Virtual Pin assignment to "LCD_RW".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[0]".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[7]".
-    Warning (15751): Ignored Virtual Pin assignment to "LCD_RW".
-    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[2]".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_ON".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[1]".
-    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[3]".
+    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[2]".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_RS".
+    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[3]".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[4]".
     Warning (15751): Ignored Virtual Pin assignment to "LCD_EN".
+    Warning (15751): Ignored Virtual Pin assignment to "LCD_DATA[5]".
 Warning (21074): Design contains 13 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "KEY[0]"
     Warning (15610): No output dependent on input pin "KEY[1]"
@@ -1279,16 +1272,16 @@ Warning (21074): Design contains 13 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "SW[7]"
     Warning (15610): No output dependent on input pin "SW[8]"
     Warning (15610): No output dependent on input pin "SW[9]"
-Info (21057): Implemented 985 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 989 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 18 input pins
     Info (21059): Implemented 53 output pins
-    Info (21061): Implemented 889 logic cells
+    Info (21061): Implemented 893 logic cells
     Info (21064): Implemented 24 RAM segments
-Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 49 warnings
-    Info: Peak virtual memory: 4885 megabytes
-    Info: Processing ended: Fri Mar 19 23:34:16 2021
-    Info: Elapsed time: 00:00:21
-    Info: Total CPU time (on all processors): 00:00:45
+Info: Quartus II 64-Bit Analysis & Synthesis was successful. 0 errors, 43 warnings
+    Info: Peak virtual memory: 4887 megabytes
+    Info: Processing ended: Sat Mar 20 17:47:45 2021
+    Info: Elapsed time: 00:00:20
+    Info: Total CPU time (on all processors): 00:00:42
 
 
 +------------------------------------------+
