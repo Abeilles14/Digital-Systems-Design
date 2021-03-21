@@ -64,46 +64,17 @@ assign reset_n = KEY[3];
 // Lab 4 code
 //
 //====================================================================================
-
-logic s_mem_write, d_mem_write, datapath_start_flag, datapath_done_flag, key_found_flag;
-logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
-logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
-logic [7:0] e_mem_addr, e_mem_data_out;
+// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
+// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
+// logic [7:0] e_mem_addr, e_mem_data_out;
+// logic s_mem_write, d_mem_write;
+logic datapath_start_flag, datapath_done_flag, key_found_flag;
 logic [23:0] secret_key;
 
 assign datapath_start_flag = 1'b1;
 
-s_memory s_mem (
-    .address(s_mem_addr),
-    .clock(clk),
-    .data(s_mem_data_in),
-    .wren(s_mem_write),
-    .q(s_mem_data_out));
-
-d_memory d_mem (
-    .address(d_mem_addr),
-    .clock(clk),
-    .data(d_mem_data_in),
-    .wren(d_mem_write),
-    .q(d_mem_data_out));
-
-e_memory e_mem (
-    .address(e_mem_addr),
-    .clock(clk),
-    .q(e_mem_data_out));
-
 datapath controller (
     .clk(clk),
-    .s_mem_addr(s_mem_addr),
-    .s_mem_data_in(s_mem_data_in),
-    .s_mem_data_out(s_mem_data_out),
-    .s_mem_write(s_mem_write),
-    .d_mem_addr(d_mem_addr),
-    .d_mem_data_in(d_mem_data_in),
-    .d_mem_data_out(d_mem_data_out),
-    .d_mem_write(d_mem_write),
-    .e_mem_addr(e_mem_addr),
-    .e_mem_data_out(e_mem_data_out),
     .secret_key(secret_key),
     .key_found_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),

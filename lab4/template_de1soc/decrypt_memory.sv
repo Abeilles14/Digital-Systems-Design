@@ -1,4 +1,4 @@
-`define START_ADDR 8'h00    //start and end addresses
+`define START_K_ADDR 8'h00    //start and end addresses
 `define END_K_ADDR 8'h20      //32
 
 module decrypt_memory (
@@ -67,9 +67,9 @@ module decrypt_memory (
 
 	initial begin
 	   state = IDLE;
-	   k_index = `START_ADDR;
-	   i_index = `START_ADDR;
-	   j_index = `START_ADDR;
+	   k_index = `START_K_ADDR;
+	   i_index = `START_K_ADDR;
+	   j_index = `START_K_ADDR;
 
 	   i_data = 8'bx;
 	   j_data = 8'bx;
@@ -87,9 +87,9 @@ module decrypt_memory (
         if (reset) begin
         	state <= IDLE;
 
-     		k_index <= `START_ADDR;
-		    i_index <= `START_ADDR;
-		    j_index <= `START_ADDR;
+     		k_index <= `START_K_ADDR;
+		    i_index <= `START_K_ADDR;
+		    j_index <= `START_K_ADDR;
 
 		    i_data <= 8'bx;
 		    j_data <= 8'bx;
@@ -105,9 +105,9 @@ module decrypt_memory (
         begin
             case (state)
                 IDLE: begin 
-                    k_index <= `START_ADDR;
-			         i_index <= `START_ADDR;
-			         j_index <= `START_ADDR;
+                    k_index <= `START_K_ADDR;
+			         i_index <= `START_K_ADDR;
+			         j_index <= `START_K_ADDR;
 
 			         i_data <= 8'bx;
 			         j_data <= 8'bx;

@@ -1,26 +1,27 @@
 module datapath(
 	input logic clk,
-	output logic [7:0] s_mem_addr,
-	output logic [7:0] s_mem_data_in,
-	input logic [7:0] s_mem_data_out,
-	output logic s_mem_write,
-	output logic [7:0] d_mem_addr,
-	output logic [7:0] d_mem_data_in,
-	input logic [7:0] d_mem_data_out,
-	output logic d_mem_write,
-	output logic [7:0] e_mem_addr,
-	input logic [7:0] e_mem_data_out,
 	output logic [23:0] secret_key,
 	output logic key_found_flag,
 	input logic datapath_start_flag,
 	output logic datapath_done_flag,
-	input logic reset,
-	output logic test3,
-    output logic test4,
-    output logic test5
+	input logic reset
 	);
 
+	////
+	logic [7:0] s_mem_addr;
+	logic [7:0] s_mem_data_in;
+	logic [7:0] s_mem_data_out;
+	logic s_mem_write;
+	logic [7:0] d_mem_addr;
+	logic [7:0] d_mem_data_in;
+	logic [7:0] d_mem_data_out;
+	logic d_mem_write;
+	logic [7:0] e_mem_addr;
+	logic [7:0] e_mem_data_out;
+	////
+
 	logic [6:0] state;
+
 	logic [7:0] s_init_addr, s_init_data_in;
 	logic [7:0] s_swap_addr, s_swap_data_in, s_decrypt_data_in;
 	logic [7:0] decrypt_addr;		//can be s_addr, d_addr, or e_addr
@@ -31,7 +32,6 @@ module datapath(
 	logic init_start_flag, swap_start_flag, decrypt_start_flag;
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
 	logic invalid_key_flag;
-
 
 	///////////////TESTBENCH////////////////
 	// logic s_mem_write, d_mem_write;
@@ -45,6 +45,26 @@ module datapath(
 
  //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
     ///////////////////////////////////////
+
+// RAM AND ROM
+s_memory s_mem (
+    .address(s_mem_addr),
+    .clock(clk),
+    .data(s_mem_data_in),
+    .wren(s_mem_write),
+    .q(s_mem_data_out));
+
+d_memory d_mem (
+    .address(d_mem_addr),
+    .clock(clk),
+    .data(d_mem_data_in),
+    .wren(d_mem_write),
+    .q(d_mem_data_out));
+
+e_memory e_mem (
+    .address(e_mem_addr),
+    .clock(clk),
+    .q(e_mem_data_out));
 
 //initialize s_memory
 init_memory init_s_mem (
