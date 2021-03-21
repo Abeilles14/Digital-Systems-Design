@@ -82,9 +82,7 @@ decrypt_memory decrypt_d_mem (
     .key_found_flag(key_found_flag),		//index k at 31 without invalid char, found a key
     .start_flag(decrypt_start_flag),
     .done_flag(decrypt_done_flag),
-    .reset(reset),
-    .test3(test3),
-    .test4(test4));
+    .reset(reset));
 
 	parameter IDLE = 7'b000_0000;
 	parameter S_MEM_INIT = 7'b001_0001;
@@ -107,22 +105,16 @@ decrypt_memory decrypt_d_mem (
 	//assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 	initial begin
-		secret_key = 24'h00000;
+		secret_key = 24'h02640F;
 		state = IDLE;
-		//test3 = 1'b0;
-		//test4 = 1'b0;
-		test5 = 1'b0;
 	end
 
 	always_ff @(posedge clk, posedge reset)
 	begin
 		if (reset)
 		begin
-			secret_key <= 24'h00000;
+			secret_key <= 24'h02640F;
 			state <= IDLE;
-			//test3 <= 1'b0;
-			//test4 <= 1'b0;
-			test5 <= 1'b0;
 		end
 		else
 		begin
@@ -160,22 +152,16 @@ decrypt_memory decrypt_d_mem (
 						end
 						else
 						begin
-							secret_key <= secret_key + 1'b1;
-							state <= S_MEM_INIT;
+							// secret_key <= secret_key + 1'b1;
+							// state <= S_MEM_INIT;
+							state <= DONE;//
 						end
 					end
 					else
-					//if(decrypt_done_flag)//
-					//begin//
-						//state <= DONE;//
-						//test4 <= 1'b1;
-					//end//
-					//else//
 						state <= S_MEM_DECRYPT;
 				end
 				DONE: begin
 					state <= DONE;
-					test5 <= 1'b1;
 				end
 				default: begin
 					state <= IDLE;
