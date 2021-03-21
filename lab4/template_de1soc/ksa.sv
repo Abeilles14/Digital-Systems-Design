@@ -70,7 +70,6 @@ logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
 logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
 logic [7:0] e_mem_addr, e_mem_data_out;
 logic [23:0] secret_key;
-logic test_LED3, test_LED4, test_LED5;
 
 assign datapath_start_flag = 1'b1;
 
@@ -109,17 +108,10 @@ datapath controller (
     .key_found_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),
     .datapath_done_flag(datapath_done_flag),
-    .reset(!reset_n),
-    .test3(test_LED3),
-    .test4(test_LED4),
-    .test5(test_LED5));
+    .reset(!reset_n));
 
 assign LED[1:0] = (datapath_done_flag && key_found_flag) ? 2'b11 : 2'b00;
 assign LED[7:6] = (datapath_done_flag && !key_found_flag) ? 2'b11 : 2'b00;
-
-assign LED[3] = test_LED3;
-assign LED[4] = test_LED4;
- assign LED[5] = test_LED5;
 
 //=====================================================================================
 //

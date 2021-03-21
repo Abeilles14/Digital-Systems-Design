@@ -105,7 +105,7 @@ decrypt_memory decrypt_d_mem (
 	//assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 	initial begin
-		secret_key = 24'h02640F;
+		secret_key = 24'h000000;
 		state = IDLE;
 	end
 
@@ -113,7 +113,7 @@ decrypt_memory decrypt_d_mem (
 	begin
 		if (reset)
 		begin
-			secret_key <= 24'h02640F;
+			secret_key <= 24'h000000;
 			state <= IDLE;
 		end
 		else
@@ -152,9 +152,8 @@ decrypt_memory decrypt_d_mem (
 						end
 						else
 						begin
-							// secret_key <= secret_key + 1'b1;
-							// state <= S_MEM_INIT;
-							state <= DONE;//
+							secret_key <= secret_key + 1'b1;
+							state <= S_MEM_INIT;
 						end
 					end
 					else

@@ -1,5 +1,5 @@
 TimeQuest Timing Analyzer report for rc4
-Sat Mar 20 23:59:52 2021
+Sun Mar 21 00:13:36 2021
 Quartus II 64-Bit Version 14.1.0 Build 186 12/03/2014 SJ Web Edition
 
 
@@ -117,12 +117,12 @@ agreement for further details.
 ; Number detected on machine ; 8           ;
 ; Maximum allowed            ; 4           ;
 ;                            ;             ;
-; Average used               ; 1.29        ;
+; Average used               ; 1.30        ;
 ; Maximum used               ; 4           ;
 ;                            ;             ;
 ; Usage by Processor         ; % Time Used ;
 ;     Processor 1            ; 100.0%      ;
-;     Processors 2-4         ;   9.5%      ;
+;     Processors 2-4         ;  10.0%      ;
 ;     Processors 5-8         ;   0.0%      ;
 +----------------------------+-------------+
 
@@ -132,7 +132,7 @@ agreement for further details.
 +------------------------+--------+--------------------------+
 ; SDC File Path          ; Status ; Read at                  ;
 +------------------------+--------+--------------------------+
-; timing_constraints.sdc ; OK     ; Sat Mar 20 23:59:35 2021 ;
+; timing_constraints.sdc ; OK     ; Sun Mar 21 00:13:28 2021 ;
 +------------------------+--------+--------------------------+
 
 
@@ -151,8 +151,8 @@ agreement for further details.
 +-----------+-----------------+---------------------+------+
 ; Fmax      ; Restricted Fmax ; Clock Name          ; Note ;
 +-----------+-----------------+---------------------+------+
-; 88.41 MHz ; 88.41 MHz       ; altera_reserved_tck ;      ;
-; 94.42 MHz ; 94.42 MHz       ; CLOCK_50            ;      ;
+; 75.36 MHz ; 75.36 MHz       ; altera_reserved_tck ;      ;
+; 85.4 MHz  ; 85.4 MHz        ; CLOCK_50            ;      ;
 +-----------+-----------------+---------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -168,8 +168,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; CLOCK_50            ; 9.409  ; 0.000         ;
-; altera_reserved_tck ; 11.011 ; 0.000         ;
+; CLOCK_50            ; 8.291  ; 0.000         ;
+; altera_reserved_tck ; 10.032 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -178,8 +178,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.277 ; 0.000         ;
-; CLOCK_50            ; 0.301 ; 0.000         ;
+; altera_reserved_tck ; 0.279 ; 0.000         ;
+; CLOCK_50            ; 0.281 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -188,7 +188,7 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 15.389 ; 0.000         ;
+; altera_reserved_tck ; 15.101 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -197,7 +197,7 @@ HTML report is unavailable in plain text report export.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.670 ; 0.000         ;
+; altera_reserved_tck ; 0.769 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -206,8 +206,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+--------+--------------------+
 ; Clock               ; Slack  ; End Point TNS      ;
 +---------------------+--------+--------------------+
-; CLOCK_50            ; 8.967  ; 0.000              ;
-; altera_reserved_tck ; 15.095 ; 0.000              ;
+; CLOCK_50            ; 8.953  ; 0.000              ;
+; altera_reserved_tck ; 15.180 ; 0.000              ;
 +---------------------+--------+--------------------+
 
 
@@ -216,8 +216,8 @@ HTML report is unavailable in plain text report export.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 1.661 ; 2.439 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 1.632 ; 2.036 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 1.537 ; 2.490 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 2.553 ; 3.440 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -227,7 +227,7 @@ HTML report is unavailable in plain text report export.
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; altera_reserved_tdi ; altera_reserved_tck ; 0.761 ; 0.384 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.531 ; 0.175 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 0.732 ; 0.446 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -236,29 +236,125 @@ HTML report is unavailable in plain text report export.
 +---------------------+---------------------+--------+--------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise   ; Fall   ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 12.235 ; 12.437 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 11.803 ; 12.292 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 11.513 ; 11.846 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 12.235 ; 12.437 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 10.452 ; 10.629 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 9.176  ; 9.238  ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 8.663  ; 8.757  ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 8.605  ; 8.707  ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 8.550  ; 8.547  ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 9.003  ; 9.238  ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 8.706  ; 8.921  ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 8.761  ; 8.898  ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 9.176  ; 8.873  ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 8.999  ; 9.176  ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 8.637  ; 8.818  ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 8.694  ; 8.840  ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 8.999  ; 9.162  ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 8.897  ; 9.176  ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 8.928  ; 9.021  ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 8.814  ; 9.054  ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 8.824  ; 8.637  ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 10.394 ; 9.923  ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 8.833  ; 8.897  ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 9.191  ; 9.457  ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 9.500  ; 9.771  ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 9.309  ; 9.592  ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 9.402  ; 9.743  ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 9.426  ; 9.685  ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 10.394 ; 9.923  ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 9.387  ; 9.708  ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 9.009  ; 9.223  ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 9.030  ; 9.220  ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 9.103  ; 9.300  ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 9.117  ; 9.297  ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 9.387  ; 9.708  ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 8.433  ; 8.427  ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 8.199  ; 8.149  ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 9.559  ; 9.608  ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 8.775  ; 8.822  ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 8.757  ; 8.834  ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 9.472  ; 9.608  ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 8.841  ; 8.981  ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 8.809  ; 8.952  ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 8.790  ; 8.906  ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 9.559  ; 9.303  ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 9.362  ; 9.785  ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 9.080  ; 9.406  ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 9.152  ; 9.495  ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 9.362  ; 9.785  ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 9.313  ; 9.661  ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 8.134  ; 8.169  ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 9.251  ; 9.691  ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 8.340  ; 8.373  ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 11.765 ; 12.197 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 11.765 ; 12.197 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 11.505 ; 11.809 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 10.939 ; 11.028 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 8.821  ; 8.721  ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 5.509  ; 5.570  ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 6.419  ; 6.511  ; Fall       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 6.502  ; 6.584  ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
 
 
-+------------------------------------------------------------------------------------------------+
-; Minimum Clock to Output Times                                                                  ;
-+---------------------+---------------------+--------+--------+------------+---------------------+
-; Data Port           ; Clock Port          ; Rise   ; Fall   ; Clock Edge ; Clock Reference     ;
-+---------------------+---------------------+--------+--------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 9.301  ; 9.572  ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 9.546  ; 10.019 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 9.301  ; 9.656  ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 10.074 ; 10.231 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 9.406  ; 9.572  ; Rise       ; CLOCK_50            ;
-; altera_reserved_tdo ; altera_reserved_tck ; 5.229  ; 5.278  ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 5.291  ; 5.363  ; Fall       ; altera_reserved_tck ;
-+---------------------+---------------------+--------+--------+------------+---------------------+
++----------------------------------------------------------------------------------------------+
+; Minimum Clock to Output Times                                                                ;
++---------------------+---------------------+-------+-------+------------+---------------------+
+; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
++---------------------+---------------------+-------+-------+------------+---------------------+
+; HEX0[*]             ; CLOCK_50            ; 7.509 ; 7.617 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 7.509 ; 7.712 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 7.532 ; 7.713 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 7.518 ; 7.617 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 7.743 ; 7.971 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 7.683 ; 7.851 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 7.671 ; 7.871 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 7.902 ; 7.683 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 7.483 ; 7.409 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 7.500 ; 7.618 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 7.607 ; 7.744 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 7.677 ; 7.872 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 7.662 ; 7.821 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 7.636 ; 7.755 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 7.648 ; 7.775 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 7.483 ; 7.409 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 7.485 ; 7.532 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 7.485 ; 7.532 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 7.913 ; 8.032 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 8.278 ; 8.539 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 8.194 ; 8.434 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 8.273 ; 8.475 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 8.156 ; 8.497 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 8.926 ; 8.497 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 7.030 ; 7.060 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 7.822 ; 8.034 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 7.829 ; 8.004 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 7.874 ; 8.098 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 7.863 ; 8.020 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 8.207 ; 8.481 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 7.313 ; 7.317 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 7.030 ; 7.060 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 7.556 ; 7.593 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 7.571 ; 7.593 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 7.556 ; 7.695 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 7.943 ; 8.060 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 7.633 ; 7.760 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 7.807 ; 7.812 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 7.578 ; 7.695 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 8.356 ; 8.072 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 7.100 ; 7.124 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 7.979 ; 8.311 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 8.003 ; 8.323 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 8.273 ; 8.759 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 8.139 ; 8.431 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 7.100 ; 7.124 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 8.178 ; 8.602 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 7.340 ; 7.339 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 7.635 ; 7.770 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 9.557 ; 9.809 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 9.338 ; 9.494 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 8.607 ; 8.908 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 7.635 ; 7.770 ; Rise       ; CLOCK_50            ;
+; altera_reserved_tdo ; altera_reserved_tck ; 5.229 ; 5.278 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 5.291 ; 5.363 ; Fall       ; altera_reserved_tck ;
++---------------------+---------------------+-------+-------+------------+---------------------+
 
 
 ----------------------------------------------
@@ -272,8 +368,8 @@ No synchronizer chains to report.
 +-----------+-----------------+---------------------+------+
 ; Fmax      ; Restricted Fmax ; Clock Name          ; Note ;
 +-----------+-----------------+---------------------+------+
-; 89.81 MHz ; 89.81 MHz       ; altera_reserved_tck ;      ;
-; 92.38 MHz ; 92.38 MHz       ; CLOCK_50            ;      ;
+; 78.86 MHz ; 78.86 MHz       ; altera_reserved_tck ;      ;
+; 86.41 MHz ; 86.41 MHz       ; CLOCK_50            ;      ;
 +-----------+-----------------+---------------------+------+
 This panel reports FMAX for every clock in the design, regardless of the user-specified clock periods.  FMAX is only computed for paths where the source and destination registers or ports are driven by the same clock.  Paths of different clocks, including generated clocks, are ignored.  For paths between a clock and its inversion, FMAX is computed as if the rising and falling edges are scaled along with FMAX, such that the duty cycle (in terms of a percentage) is maintained. Altera recommends that you always use clock constraints and other slack reports for sign-off analysis.
 
@@ -283,8 +379,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; CLOCK_50            ; 9.175  ; 0.000         ;
-; altera_reserved_tck ; 11.099 ; 0.000         ;
+; CLOCK_50            ; 8.427  ; 0.000         ;
+; altera_reserved_tck ; 10.326 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -293,8 +389,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.203 ; 0.000         ;
-; CLOCK_50            ; 0.283 ; 0.000         ;
+; CLOCK_50            ; 0.267 ; 0.000         ;
+; altera_reserved_tck ; 0.299 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -303,7 +399,7 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 15.474 ; 0.000         ;
+; altera_reserved_tck ; 15.224 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -312,7 +408,7 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.638 ; 0.000         ;
+; altera_reserved_tck ; 0.727 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -321,8 +417,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+--------+-------------------+
 ; Clock               ; Slack  ; End Point TNS     ;
 +---------------------+--------+-------------------+
-; CLOCK_50            ; 8.999  ; 0.000             ;
-; altera_reserved_tck ; 15.094 ; 0.000             ;
+; CLOCK_50            ; 8.982  ; 0.000             ;
+; altera_reserved_tck ; 15.150 ; 0.000             ;
 +---------------------+--------+-------------------+
 
 
@@ -331,8 +427,8 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 1.680 ; 2.410 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 1.661 ; 2.099 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 1.567 ; 2.517 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 2.542 ; 3.448 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -342,7 +438,7 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; altera_reserved_tdi ; altera_reserved_tck ; 0.790 ; 0.415 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.550 ; 0.197 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 0.660 ; 0.306 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -351,13 +447,61 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+---------------------+--------+--------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise   ; Fall   ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 11.823 ; 12.036 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 11.470 ; 11.965 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 11.188 ; 11.539 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 11.823 ; 12.036 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 10.102 ; 10.275 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 8.901  ; 8.987  ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 8.454  ; 8.523  ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 8.411  ; 8.485  ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 8.338  ; 8.316  ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 8.793  ; 8.987  ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 8.492  ; 8.678  ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 8.545  ; 8.658  ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 8.901  ; 8.620  ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 8.700  ; 8.912  ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 8.409  ; 8.567  ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 8.493  ; 8.597  ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 8.700  ; 8.864  ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 8.634  ; 8.912  ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 8.630  ; 8.784  ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 8.546  ; 8.798  ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 8.575  ; 8.379  ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 10.095 ; 9.673  ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 8.593  ; 8.653  ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 8.924  ; 9.181  ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 9.246  ; 9.494  ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 9.057  ; 9.316  ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 9.115  ; 9.454  ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 9.178  ; 9.412  ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 10.095 ; 9.673  ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 9.160  ; 9.442  ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 8.800  ; 8.980  ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 8.794  ; 8.969  ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 8.868  ; 9.029  ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 8.859  ; 9.016  ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 9.160  ; 9.442  ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 8.233  ; 8.211  ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 7.965  ; 7.954  ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 9.277  ; 9.337  ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 8.542  ; 8.567  ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 8.531  ; 8.586  ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 9.210  ; 9.337  ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 8.607  ; 8.734  ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 8.581  ; 8.698  ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 8.565  ; 8.652  ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 9.277  ; 9.046  ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 9.140  ; 9.516  ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 8.866  ; 9.152  ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 8.951  ; 9.242  ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 9.140  ; 9.516  ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 9.059  ; 9.388  ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 7.963  ; 7.985  ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 9.041  ; 9.430  ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 8.147  ; 8.189  ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 11.339 ; 11.812 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 11.339 ; 11.812 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 11.091 ; 11.442 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 10.593 ; 10.656 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 8.539  ; 8.414  ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 5.352  ; 5.388  ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 6.250  ; 6.197  ; Fall       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 6.250  ; 6.260  ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
 
 
@@ -366,11 +510,59 @@ This panel reports FMAX for every clock in the design, regardless of the user-sp
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 8.983 ; 9.272 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 9.223 ; 9.693 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 8.983 ; 9.339 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 9.674 ; 9.926 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 9.040 ; 9.272 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 7.287 ; 7.403 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 7.302 ; 7.464 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 7.331 ; 7.493 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 7.287 ; 7.403 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 7.526 ; 7.713 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 7.447 ; 7.624 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 7.449 ; 7.642 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 7.645 ; 7.455 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 7.233 ; 7.175 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 7.281 ; 7.372 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 7.377 ; 7.485 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 7.438 ; 7.620 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 7.418 ; 7.555 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 7.405 ; 7.502 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 7.397 ; 7.514 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 7.233 ; 7.175 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 7.230 ; 7.278 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 7.230 ; 7.278 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 7.632 ; 7.746 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 8.016 ; 8.237 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 7.925 ; 8.144 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 7.968 ; 8.165 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 7.887 ; 8.235 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 8.610 ; 8.231 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 6.802 ; 6.835 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 7.576 ; 7.755 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 7.562 ; 7.722 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 7.631 ; 7.817 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 7.596 ; 7.740 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 7.960 ; 8.179 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 7.073 ; 7.065 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 6.802 ; 6.835 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 7.307 ; 7.336 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 7.319 ; 7.336 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 7.307 ; 7.432 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 7.686 ; 7.808 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 7.372 ; 7.485 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 7.537 ; 7.543 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 7.327 ; 7.418 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 8.051 ; 7.790 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 6.906 ; 6.910 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 7.730 ; 8.023 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 7.768 ; 8.031 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 8.013 ; 8.458 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 7.854 ; 8.133 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 6.906 ; 6.910 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 7.934 ; 8.303 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 7.125 ; 7.120 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 7.374 ; 7.499 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 9.162 ; 9.463 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 8.952 ; 9.157 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 8.314 ; 8.605 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 7.374 ; 7.499 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 5.090 ; 5.115 ; Rise       ; altera_reserved_tck ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 5.136 ; 5.184 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
@@ -387,8 +579,8 @@ No synchronizer chains to report.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 13.621 ; 0.000         ;
-; CLOCK_50            ; 14.121 ; 0.000         ;
+; altera_reserved_tck ; 12.882 ; 0.000         ;
+; CLOCK_50            ; 12.963 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -397,8 +589,8 @@ No synchronizer chains to report.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.090 ; 0.000         ;
-; CLOCK_50            ; 0.171 ; 0.000         ;
+; altera_reserved_tck ; 0.077 ; 0.000         ;
+; CLOCK_50            ; 0.162 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -407,7 +599,7 @@ No synchronizer chains to report.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 16.317 ; 0.000         ;
+; altera_reserved_tck ; 16.148 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -416,7 +608,7 @@ No synchronizer chains to report.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.337 ; 0.000         ;
+; altera_reserved_tck ; 0.336 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -425,8 +617,8 @@ No synchronizer chains to report.
 +---------------------+--------+--------------------+
 ; Clock               ; Slack  ; End Point TNS      ;
 +---------------------+--------+--------------------+
-; CLOCK_50            ; 8.534  ; 0.000              ;
-; altera_reserved_tck ; 14.789 ; 0.000              ;
+; CLOCK_50            ; 8.527  ; 0.000              ;
+; altera_reserved_tck ; 14.842 ; 0.000              ;
 +---------------------+--------+--------------------+
 
 
@@ -435,8 +627,8 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 1.066 ; 2.221 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.902 ; 1.673 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 1.116 ; 2.395 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 1.593 ; 2.848 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -445,8 +637,8 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+--------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall   ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+--------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 0.407 ; -0.282 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.293 ; -0.385 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 0.424 ; -0.282 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 0.428 ; -0.255 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+--------+------------+---------------------+
 
 
@@ -455,13 +647,61 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 7.240 ; 7.594 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 6.966 ; 7.523 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 6.790 ; 7.211 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 7.240 ; 7.594 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 6.277 ; 6.604 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 5.612 ; 5.618 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 5.143 ; 5.253 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 5.085 ; 5.193 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 5.075 ; 5.156 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 5.385 ; 5.618 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 5.230 ; 5.380 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 5.197 ; 5.343 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 5.612 ; 5.342 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 5.425 ; 5.619 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 5.187 ; 5.338 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 5.210 ; 5.377 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 5.425 ; 5.609 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 5.391 ; 5.619 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 5.356 ; 5.466 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 5.314 ; 5.508 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 5.348 ; 5.202 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 6.503 ; 6.069 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 5.308 ; 5.391 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 5.467 ; 5.719 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 5.771 ; 6.036 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 5.600 ; 5.862 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 5.633 ; 5.927 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 5.697 ; 5.948 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 6.503 ; 6.069 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 5.714 ; 6.018 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 5.476 ; 5.686 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 5.485 ; 5.677 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 5.566 ; 5.764 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 5.549 ; 5.734 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 5.714 ; 6.018 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 5.089 ; 5.094 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 4.927 ; 4.884 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 5.923 ; 5.897 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 5.315 ; 5.394 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 5.277 ; 5.369 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 5.751 ; 5.897 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 5.338 ; 5.481 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 5.370 ; 5.458 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 5.323 ; 5.445 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 5.923 ; 5.682 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 5.703 ; 6.103 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 5.498 ; 5.816 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 5.546 ; 5.871 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 5.703 ; 6.103 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 5.612 ; 5.958 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 4.834 ; 4.842 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 5.612 ; 6.029 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 4.965 ; 4.953 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 6.939 ; 7.422 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 6.939 ; 7.422 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 6.784 ; 7.152 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 6.576 ; 6.676 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 5.369 ; 5.300 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.369 ; 3.421 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 4.339 ; 4.396 ; Fall       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 4.445 ; 4.494 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -470,11 +710,59 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 5.656 ; 5.945 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 5.807 ; 6.245 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 5.656 ; 5.988 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 6.065 ; 6.311 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 5.703 ; 5.945 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 4.565 ; 4.635 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 4.572 ; 4.720 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 4.569 ; 4.678 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 4.565 ; 4.635 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 4.758 ; 4.974 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 4.693 ; 4.830 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 4.672 ; 4.805 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 4.933 ; 4.725 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 4.609 ; 4.546 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 4.609 ; 4.730 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 4.687 ; 4.830 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 4.730 ; 4.895 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 4.730 ; 4.898 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 4.662 ; 4.816 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 4.687 ; 4.827 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 4.636 ; 4.546 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 4.586 ; 4.644 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 4.586 ; 4.644 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 4.820 ; 4.937 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 5.112 ; 5.352 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 5.010 ; 5.235 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 5.038 ; 5.226 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 4.996 ; 5.281 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 5.686 ; 5.296 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 4.330 ; 4.328 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 4.824 ; 5.013 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 4.823 ; 4.987 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 4.888 ; 5.094 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 4.856 ; 5.009 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 5.111 ; 5.323 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 4.478 ; 4.478 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 4.330 ; 4.328 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 4.615 ; 4.682 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 4.645 ; 4.682 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 4.615 ; 4.724 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 4.853 ; 4.955 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 4.671 ; 4.791 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 4.779 ; 4.814 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 4.645 ; 4.755 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 5.210 ; 4.968 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 4.334 ; 4.331 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 4.950 ; 5.254 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 4.967 ; 5.264 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 5.187 ; 5.576 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 5.034 ; 5.329 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 4.334 ; 4.331 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 5.088 ; 5.484 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 4.471 ; 4.450 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 4.661 ; 4.835 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 5.770 ; 6.116 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 5.639 ; 5.896 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 5.246 ; 5.569 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 4.661 ; 4.835 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.260 ; 3.306 ; Rise       ; altera_reserved_tck ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.777 ; 3.835 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
@@ -491,8 +779,8 @@ No synchronizer chains to report.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 14.003 ; 0.000         ;
-; CLOCK_50            ; 14.537 ; 0.000         ;
+; altera_reserved_tck ; 13.389 ; 0.000         ;
+; CLOCK_50            ; 13.518 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -501,8 +789,8 @@ No synchronizer chains to report.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.042 ; 0.000         ;
-; CLOCK_50            ; 0.154 ; 0.000         ;
+; altera_reserved_tck ; 0.067 ; 0.000         ;
+; CLOCK_50            ; 0.135 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -511,7 +799,7 @@ No synchronizer chains to report.
 +---------------------+--------+---------------+
 ; Clock               ; Slack  ; End Point TNS ;
 +---------------------+--------+---------------+
-; altera_reserved_tck ; 16.444 ; 0.000         ;
+; altera_reserved_tck ; 16.294 ; 0.000         ;
 +---------------------+--------+---------------+
 
 
@@ -520,7 +808,7 @@ No synchronizer chains to report.
 +---------------------+-------+---------------+
 ; Clock               ; Slack ; End Point TNS ;
 +---------------------+-------+---------------+
-; altera_reserved_tck ; 0.293 ; 0.000         ;
+; altera_reserved_tck ; 0.289 ; 0.000         ;
 +---------------------+-------+---------------+
 
 
@@ -529,8 +817,8 @@ No synchronizer chains to report.
 +---------------------+--------+-------------------+
 ; Clock               ; Slack  ; End Point TNS     ;
 +---------------------+--------+-------------------+
-; CLOCK_50            ; 8.485  ; 0.000             ;
-; altera_reserved_tck ; 14.781 ; 0.000             ;
+; CLOCK_50            ; 8.478  ; 0.000             ;
+; altera_reserved_tck ; 14.803 ; 0.000             ;
 +---------------------+--------+-------------------+
 
 
@@ -539,8 +827,8 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 0.978 ; 2.099 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.852 ; 1.673 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 1.051 ; 2.256 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 1.480 ; 2.673 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -550,7 +838,7 @@ No synchronizer chains to report.
 ; Data Port           ; Clock Port          ; Rise  ; Fall   ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+--------+------------+---------------------+
 ; altera_reserved_tdi ; altera_reserved_tck ; 0.414 ; -0.326 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.297 ; -0.431 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 0.401 ; -0.362 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+--------+------------+---------------------+
 
 
@@ -559,13 +847,61 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 6.694 ; 7.015 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 6.493 ; 6.941 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 6.333 ; 6.675 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 6.694 ; 7.015 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 5.743 ; 6.035 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 5.197 ; 5.209 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 4.818 ; 4.898 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 4.766 ; 4.845 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 4.739 ; 4.798 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 5.038 ; 5.209 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 4.882 ; 4.998 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 4.865 ; 4.975 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 5.197 ; 4.977 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 5.046 ; 5.200 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 4.854 ; 4.976 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 4.872 ; 4.992 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 5.046 ; 5.186 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 5.009 ; 5.200 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 4.982 ; 5.073 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 4.931 ; 5.105 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 4.966 ; 4.837 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 5.963 ; 5.632 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 4.921 ; 4.987 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 5.063 ; 5.294 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 5.355 ; 5.563 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 5.218 ; 5.422 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 5.224 ; 5.480 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 5.286 ; 5.482 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 5.963 ; 5.632 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 5.321 ; 5.551 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 5.087 ; 5.248 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 5.091 ; 5.239 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 5.157 ; 5.305 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 5.135 ; 5.274 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 5.321 ; 5.551 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 4.732 ; 4.729 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 4.579 ; 4.532 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 5.424 ; 5.422 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 4.925 ; 4.983 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 4.897 ; 4.961 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 5.307 ; 5.422 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 4.951 ; 5.063 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 4.960 ; 5.039 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 4.936 ; 5.026 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 5.424 ; 5.236 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 5.294 ; 5.600 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 5.104 ; 5.345 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 5.166 ; 5.409 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 5.294 ; 5.600 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 5.201 ; 5.473 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 4.528 ; 4.528 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 5.212 ; 5.531 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 4.649 ; 4.639 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 6.427 ; 6.860 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 6.427 ; 6.860 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 6.288 ; 6.629 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 6.129 ; 6.187 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 4.953 ; 4.876 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.142 ; 3.174 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 4.155 ; 4.140 ; Fall       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 4.166 ; 4.198 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -574,11 +910,59 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 5.198 ; 5.435 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 5.354 ; 5.742 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 5.216 ; 5.517 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 5.550 ; 5.802 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 5.198 ; 5.435 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 4.250 ; 4.305 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 4.266 ; 4.385 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 4.263 ; 4.355 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 4.250 ; 4.305 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 4.436 ; 4.592 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 4.360 ; 4.472 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 4.357 ; 4.468 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 4.553 ; 4.394 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 4.289 ; 4.225 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 4.299 ; 4.385 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 4.354 ; 4.461 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 4.402 ; 4.531 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 4.393 ; 4.516 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 4.341 ; 4.456 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 4.346 ; 4.458 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 4.289 ; 4.225 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 4.238 ; 4.285 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 4.238 ; 4.285 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 4.464 ; 4.564 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 4.734 ; 4.912 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 4.648 ; 4.823 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 4.652 ; 4.812 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 4.622 ; 4.863 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 5.196 ; 4.904 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 4.006 ; 4.008 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 4.461 ; 4.603 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 4.458 ; 4.584 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 4.518 ; 4.669 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 4.481 ; 4.597 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 4.740 ; 4.887 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 4.144 ; 4.139 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 4.006 ; 4.008 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 4.266 ; 4.321 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 4.294 ; 4.321 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 4.266 ; 4.351 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 4.487 ; 4.567 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 4.315 ; 4.405 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 4.411 ; 4.426 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 4.290 ; 4.369 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 4.768 ; 4.577 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 4.037 ; 4.024 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 4.570 ; 4.793 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 4.603 ; 4.819 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 4.787 ; 5.079 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 4.637 ; 4.869 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 4.037 ; 4.024 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 4.697 ; 4.992 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 4.163 ; 4.147 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 4.301 ; 4.438 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 5.281 ; 5.597 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 5.162 ; 5.403 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 4.859 ; 5.117 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 4.301 ; 4.438 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.032 ; 3.057 ; Rise       ; altera_reserved_tck ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.596 ; 3.634 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
@@ -595,9 +979,9 @@ No synchronizer chains to report.
 +----------------------+--------+-------+----------+---------+---------------------+
 ; Clock                ; Setup  ; Hold  ; Recovery ; Removal ; Minimum Pulse Width ;
 +----------------------+--------+-------+----------+---------+---------------------+
-; Worst-case Slack     ; 9.175  ; 0.042 ; 15.389   ; 0.293   ; 8.485               ;
-;  CLOCK_50            ; 9.175  ; 0.154 ; N/A      ; N/A     ; 8.485               ;
-;  altera_reserved_tck ; 11.011 ; 0.042 ; 15.389   ; 0.293   ; 14.781              ;
+; Worst-case Slack     ; 8.291  ; 0.067 ; 15.101   ; 0.289   ; 8.478               ;
+;  CLOCK_50            ; 8.291  ; 0.135 ; N/A      ; N/A     ; 8.478               ;
+;  altera_reserved_tck ; 10.032 ; 0.067 ; 15.101   ; 0.289   ; 14.803              ;
 ; Design-wide TNS      ; 0.0    ; 0.0   ; 0.0      ; 0.0     ; 0.0                 ;
 ;  CLOCK_50            ; 0.000  ; 0.000 ; N/A      ; N/A     ; 0.000               ;
 ;  altera_reserved_tck ; 0.000  ; 0.000 ; 0.000    ; 0.000   ; 0.000               ;
@@ -609,8 +993,8 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; altera_reserved_tdi ; altera_reserved_tck ; 1.680 ; 2.439 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 1.661 ; 2.099 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tdi ; altera_reserved_tck ; 1.567 ; 2.517 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 2.553 ; 3.448 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -620,7 +1004,7 @@ No synchronizer chains to report.
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; altera_reserved_tdi ; altera_reserved_tck ; 0.790 ; 0.415 ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tms ; altera_reserved_tck ; 0.550 ; 0.197 ; Rise       ; altera_reserved_tck ;
+; altera_reserved_tms ; altera_reserved_tck ; 0.732 ; 0.446 ; Rise       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
 
 
@@ -629,13 +1013,61 @@ No synchronizer chains to report.
 +---------------------+---------------------+--------+--------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise   ; Fall   ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 12.235 ; 12.437 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 11.803 ; 12.292 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 11.513 ; 11.846 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 12.235 ; 12.437 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 10.452 ; 10.629 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 9.176  ; 9.238  ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 8.663  ; 8.757  ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 8.605  ; 8.707  ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 8.550  ; 8.547  ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 9.003  ; 9.238  ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 8.706  ; 8.921  ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 8.761  ; 8.898  ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 9.176  ; 8.873  ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 8.999  ; 9.176  ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 8.637  ; 8.818  ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 8.694  ; 8.840  ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 8.999  ; 9.162  ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 8.897  ; 9.176  ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 8.928  ; 9.021  ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 8.814  ; 9.054  ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 8.824  ; 8.637  ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 10.394 ; 9.923  ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 8.833  ; 8.897  ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 9.191  ; 9.457  ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 9.500  ; 9.771  ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 9.309  ; 9.592  ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 9.402  ; 9.743  ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 9.426  ; 9.685  ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 10.394 ; 9.923  ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 9.387  ; 9.708  ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 9.009  ; 9.223  ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 9.030  ; 9.220  ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 9.103  ; 9.300  ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 9.117  ; 9.297  ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 9.387  ; 9.708  ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 8.433  ; 8.427  ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 8.199  ; 8.149  ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 9.559  ; 9.608  ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 8.775  ; 8.822  ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 8.757  ; 8.834  ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 9.472  ; 9.608  ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 8.841  ; 8.981  ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 8.809  ; 8.952  ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 8.790  ; 8.906  ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 9.559  ; 9.303  ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 9.362  ; 9.785  ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 9.080  ; 9.406  ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 9.152  ; 9.495  ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 9.362  ; 9.785  ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 9.313  ; 9.661  ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 8.134  ; 8.169  ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 9.251  ; 9.691  ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 8.340  ; 8.373  ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 11.765 ; 12.197 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 11.765 ; 12.197 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 11.505 ; 11.809 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 10.939 ; 11.028 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 8.821  ; 8.721  ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 5.509  ; 5.570  ; Rise       ; altera_reserved_tck ;
-; altera_reserved_tdo ; altera_reserved_tck ; 6.419  ; 6.511  ; Fall       ; altera_reserved_tck ;
+; altera_reserved_tdo ; altera_reserved_tck ; 6.502  ; 6.584  ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+--------+--------+------------+---------------------+
 
 
@@ -644,11 +1076,59 @@ No synchronizer chains to report.
 +---------------------+---------------------+-------+-------+------------+---------------------+
 ; Data Port           ; Clock Port          ; Rise  ; Fall  ; Clock Edge ; Clock Reference     ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
-; LEDR[*]             ; CLOCK_50            ; 5.198 ; 5.435 ; Rise       ; CLOCK_50            ;
-;  LEDR[0]            ; CLOCK_50            ; 5.354 ; 5.742 ; Rise       ; CLOCK_50            ;
-;  LEDR[1]            ; CLOCK_50            ; 5.216 ; 5.517 ; Rise       ; CLOCK_50            ;
-;  LEDR[6]            ; CLOCK_50            ; 5.550 ; 5.802 ; Rise       ; CLOCK_50            ;
-;  LEDR[7]            ; CLOCK_50            ; 5.198 ; 5.435 ; Rise       ; CLOCK_50            ;
+; HEX0[*]             ; CLOCK_50            ; 4.250 ; 4.305 ; Rise       ; CLOCK_50            ;
+;  HEX0[0]            ; CLOCK_50            ; 4.266 ; 4.385 ; Rise       ; CLOCK_50            ;
+;  HEX0[1]            ; CLOCK_50            ; 4.263 ; 4.355 ; Rise       ; CLOCK_50            ;
+;  HEX0[2]            ; CLOCK_50            ; 4.250 ; 4.305 ; Rise       ; CLOCK_50            ;
+;  HEX0[3]            ; CLOCK_50            ; 4.436 ; 4.592 ; Rise       ; CLOCK_50            ;
+;  HEX0[4]            ; CLOCK_50            ; 4.360 ; 4.472 ; Rise       ; CLOCK_50            ;
+;  HEX0[5]            ; CLOCK_50            ; 4.357 ; 4.468 ; Rise       ; CLOCK_50            ;
+;  HEX0[6]            ; CLOCK_50            ; 4.553 ; 4.394 ; Rise       ; CLOCK_50            ;
+; HEX1[*]             ; CLOCK_50            ; 4.289 ; 4.225 ; Rise       ; CLOCK_50            ;
+;  HEX1[0]            ; CLOCK_50            ; 4.299 ; 4.385 ; Rise       ; CLOCK_50            ;
+;  HEX1[1]            ; CLOCK_50            ; 4.354 ; 4.461 ; Rise       ; CLOCK_50            ;
+;  HEX1[2]            ; CLOCK_50            ; 4.402 ; 4.531 ; Rise       ; CLOCK_50            ;
+;  HEX1[3]            ; CLOCK_50            ; 4.393 ; 4.516 ; Rise       ; CLOCK_50            ;
+;  HEX1[4]            ; CLOCK_50            ; 4.341 ; 4.456 ; Rise       ; CLOCK_50            ;
+;  HEX1[5]            ; CLOCK_50            ; 4.346 ; 4.458 ; Rise       ; CLOCK_50            ;
+;  HEX1[6]            ; CLOCK_50            ; 4.289 ; 4.225 ; Rise       ; CLOCK_50            ;
+; HEX2[*]             ; CLOCK_50            ; 4.238 ; 4.285 ; Rise       ; CLOCK_50            ;
+;  HEX2[0]            ; CLOCK_50            ; 4.238 ; 4.285 ; Rise       ; CLOCK_50            ;
+;  HEX2[1]            ; CLOCK_50            ; 4.464 ; 4.564 ; Rise       ; CLOCK_50            ;
+;  HEX2[2]            ; CLOCK_50            ; 4.734 ; 4.912 ; Rise       ; CLOCK_50            ;
+;  HEX2[3]            ; CLOCK_50            ; 4.648 ; 4.823 ; Rise       ; CLOCK_50            ;
+;  HEX2[4]            ; CLOCK_50            ; 4.652 ; 4.812 ; Rise       ; CLOCK_50            ;
+;  HEX2[5]            ; CLOCK_50            ; 4.622 ; 4.863 ; Rise       ; CLOCK_50            ;
+;  HEX2[6]            ; CLOCK_50            ; 5.196 ; 4.904 ; Rise       ; CLOCK_50            ;
+; HEX3[*]             ; CLOCK_50            ; 4.006 ; 4.008 ; Rise       ; CLOCK_50            ;
+;  HEX3[0]            ; CLOCK_50            ; 4.461 ; 4.603 ; Rise       ; CLOCK_50            ;
+;  HEX3[1]            ; CLOCK_50            ; 4.458 ; 4.584 ; Rise       ; CLOCK_50            ;
+;  HEX3[2]            ; CLOCK_50            ; 4.518 ; 4.669 ; Rise       ; CLOCK_50            ;
+;  HEX3[3]            ; CLOCK_50            ; 4.481 ; 4.597 ; Rise       ; CLOCK_50            ;
+;  HEX3[4]            ; CLOCK_50            ; 4.740 ; 4.887 ; Rise       ; CLOCK_50            ;
+;  HEX3[5]            ; CLOCK_50            ; 4.144 ; 4.139 ; Rise       ; CLOCK_50            ;
+;  HEX3[6]            ; CLOCK_50            ; 4.006 ; 4.008 ; Rise       ; CLOCK_50            ;
+; HEX4[*]             ; CLOCK_50            ; 4.266 ; 4.321 ; Rise       ; CLOCK_50            ;
+;  HEX4[0]            ; CLOCK_50            ; 4.294 ; 4.321 ; Rise       ; CLOCK_50            ;
+;  HEX4[1]            ; CLOCK_50            ; 4.266 ; 4.351 ; Rise       ; CLOCK_50            ;
+;  HEX4[2]            ; CLOCK_50            ; 4.487 ; 4.567 ; Rise       ; CLOCK_50            ;
+;  HEX4[3]            ; CLOCK_50            ; 4.315 ; 4.405 ; Rise       ; CLOCK_50            ;
+;  HEX4[4]            ; CLOCK_50            ; 4.411 ; 4.426 ; Rise       ; CLOCK_50            ;
+;  HEX4[5]            ; CLOCK_50            ; 4.290 ; 4.369 ; Rise       ; CLOCK_50            ;
+;  HEX4[6]            ; CLOCK_50            ; 4.768 ; 4.577 ; Rise       ; CLOCK_50            ;
+; HEX5[*]             ; CLOCK_50            ; 4.037 ; 4.024 ; Rise       ; CLOCK_50            ;
+;  HEX5[0]            ; CLOCK_50            ; 4.570 ; 4.793 ; Rise       ; CLOCK_50            ;
+;  HEX5[1]            ; CLOCK_50            ; 4.603 ; 4.819 ; Rise       ; CLOCK_50            ;
+;  HEX5[2]            ; CLOCK_50            ; 4.787 ; 5.079 ; Rise       ; CLOCK_50            ;
+;  HEX5[3]            ; CLOCK_50            ; 4.637 ; 4.869 ; Rise       ; CLOCK_50            ;
+;  HEX5[4]            ; CLOCK_50            ; 4.037 ; 4.024 ; Rise       ; CLOCK_50            ;
+;  HEX5[5]            ; CLOCK_50            ; 4.697 ; 4.992 ; Rise       ; CLOCK_50            ;
+;  HEX5[6]            ; CLOCK_50            ; 4.163 ; 4.147 ; Rise       ; CLOCK_50            ;
+; LEDR[*]             ; CLOCK_50            ; 4.301 ; 4.438 ; Rise       ; CLOCK_50            ;
+;  LEDR[0]            ; CLOCK_50            ; 5.281 ; 5.597 ; Rise       ; CLOCK_50            ;
+;  LEDR[1]            ; CLOCK_50            ; 5.162 ; 5.403 ; Rise       ; CLOCK_50            ;
+;  LEDR[6]            ; CLOCK_50            ; 4.859 ; 5.117 ; Rise       ; CLOCK_50            ;
+;  LEDR[7]            ; CLOCK_50            ; 4.301 ; 4.438 ; Rise       ; CLOCK_50            ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.032 ; 3.057 ; Rise       ; altera_reserved_tck ;
 ; altera_reserved_tdo ; altera_reserved_tck ; 3.596 ; 3.634 ; Fall       ; altera_reserved_tck ;
 +---------------------+---------------------+-------+-------+------------+---------------------+
@@ -996,8 +1476,8 @@ No synchronizer chains to report.
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 2669     ; 0        ; 38       ; 0        ;
-; CLOCK_50            ; CLOCK_50            ; 91788    ; 0        ; 0        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 2600     ; 0        ; 38       ; 0        ;
+; CLOCK_50            ; CLOCK_50            ; 57078    ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -1007,8 +1487,8 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 2669     ; 0        ; 38       ; 0        ;
-; CLOCK_50            ; CLOCK_50            ; 91788    ; 0        ; 0        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 2600     ; 0        ; 38       ; 0        ;
+; CLOCK_50            ; CLOCK_50            ; 57078    ; 0        ; 0        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -1018,7 +1498,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 122      ; 0        ; 1        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 121      ; 0        ; 1        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -1028,7 +1508,7 @@ Entries labeled "false path" only account for clock-to-clock false paths and not
 +---------------------+---------------------+----------+----------+----------+----------+
 ; From Clock          ; To Clock            ; RR Paths ; FR Paths ; RF Paths ; FF Paths ;
 +---------------------+---------------------+----------+----------+----------+----------+
-; altera_reserved_tck ; altera_reserved_tck ; 122      ; 0        ; 1        ; 0        ;
+; altera_reserved_tck ; altera_reserved_tck ; 121      ; 0        ; 1        ; 0        ;
 +---------------------+---------------------+----------+----------+----------+----------+
 Entries labeled "false path" only account for clock-to-clock false paths and not path-based false paths. As a result, actual path counts may be lower than reported.
 
@@ -1053,9 +1533,9 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 ; Illegal Clocks                  ; 0     ; 0    ;
 ; Unconstrained Clocks            ; 0     ; 0    ;
 ; Unconstrained Input Ports       ; 3     ; 3    ;
-; Unconstrained Input Port Paths  ; 264   ; 264  ;
-; Unconstrained Output Ports      ; 5     ; 5    ;
-; Unconstrained Output Port Paths ; 13    ; 13   ;
+; Unconstrained Input Port Paths  ; 294   ; 294  ;
+; Unconstrained Output Ports      ; 47    ; 47   ;
+; Unconstrained Output Port Paths ; 181   ; 181  ;
 +---------------------------------+-------+------+
 
 
@@ -1065,7 +1545,7 @@ No non-DPA dedicated SERDES Receiver circuitry present in device or used in desi
 Info: *******************************************************************
 Info: Running Quartus II 64-Bit TimeQuest Timing Analyzer
     Info: Version 14.1.0 Build 186 12/03/2014 SJ Web Edition
-    Info: Processing started: Sat Mar 20 23:59:28 2021
+    Info: Processing started: Sun Mar 21 00:13:24 2021
 Info: Command: quartus_sta rc4 -c rc4
 Info: qsta_default_script.tcl version: #3
 Info (11104): Parallel Compilation has detected 8 hyper-threaded processors. However, the extra hyper-threaded processors will not be used by default. Parallel Compilation will use 4 of the 4 physical processors detected instead.
@@ -1082,114 +1562,114 @@ Info (332151): Clock uncertainty is not calculated until you update the timing n
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
 Info: Found TIMEQUEST_REPORT_SCRIPT_INCLUDE_DEFAULT_ANALYSIS = ON
 Info: Analyzing Slow 1100mV 85C Model
-Info (332146): Worst-case setup slack is 9.409
+Info (332146): Worst-case setup slack is 8.291
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     9.409               0.000 CLOCK_50 
-    Info (332119):    11.011               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.277
+    Info (332119):     8.291               0.000 CLOCK_50 
+    Info (332119):    10.032               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.279
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.277               0.000 altera_reserved_tck 
-    Info (332119):     0.301               0.000 CLOCK_50 
-Info (332146): Worst-case recovery slack is 15.389
+    Info (332119):     0.279               0.000 altera_reserved_tck 
+    Info (332119):     0.281               0.000 CLOCK_50 
+Info (332146): Worst-case recovery slack is 15.101
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    15.389               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.670
+    Info (332119):    15.101               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.769
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.670               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.967
+    Info (332119):     0.769               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.953
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.967               0.000 CLOCK_50 
-    Info (332119):    15.095               0.000 altera_reserved_tck 
+    Info (332119):     8.953               0.000 CLOCK_50 
+    Info (332119):    15.180               0.000 altera_reserved_tck 
 Info: Analyzing Slow 1100mV 0C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 9.175
+Info (332146): Worst-case setup slack is 8.427
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     9.175               0.000 CLOCK_50 
-    Info (332119):    11.099               0.000 altera_reserved_tck 
-Info (332146): Worst-case hold slack is 0.203
+    Info (332119):     8.427               0.000 CLOCK_50 
+    Info (332119):    10.326               0.000 altera_reserved_tck 
+Info (332146): Worst-case hold slack is 0.267
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.203               0.000 altera_reserved_tck 
-    Info (332119):     0.283               0.000 CLOCK_50 
-Info (332146): Worst-case recovery slack is 15.474
+    Info (332119):     0.267               0.000 CLOCK_50 
+    Info (332119):     0.299               0.000 altera_reserved_tck 
+Info (332146): Worst-case recovery slack is 15.224
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    15.474               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.638
+    Info (332119):    15.224               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.727
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.638               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.999
+    Info (332119):     0.727               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.982
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.999               0.000 CLOCK_50 
-    Info (332119):    15.094               0.000 altera_reserved_tck 
+    Info (332119):     8.982               0.000 CLOCK_50 
+    Info (332119):    15.150               0.000 altera_reserved_tck 
 Info: Analyzing Fast 1100mV 85C Model
 Info (334003): Started post-fitting delay annotation
 Info (334004): Delay annotation completed successfully
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 13.621
+Info (332146): Worst-case setup slack is 12.882
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    13.621               0.000 altera_reserved_tck 
-    Info (332119):    14.121               0.000 CLOCK_50 
-Info (332146): Worst-case hold slack is 0.090
+    Info (332119):    12.882               0.000 altera_reserved_tck 
+    Info (332119):    12.963               0.000 CLOCK_50 
+Info (332146): Worst-case hold slack is 0.077
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.090               0.000 altera_reserved_tck 
-    Info (332119):     0.171               0.000 CLOCK_50 
-Info (332146): Worst-case recovery slack is 16.317
+    Info (332119):     0.077               0.000 altera_reserved_tck 
+    Info (332119):     0.162               0.000 CLOCK_50 
+Info (332146): Worst-case recovery slack is 16.148
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    16.317               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.337
+    Info (332119):    16.148               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.336
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.337               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.534
+    Info (332119):     0.336               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.527
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.534               0.000 CLOCK_50 
-    Info (332119):    14.789               0.000 altera_reserved_tck 
+    Info (332119):     8.527               0.000 CLOCK_50 
+    Info (332119):    14.842               0.000 altera_reserved_tck 
 Info: Analyzing Fast 1100mV 0C Model
 Info (332123): Deriving Clock Uncertainty. Please refer to report_sdc in TimeQuest to see clock uncertainties.
-Info (332146): Worst-case setup slack is 14.003
+Info (332146): Worst-case setup slack is 13.389
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    14.003               0.000 altera_reserved_tck 
-    Info (332119):    14.537               0.000 CLOCK_50 
-Info (332146): Worst-case hold slack is 0.042
+    Info (332119):    13.389               0.000 altera_reserved_tck 
+    Info (332119):    13.518               0.000 CLOCK_50 
+Info (332146): Worst-case hold slack is 0.067
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.042               0.000 altera_reserved_tck 
-    Info (332119):     0.154               0.000 CLOCK_50 
-Info (332146): Worst-case recovery slack is 16.444
+    Info (332119):     0.067               0.000 altera_reserved_tck 
+    Info (332119):     0.135               0.000 CLOCK_50 
+Info (332146): Worst-case recovery slack is 16.294
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):    16.444               0.000 altera_reserved_tck 
-Info (332146): Worst-case removal slack is 0.293
+    Info (332119):    16.294               0.000 altera_reserved_tck 
+Info (332146): Worst-case removal slack is 0.289
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     0.293               0.000 altera_reserved_tck 
-Info (332146): Worst-case minimum pulse width slack is 8.485
+    Info (332119):     0.289               0.000 altera_reserved_tck 
+Info (332146): Worst-case minimum pulse width slack is 8.478
     Info (332119):     Slack       End Point TNS Clock 
     Info (332119): ========= =================== =====================
-    Info (332119):     8.485               0.000 CLOCK_50 
-    Info (332119):    14.781               0.000 altera_reserved_tck 
+    Info (332119):     8.478               0.000 CLOCK_50 
+    Info (332119):    14.803               0.000 altera_reserved_tck 
 Info (332102): Design is not fully constrained for setup requirements
 Info (332102): Design is not fully constrained for hold requirements
 Info: Quartus II 64-Bit TimeQuest Timing Analyzer was successful. 0 errors, 0 warnings
-    Info: Peak virtual memory: 5208 megabytes
-    Info: Processing ended: Sat Mar 20 23:59:52 2021
-    Info: Elapsed time: 00:00:24
-    Info: Total CPU time (on all processors): 00:00:26
+    Info: Peak virtual memory: 5213 megabytes
+    Info: Processing ended: Sun Mar 21 00:13:36 2021
+    Info: Elapsed time: 00:00:12
+    Info: Total CPU time (on all processors): 00:00:13
 
 
