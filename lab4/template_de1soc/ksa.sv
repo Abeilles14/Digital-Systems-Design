@@ -64,6 +64,36 @@ assign reset_n = KEY[3];
 // Lab 4 code
 //
 //====================================================================================
+// logic start_flag, done_flag;
+// logic [3:0] key_found_flag;
+// logic [23:0] secret_key;
+
+// assign start_flag = 1'b1;
+
+// multicore_controller quadcore_decryption (      //main 4 core controller
+//     .clk(clk),
+//     .secret_key(secret_key),
+//     .key_found_flag(key_found_flag),
+//     .multicore_start_flag(start_flag),
+//     .multicore_done_flag(done_flag),
+//     .reset(!reset_n));
+
+// always_ff @(posedge clk)                                    //LED display which core found the key
+// begin
+//     if (done_flag && key_found_flag[0])
+//         LED[1] = 1'b1;
+//     else if (done_flag && key_found_flag[1])
+//         LED[2] = 1'b1;
+//     else if (done_flag && key_found_flag[2])
+//         LED[3] = 1'b1;
+//     else if (done_flag && key_found_flag[3])
+//         LED[4] = 1'b1;
+//     else if (done_flag && (key_found_flag == 4'b0))         //key not found, LED 7
+//         LED[7] = 1'b1;
+//     else
+//         LED[7:1]= 8'b0;
+// end
+
 logic start_flag, done_flag, key_found_flag;
 logic [23:0] secret_key;
 

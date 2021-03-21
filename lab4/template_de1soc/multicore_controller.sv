@@ -10,13 +10,13 @@ module multicore_controller(
 logic stop_flag;
 logic [23:0] key_range_1, key_range_2, key_range_3, key_range_4;
 logic key_found_1, key_found_2, key_found_3, key_found_4;
-logic current_key_1, current_key_2, current_key_3, current_key_4;
+logic [23:0] current_key_1, current_key_2, current_key_3, current_key_4;
 logic datapath_done_1, datapath_done_2, datapath_done_3, datapath_done_4;
 
-assign key_range_1 = 24'h100000;
-assign key_range_2 = 24'h200000;
-assign key_range_3 = 24'h300000;
-assign key_range_4 = 24'h400000;
+assign key_range_1 = 24'h000000;		//start value key for each core
+assign key_range_2 = 24'h0FC000;
+assign key_range_3 = 24'h1F8000;
+assign key_range_4 = 24'h2F4000;
 
 datapath decryption_core_1 (
     .clk(clk),
