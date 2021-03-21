@@ -32,6 +32,7 @@ module datapath(
 	logic init_start_flag, swap_start_flag, decrypt_start_flag;
 	logic init_done_flag, swap_done_flag, decrypt_done_flag;
 	logic invalid_key_flag;
+	logic [23:0] key_end_value;
 
 ////////////////// RAM AND ROM /////////////////
 s_memory s_mem (
@@ -52,6 +53,16 @@ e_memory e_mem (
     .address(e_mem_addr),
     .clock(clk),
     .q(e_mem_data_out));
+
+	/////////////TESTBENCH////////////////
+	// RAM s_mem (s_mem_addr, clk, d_mem_data_in, s_mem_write, s_mem_data_out);
+
+ //    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (d_mem_addr, clk, d_mem_data_in, d_mem_write, d_mem_data_out);
+
+ //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
+    /////////////////////////////////////
+
+
 
 ////////////// INIT, SWAP, DECRYPT FSM //////////////
 
@@ -111,6 +122,7 @@ decrypt_memory decrypt_d_mem (
 	assign d_mem_addr = decrypt_addr;	//will only be written to when d_mem_write
 	assign e_mem_addr = decrypt_addr;	//will only be used when writing to d_mem with d_mem_write
 
+	assign key_end_value = key_start_value + 24'h100000;	//0FC000 is the range of values that each core covers
 	//assign secret_key = 24'h000249;     //temp hardcoded secret key
 
 	initial begin
@@ -158,7 +170,7 @@ decrypt_memory decrypt_d_mem (
 					end
 					else if (decrypt_done_flag && !key_found_flag)
 					begin
-						if((secret_key == key_start_value) || (secret_key == 24'h3FFFFF))
+						if((secret_key == key_end_value) || (secret_key == 23'h3FFFFF))				//range that each core needs to check
 						begin
 							state <= DONE;
 						end
@@ -181,18 +193,3 @@ decrypt_memory decrypt_d_mem (
 		end
 	end
 endmodule
-
-
-	///////////////TESTBENCH////////////////
-	// logic s_mem_write, d_mem_write;
-	// logic [7:0] s_mem_addr, s_mem_data_in, s_mem_data_out;
-	// logic [7:0] d_mem_addr, d_mem_data_in, d_mem_data_out;
-	// logic [7:0] e_mem_addr, e_mem_data_out;
-
-	// RAM s_mem (s_mem_addr, clk, d_mem_data_in, s_mem_write, s_mem_data_out);
-
- //    RAM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) d_mem (d_mem_addr, clk, d_mem_data_in, d_mem_write, d_mem_data_out);
-
- //    ROM #(.ADDR_WIDTH(5), .DATA_WIDTH(8), .DEPTH(32)) e_mem (e_mem_addr, clk, e_mem_data_out);
-    ///////////////////////////////////////
-

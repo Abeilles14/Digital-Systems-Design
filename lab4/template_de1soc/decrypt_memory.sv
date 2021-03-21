@@ -45,7 +45,7 @@ module decrypt_memory (
     parameter WAIT_K_ADDR = 11'b000_1111_0000;
 
     parameter DECRYPT = 11'b001_0000_0100;			//decrypted_output[k] = f^encrypted_input[k]
-    parameter WAIT_DECRYPT = 11'b0001_0001_0100;
+    parameter WAIT_DECRYPT = 11'b001_0001_0100;
 
     parameter VALIDATE = 11'b001_0010_0000;
     

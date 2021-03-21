@@ -1,7 +1,7 @@
 module multicore_controller(
 	input logic clk,
 	output logic [23:0] secret_key,
-	output logic key_found_flag,
+	output logic [3:0] key_found_flag,
 	input logic multicore_start_flag,
 	output logic multicore_done_flag,
 	input logic reset
@@ -14,9 +14,9 @@ logic [23:0] current_key_1, current_key_2, current_key_3, current_key_4;
 logic datapath_done_1, datapath_done_2, datapath_done_3, datapath_done_4;
 
 assign key_range_1 = 24'h000000;		//start value key for each core
-assign key_range_2 = 24'h0FC000;
-assign key_range_3 = 24'h1F8000;
-assign key_range_4 = 24'h2F4000;
+assign key_range_2 = 24'h100000;
+assign key_range_3 = 24'h200000;
+assign key_range_4 = 24'h300000;
 
 datapath decryption_core_1 (
     .clk(clk),
@@ -59,45 +59,44 @@ datapath decryption_core_4 (
     .reset(reset));
 
 	assign multicore_done_flag = stop_flag;
-
-	assign secret_key = current_key_1;
+	//assign secret_key = current_key_4;
 
 	initial begin
-		//secret_key = current_key_1;	//display core 1 secret key incrementing initially
+		secret_key = current_key_1;			//display core 1 secret key incrementing initially
 		stop_flag = 1'b0;
-		key_found_flag = 1'b0;
+		key_found_flag = 4'b0000;
 	end
 
-	always_comb
+	always_ff @(posedge clk)
 	begin
-		if (key_found_1)
+		if (key_found_1)					//core 1 found key
 		begin
-			key_found_flag = 1'b1;
-			//secret_key = current_key_1;
+			key_found_flag = 4'b0001;
+			secret_key = current_key_1;
 			stop_flag = 1'b1;
 		end
-		else if (key_found_2)
+		else if (key_found_2)				//core 2 found key
 		begin
-			key_found_flag = 1'b1;
-			//secret_key = current_key_2;
+			key_found_flag = 4'b0010;
+			secret_key = current_key_2;
 			stop_flag = 1'b1;
 		end
-		else if (key_found_3)
+		else if (key_found_3)				//core 3 found key
 		begin
-			key_found_flag = 1'b1;
-			//secret_key = current_key_3;
+			key_found_flag = 4'b0100;
+			secret_key = current_key_3;
 			stop_flag = 1'b1;
 		end
-		else if (key_found_4)
+		else if (key_found_4)				//core 4 found key
 		begin
-			key_found_flag = 1'b1;
-			//secret_key = current_key_4;
+			key_found_flag = 4'b1000;
+			secret_key = current_key_4;
 			stop_flag = 1'b1;
 		end
 		else
 		begin
-			key_found_flag = 1'b0;
-			//secret_key = current_key_1;
+			key_found_flag = 4'b0000;
+			secret_key = current_key_1;
 			stop_flag = 1'b0;
 		end
 	end

@@ -9,43 +9,29 @@
 
 module datapath_tb();
 	logic clk;
-	// logic [7:0] s_mem_addr;
-	// logic [7:0] s_mem_data_in;
-	// logic [7:0] s_mem_data_out;
-	// logic s_mem_write;
-	// logic [7:0] d_mem_addr;
-	// logic [7:0] d_mem_data_in;
-	// logic [7:0] d_mem_data_out;
-	// logic d_mem_write;
-	// logic [7:0] e_mem_addr;
-	// logic [7:0] e_mem_data_out;
 	logic [23:0] secret_key;
-	logic key__found_flag;
+	logic [23:0] key_start_value;
+	logic key_found_flag;
 	logic datapath_start_flag;
 	logic datapath_done_flag;
+	logic stop;
 	logic reset;
 	
 	datapath DUT (
     .clk(clk),
-    // .s_mem_addr(s_mem_addr),
-    // .s_mem_data_in(s_mem_data_in),
-    // .s_mem_data_out(s_mem_data_out),
-    // .s_mem_write(s_mem_write),
-    // .d_mem_addr(s_mem_addr),
-    // .d_mem_data_in(s_mem_data_in),
-    // .d_mem_data_out(s_mem_data_out),
-    // .d_mem_write(s_mem_write),
-    // .e_mem_addr(e_mem_addr),
-    // .e_mem_data_out(e_mem_data_out),
     .secret_key(secret_key),
+    .key_start_value(key_start_value),
     .key_found_flag(key_found_flag),
     .datapath_start_flag(datapath_start_flag),
     .datapath_done_flag(datapath_done_flag),
+    .stop(stop),
     .reset(reset));
 
 	initial				//initial block
 	begin
 		datapath_start_flag = 1'b1;
+		key_start_value = 24'h000000;
+		stop = 1'b0;
 		reset = 1'b0;
 
     	clk = 0;		//simulates clk every 5ps
