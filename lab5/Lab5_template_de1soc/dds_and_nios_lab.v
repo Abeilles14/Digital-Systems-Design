@@ -330,10 +330,49 @@ DE1_SoC_QSYS U0(
 //
 ////////////////////////////////////////////////////////////////////		   
 
-	
-(* keep = 1, preserve = 1 *) logic [11:0] actual_selected_modulation;
-(* keep = 1, preserve = 1 *) logic [11:0] actual_selected_signal;
+(* keep = 1, preserve = 1 *)
+logic [11:0] actual_selected_modulation;
+logic [11:0] actual_selected_signal;
 
+//clk divider
+logic [31:0] div_clk_1hz;
+logic clk_1hz;
+
+//lfsr
+logic [4:0] lfsr_output;
+
+//dds
+logic clk, reset;
+logic [31:0] phase_inc, tuning_word;
+logic [11:0] sin_out, cos_out, squ_out, saw_out;
+
+assign div_clk_1hz = 32'h17D7840;
+assign tuning_word = 32'h0000102;	//DDS tuning word to generate 3 Hz carrier
+
+clock_divider generate_1hz_clock(
+	.inclk(CLOCK_50),
+	.outclk(clk_1hz),
+	.div_clk_count(div_clk_1hz),
+	.reset(1'b1));
+
+LFSR lfsr_5_bit(
+	.clk(CLOCK_50),
+	.lfsr(lfsr_output));
+
+DDS dds(
+	.clk(clk),
+	.reset(reset),
+	.en(1'b1),
+	.phase_inc(phase_inc),
+	.sin_out(sin_out),
+	.cos_out(cos_out),
+	.squ_out(squ_out),
+	.saw_out(saw_out));
+
+
+always_comb begin
+	phase_inc <= tuning_word;
+end
 
 ////////////////////////////////////////////////////////////////////
 // 
