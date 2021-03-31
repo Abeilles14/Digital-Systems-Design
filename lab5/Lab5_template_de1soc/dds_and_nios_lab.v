@@ -342,12 +342,13 @@ logic clk_1hz;
 logic [4:0] lfsr_output;
 
 //dds
-logic clk, reset;
 logic [31:0] phase_inc, tuning_word;
-logic [11:0] sin_out, cos_out, squ_out, saw_out;
+logic [11:0] sin_out, cos_out, squ_out, saw_out, ask_out, bpsk_out;
+logic pseudo_random;
 
 assign div_clk_1hz = 32'h17D7840;
-assign tuning_word = 32'h0000102;	//DDS tuning word to generate 3 Hz carrier
+assign tuning_word = 32'h0000102;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
+assign pseudo_random = lfsr_output[0];
 
 clock_divider generate_1hz_clock(
 	.inclk(CLOCK_50),
@@ -356,19 +357,21 @@ clock_divider generate_1hz_clock(
 	.reset(1'b1));
 
 LFSR lfsr_5_bit(
-	.clk(CLOCK_50),
+	.clk(clk_1hz),
 	.lfsr(lfsr_output));
 
 DDS dds(
-	.clk(clk),
-	.reset(reset),
+	.clk(CLOCK_50),
+	.reset(1'b1),
 	.en(1'b1),
+	.random(pseudo_random),
 	.phase_inc(phase_inc),
 	.sin_out(sin_out),
 	.cos_out(cos_out),
 	.squ_out(squ_out),
-	.saw_out(saw_out));
-
+	.saw_out(saw_out),
+	.ask_out(ask_out),
+	.bpsk_out(bpsk_out));
 
 always_comb begin
 	phase_inc <= tuning_word;
