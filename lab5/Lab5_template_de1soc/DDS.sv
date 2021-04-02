@@ -2,14 +2,14 @@ module DDS(
 	input logic clk,
 	input logic reset,
 	input logic en,
-	input logic random,
+	input logic lfsr,
 	input logic [31:0] phase_inc,
 	output logic [11:0] sin_out,
 	output logic [11:0] cos_out,
 	output logic [11:0] squ_out,
 	output logic [11:0] saw_out,
 	output logic [11:0] ask_out,
-	otuput logic [11:0] bpsk_out
+	output logic [11:0] bpsk_out
 );
 
 waveform_gen waveform(
@@ -29,7 +29,7 @@ initial begin
 end
 
 always @(posedge clk) begin
-	if(random == 1'b1)				//modulated carrier
+	if(lfsr == 1'b1)				//modulated carrier
 	begin
 		ask_out <= sin_out;			//amplitude shift keying (ASK  or OOK), ask = sin wave
 		bpsk_out <= sin_out;
