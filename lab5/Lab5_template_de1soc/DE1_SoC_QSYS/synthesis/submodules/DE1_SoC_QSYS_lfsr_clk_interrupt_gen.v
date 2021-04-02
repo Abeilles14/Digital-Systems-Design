@@ -18,20 +18,20 @@
 // altera message_level Level1 
 // altera message_off 10034 10035 10036 10037 10230 10240 10030 
 
-module DE1_SoC_QSYS_key (
-                          // inputs:
-                           address,
-                           chipselect,
-                           clk,
-                           in_port,
-                           reset_n,
-                           write_n,
-                           writedata,
+module DE1_SoC_QSYS_lfsr_clk_interrupt_gen (
+                                             // inputs:
+                                              address,
+                                              chipselect,
+                                              clk,
+                                              in_port,
+                                              reset_n,
+                                              write_n,
+                                              writedata,
 
-                          // outputs:
-                           irq,
-                           readdata
-                        )
+                                             // outputs:
+                                              irq,
+                                              readdata
+                                           )
 ;
 
   output           irq;
@@ -39,27 +39,27 @@ module DE1_SoC_QSYS_key (
   input   [  1: 0] address;
   input            chipselect;
   input            clk;
-  input   [  3: 0] in_port;
+  input            in_port;
   input            reset_n;
   input            write_n;
   input   [ 31: 0] writedata;
 
   wire             clk_en;
-  reg     [  3: 0] d1_data_in;
-  reg     [  3: 0] d2_data_in;
-  wire    [  3: 0] data_in;
-  reg     [  3: 0] edge_capture;
+  reg              d1_data_in;
+  reg              d2_data_in;
+  wire             data_in;
+  reg              edge_capture;
   wire             edge_capture_wr_strobe;
-  wire    [  3: 0] edge_detect;
+  wire             edge_detect;
   wire             irq;
-  reg     [  3: 0] irq_mask;
-  wire    [  3: 0] read_mux_out;
+  reg              irq_mask;
+  wire             read_mux_out;
   reg     [ 31: 0] readdata;
   assign clk_en = 1;
   //s1, which is an e_avalon_slave
-  assign read_mux_out = ({4 {(address == 0)}} & data_in) |
-    ({4 {(address == 2)}} & irq_mask) |
-    ({4 {(address == 3)}} & edge_capture);
+  assign read_mux_out = ({1 {(address == 0)}} & data_in) |
+    ({1 {(address == 2)}} & irq_mask) |
+    ({1 {(address == 3)}} & edge_capture);
 
   always @(posedge clk or negedge reset_n)
     begin
@@ -76,7 +76,7 @@ module DE1_SoC_QSYS_key (
       if (reset_n == 0)
           irq_mask <= 0;
       else if (chipselect && ~write_n && (address == 2))
-          irq_mask <= writedata[3 : 0];
+          irq_mask <= writedata;
     end
 
 
@@ -85,48 +85,12 @@ module DE1_SoC_QSYS_key (
   always @(posedge clk or negedge reset_n)
     begin
       if (reset_n == 0)
-          edge_capture[0] <= 0;
+          edge_capture <= 0;
       else if (clk_en)
           if (edge_capture_wr_strobe)
-              edge_capture[0] <= 0;
-          else if (edge_detect[0])
-              edge_capture[0] <= -1;
-    end
-
-
-  always @(posedge clk or negedge reset_n)
-    begin
-      if (reset_n == 0)
-          edge_capture[1] <= 0;
-      else if (clk_en)
-          if (edge_capture_wr_strobe)
-              edge_capture[1] <= 0;
-          else if (edge_detect[1])
-              edge_capture[1] <= -1;
-    end
-
-
-  always @(posedge clk or negedge reset_n)
-    begin
-      if (reset_n == 0)
-          edge_capture[2] <= 0;
-      else if (clk_en)
-          if (edge_capture_wr_strobe)
-              edge_capture[2] <= 0;
-          else if (edge_detect[2])
-              edge_capture[2] <= -1;
-    end
-
-
-  always @(posedge clk or negedge reset_n)
-    begin
-      if (reset_n == 0)
-          edge_capture[3] <= 0;
-      else if (clk_en)
-          if (edge_capture_wr_strobe)
-              edge_capture[3] <= 0;
-          else if (edge_detect[3])
-              edge_capture[3] <= -1;
+              edge_capture <= 0;
+          else if (edge_detect)
+              edge_capture <= -1;
     end
 
 
@@ -145,7 +109,7 @@ module DE1_SoC_QSYS_key (
     end
 
 
-  assign edge_detect = ~d1_data_in & d2_data_in;
+  assign edge_detect = d1_data_in & ~d2_data_in;
 
 endmodule
 

@@ -21,6 +21,38 @@ void handle_lfsr_interrupts(void* context, alt_u32 id)
 	#ifdef LFSR_CLK_INTERRUPT_GEN_BASE
 	#ifdef DDS_INCREMENT_BASE
 	
+	// int lfsr_bit;
+	// int phase_inc_1hz = 86;		//F_out = M*F_clk/2^n
+	// int phase_inc_5hz = 430;
+
+	// //read LFSR value and check bit 0
+	// lfsr_bit = IORD_ALTERA_AVALON_PIO_DATA(LFSR_VAL_BASE);
+	// if (lfsr_bit) {
+	// 	//if LFSR 1, write 5hz to DDS
+	// 	IOWR_ALTERA_AVALON_PIO_DATA(DDS_INCREMENT_BASE, phase_inc_5hz);
+	// } else {
+	// 	//if LFSR 0, write 1hz to DDS
+	// 	IOWR_ALTERA_AVALON_PIO_DATA(DDS_INCREMENT_BASE, phase_inc_1hz);
+	// }
+
+	// //reset edge capture to prepare for next clk edge
+	// /* Cast context to edge_capture's type. It is important that this
+	// be declared volatile to avoid unwanted compiler optimization. */
+	// volatile int* edge_capture_ptr = (volatile int*) context;
+
+	// /*
+	// * Read the edge capture register on the button PIO.
+	// * Store value.
+	// */
+	// *edge_capture_ptr =
+	// IORD_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE);
+	// /* Write to the edge capture register to reset it. */
+	// IOWR_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE, 0);
+	// /* Read the PIO to delay ISR exit. This is done to prevent a
+	// spurious interrupt in systems with high processor -> pio
+	// latency and fast interrupts. */
+	// IORD_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE);
+
 	#endif
 	#endif
 	#endif

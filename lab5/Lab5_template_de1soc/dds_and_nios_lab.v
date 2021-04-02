@@ -318,8 +318,13 @@ DE1_SoC_QSYS U0(
 	   .audio_sel_export                              (audio_selector),                               //                       audio_sel.export
 	   
        .vga_vga_clk_clk                               (video_clk_40Mhz),                               //                     vga_vga_clk.clk
-       .clk_25_out_clk                                (CLK_25MHZ)                                 //                      clk_25_out.clk
+       .clk_25_out_clk                                (CLK_25MHZ),                                 //                      clk_25_out.clk
        
+       //lfsr and dds
+       .lfsr_clk_interrupt_gen_external_connection_export(clk_1hz),  //lfsr_clk_interrupt_gen_external_connection.export
+	   .lfsr_val_external_connection_export({31'b0, pseudo_random}),     //lfsr_val_external_connection.export
+	   .dds_increment_external_connection_export(fsk_phase_inc)      //dds_increment_external_connection.export
+	
 	);
 	
  
@@ -335,22 +340,26 @@ logic [11:0] actual_selected_signal;
 
 //clk divider
 logic [31:0] div_clk_1hz;
-logic clk_1hz, sync_lfsr_50M;
+logic clk_1hz, pseudo_random;
 
 //lfsr
 logic [4:0] lfsr_out;
 
 //dds
-logic [31:0] tuning_word;
+logic [31:0] phase_inc;
 logic [11:0] sin_out, cos_out, squ_out, saw_out, ask_out, bpsk_out;
 
 //scope selector
 logic [11:0] sig_out, mod_out;
 
-assign div_clk_1hz = 32'h17D7840;
-assign tuning_word = 32'd258;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
+//fsk
+wire[31:0] fsk_phase_inc;
 
-//lfsr debugging
+assign div_clk_1hz = 32'h17D7840;
+assign phase_inc = 32'd258;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
+assign pseudo_random = lfsr_out[0];
+
+//lfsr LED
 assign LEDR[0] = lfsr_out[0];
 
 //CLOCK DIVIDER AND CLOCK DOMAIN CROSSING LOGIC
@@ -372,7 +381,6 @@ fast_to_slow_synchronizer sync_sig (
 	.data_in(sig_out),	//signal from selector
 	.data_out(actual_selected_signal));
 
-
 //LFSR AND DDS
 LFSR lfsr_5_bit(
 	.clk(clk_1hz),
@@ -382,8 +390,9 @@ DDS_selector dds(
 	.clk(CLOCK_50),
 	.reset(1'b1),
 	.en(1'b1),
-	.lfsr(lfsr_out[0]),		//use sync'd lfsr[0] and CLOCK_50 signal
-	.phase_inc(32'd258),
+	.lfsr(pseudo_random),		//use sync'd lfsr[0] and CLOCK_50 signal
+	.phase_inc(phase_inc),
+	.fsk_phase_inc(fsk_phase_inc),
 	.sig_sel(signal_selector),
 	.mod_sel(modulation_selector),
 	.sig_out(sig_out),
