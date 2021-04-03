@@ -32,6 +32,7 @@ always @(posedge clk) begin
 	if(lfsr == 1'b1)				//modulated carrier
 	begin
 		ask_out <= sin_out;			//amplitude shift keying (ASK  or OOK), ask = sin wave
+		//fsk_out <= 12'b0;
 		bpsk_out <= sin_out;
 	end
 	else

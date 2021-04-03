@@ -1,6 +1,6 @@
 module scope_selector(
 	input logic clk,
-	input logic [3:0] sig_sel,
+	input logic [7:0] sig_sel,
 	input logic [3:0] mod_sel,
 	input logic [11:0] sin_sig,
 	input logic [11:0] cos_sig,
@@ -21,16 +21,16 @@ end
 
 always @(posedge clk) begin
 	case(sig_sel)				//select signal (sin, cos, saw, squ)
-		4'b0000: begin
+		8'b0000_0000: begin
 			sig_out <= sin_sig;
 		end
-		4'b0001: begin
+		8'b0000_0001: begin
 			sig_out <= cos_sig;
 		end
-		4'b0010: begin
+		8'b0000_0010: begin
 			sig_out <= saw_sig;
 		end
-		4'b0011: begin
+		8'b0000_0011: begin
 			sig_out <= squ_sig;
 		end
 		default: begin

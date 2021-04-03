@@ -207,7 +207,6 @@ logic [15:0]to_histogram;
 logic synced_bar_on;
 logic [15:0] flash_audio_data_left_to_histogram, actual_audio_to_histogram;
 
-
 //modulator
 wire [7:0]signal_selector;
 wire [3:0]modulation_selector;
@@ -336,46 +335,59 @@ logic [11:0] actual_selected_signal;
 
 //clk divider
 logic [31:0] div_clk_1hz;
-logic clk_1hz;
+logic clk_1hz, sync_lfsr_50M;
 
 //lfsr
-logic [4:0] lfsr_output;
+logic [4:0] lfsr_out;
 
 //dds
-logic [31:0] phase_inc, tuning_word;
+logic [31:0] tuning_word;
 logic [11:0] sin_out, cos_out, squ_out, saw_out, ask_out, bpsk_out;
-logic pseudo_random;
+
+//scope selector
+logic [11:0] sig_out, mod_out;
 
 assign div_clk_1hz = 32'h17D7840;
-assign tuning_word = 32'h0000102;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
-assign pseudo_random = lfsr_output[0];
+assign tuning_word = 32'd258;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
 
+//lfsr debugging
+assign LEDR[0] = lfsr_out[0];
+
+//CLOCK DIVIDER AND CLOCK DOMAIN CROSSING LOGIC
 clock_divider generate_1hz_clock(
 	.inclk(CLOCK_50),
 	.outclk(clk_1hz),
 	.div_clk_count(div_clk_1hz),
 	.reset(1'b1));
 
+fast_to_slow_synchronizer sync_mod (		//fast to slow data sync for modulation
+	.clk1(CLOCK_50),
+	.clk2(sampler),
+	.data_in(mod_out),	//modulation from selector
+	.data_out(actual_selected_modulation));		//fast to slow data sync for signal
+
+fast_to_slow_synchronizer sync_sig (
+	.clk1(CLOCK_50),
+	.clk2(sampler),
+	.data_in(sig_out),	//signal from selector
+	.data_out(actual_selected_signal));
+
+
+//LFSR AND DDS
 LFSR lfsr_5_bit(
 	.clk(clk_1hz),
-	.lfsr(lfsr_output));
+	.lfsr(lfsr_out));
 
-DDS dds(
+DDS_selector dds(
 	.clk(CLOCK_50),
 	.reset(1'b1),
 	.en(1'b1),
-	.random(pseudo_random),
-	.phase_inc(phase_inc),
-	.sin_out(sin_out),
-	.cos_out(cos_out),
-	.squ_out(squ_out),
-	.saw_out(saw_out),
-	.ask_out(ask_out),
-	.bpsk_out(bpsk_out));
-
-always_comb begin
-	phase_inc <= tuning_word;
-end
+	.lfsr(lfsr_out[0]),		//use sync'd lfsr[0] and CLOCK_50 signal
+	.phase_inc(32'd258),
+	.sig_sel(signal_selector),
+	.mod_sel(modulation_selector),
+	.sig_out(sig_out),
+	.mod_out(mod_out));
 
 ////////////////////////////////////////////////////////////////////
 // 
