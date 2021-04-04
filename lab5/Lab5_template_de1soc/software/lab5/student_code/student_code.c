@@ -21,6 +21,28 @@ void handle_lfsr_interrupts(void* context, alt_u32 id)
 	#ifdef LFSR_CLK_INTERRUPT_GEN_BASE
 	#ifdef DDS_INCREMENT_BASE
 	
+	int lfsr_bit;
+	int phase_inc_1hz = 86;		//F_out = M*F_clk/2^n
+	int phase_inc_5hz = 430;
+
+	//read LFSR value and check bit 0
+	lfsr_bit = IORD_ALTERA_AVALON_PIO_DATA(LFSR_VAL_BASE);
+	if (lfsr_bit != 0) {
+		//if LFSR 1, write 5hz to DDS
+		IOWR_ALTERA_AVALON_PIO_DATA(DDS_INCREMENT_BASE, phase_inc_5hz);
+	} else {
+		//if LFSR 0, write 1hz to DDS
+		IOWR_ALTERA_AVALON_PIO_DATA(DDS_INCREMENT_BASE, phase_inc_1hz);
+	}
+
+	//reset edge capture to prepare for next clk edge
+	volatile int* edge_capture_ptr = (volatile int*) context;
+
+	*edge_capture_ptr =
+	IORD_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE);
+	IOWR_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE, 0);
+	IORD_ALTERA_AVALON_PIO_EDGE_CAP(LFSR_CLK_INTERRUPT_GEN_BASE);
+
 	#endif
 	#endif
 	#endif
