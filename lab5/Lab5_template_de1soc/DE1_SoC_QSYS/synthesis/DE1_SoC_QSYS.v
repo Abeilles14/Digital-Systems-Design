@@ -50,6 +50,7 @@ module DE1_SoC_QSYS (
 	);
 
 	wire         pll_outclk0_clk;                                           // pll:outclk_0 -> [audio:clk_clk, irq_synchronizer:receiver_clk, mm_interconnect_0:pll_outclk0_clk, rst_controller:clk, sdram:clk, vga:nios_clk_clk]
+	wire         pll_outclk2_clk;                                           // pll:outclk_2 -> [keyboard_keys:clk, mm_interconnect_0:pll_outclk2_clk, rst_controller_003:clk]
 	wire  [31:0] cpu_data_master_readdata;                                  // mm_interconnect_0:cpu_data_master_readdata -> cpu:d_readdata
 	wire         cpu_data_master_waitrequest;                               // mm_interconnect_0:cpu_data_master_waitrequest -> cpu:d_waitrequest
 	wire         cpu_data_master_debugaccess;                               // cpu:jtag_debug_module_debugaccess_to_roms -> mm_interconnect_0:cpu_data_master_debugaccess
@@ -196,7 +197,6 @@ module DE1_SoC_QSYS (
 	wire         rst_controller_002_reset_out_reset_req;                    // rst_controller_002:reset_req -> [cpu:reset_req, rst_translator:reset_req_in]
 	wire         cpu_jtag_debug_module_reset_reset;                         // cpu:jtag_debug_module_resetrequest -> rst_controller_002:reset_in1
 	wire         rst_controller_003_reset_out_reset;                        // rst_controller_003:reset_out -> [keyboard_keys:reset_n, mm_interconnect_0:keyboard_keys_reset_reset_bridge_in_reset_reset]
-	wire         rst_controller_004_reset_out_reset;                        // rst_controller_004:reset_out -> [mm_interconnect_0:mouse_pos_reset_reset_bridge_in_reset_reset, mouse_pos:reset_n]
 
 	DE1_SoC_QSYS_audio audio (
 		.clk_clk                      (pll_outclk0_clk),                                      //               clk.clk
@@ -338,7 +338,7 @@ module DE1_SoC_QSYS (
 	);
 
 	DE1_SoC_QSYS_keyboard_keys keyboard_keys (
-		.clk      (clk_25_out_clk),                              //                 clk.clk
+		.clk      (pll_outclk2_clk),                             //                 clk.clk
 		.reset_n  (~rst_controller_003_reset_out_reset),         //               reset.reset_n
 		.address  (mm_interconnect_0_keyboard_keys_s1_address),  //                  s1.address
 		.readdata (mm_interconnect_0_keyboard_keys_s1_readdata), //                    .readdata
@@ -376,9 +376,9 @@ module DE1_SoC_QSYS (
 		.out_port   (modulation_selector_export)                           // external_connection.export
 	);
 
-	DE1_SoC_QSYS_mouse_pos mouse_pos (
-		.clk      (vga_vga_clk_clk),                         //                 clk.clk
-		.reset_n  (~rst_controller_004_reset_out_reset),     //               reset.reset_n
+	DE1_SoC_QSYS_lfsr_val mouse_pos (
+		.clk      (clk_clk),                                 //                 clk.clk
+		.reset_n  (~rst_controller_001_reset_out_reset),     //               reset.reset_n
 		.address  (mm_interconnect_0_mouse_pos_s1_address),  //                  s1.address
 		.readdata (mm_interconnect_0_mouse_pos_s1_readdata), //                    .readdata
 		.in_port  (mouse_pos_export)                         // external_connection.export
@@ -389,7 +389,7 @@ module DE1_SoC_QSYS (
 		.rst      (~reset_reset_n),    //   reset.reset
 		.outclk_0 (pll_outclk0_clk),   // outclk0.clk
 		.outclk_1 (clk_sdram_clk),     // outclk1.clk
-		.outclk_2 (clk_25_out_clk),    // outclk2.clk
+		.outclk_2 (pll_outclk2_clk),   // outclk2.clk
 		.locked   (pll_locked_export)  //  locked.export
 	);
 
@@ -471,19 +471,19 @@ module DE1_SoC_QSYS (
 		.to_sdram_read                             (vga_to_sdram_read),                                    //                               .read
 		.to_sdram_readdatavalid                    (vga_to_sdram_readdatavalid),                           //                               .readdatavalid
 		.to_sdram_waitrequest                      (vga_to_sdram_waitrequest),                             //                               .waitrequest
-		.vga_clk_clk                               (vga_vga_clk_clk)                                       //                        vga_clk.clk
+		.vga_clk_clk                               ()                                                      //                        vga_clk.clk
 	);
 
 	DE1_SoC_QSYS_mm_interconnect_0 mm_interconnect_0 (
 		.clk_50_clk_clk                                  (clk_clk),                                                   //                                clk_50_clk.clk
 		.pll_outclk0_clk                                 (pll_outclk0_clk),                                           //                               pll_outclk0.clk
-		.pll_outclk2_clk                                 (clk_25_out_clk),                                            //                               pll_outclk2.clk
-		.vga_clk_bridge_out_out_clk_1_clk                (vga_vga_clk_clk),                                           //              vga_clk_bridge_out_out_clk_1.clk
+		.pll_outclk2_clk                                 (pll_outclk2_clk),                                           //                               pll_outclk2.clk
+		.vga_clk_bridge_out_out_clk_1_clk                (clk_clk),                                                   //              vga_clk_bridge_out_out_clk_1.clk
 		.audio_reset_reset_bridge_in_reset_reset         (rst_controller_reset_out_reset),                            //         audio_reset_reset_bridge_in_reset.reset
 		.cpu_reset_n_reset_bridge_in_reset_reset         (rst_controller_002_reset_out_reset),                        //         cpu_reset_n_reset_bridge_in_reset.reset
 		.jtag_uart_reset_reset_bridge_in_reset_reset     (rst_controller_001_reset_out_reset),                        //     jtag_uart_reset_reset_bridge_in_reset.reset
 		.keyboard_keys_reset_reset_bridge_in_reset_reset (rst_controller_003_reset_out_reset),                        // keyboard_keys_reset_reset_bridge_in_reset.reset
-		.mouse_pos_reset_reset_bridge_in_reset_reset     (rst_controller_004_reset_out_reset),                        //     mouse_pos_reset_reset_bridge_in_reset.reset
+		.mouse_pos_reset_reset_bridge_in_reset_reset     (rst_controller_001_reset_out_reset),                        //     mouse_pos_reset_reset_bridge_in_reset.reset
 		.vga_nios_clk_reset_reset_bridge_in_reset_reset  (rst_controller_reset_out_reset),                            //  vga_nios_clk_reset_reset_bridge_in_reset.reset
 		.cpu_data_master_address                         (cpu_data_master_address),                                   //                           cpu_data_master.address
 		.cpu_data_master_waitrequest                     (cpu_data_master_waitrequest),                               //                                          .waitrequest
@@ -858,7 +858,7 @@ module DE1_SoC_QSYS (
 		.ADAPT_RESET_REQUEST       (0)
 	) rst_controller_003 (
 		.reset_in0      (~reset_reset_n),                     // reset_in0.reset
-		.clk            (clk_25_out_clk),                     //       clk.clk
+		.clk            (pll_outclk2_clk),                    //       clk.clk
 		.reset_out      (rst_controller_003_reset_out_reset), // reset_out.reset
 		.reset_req      (),                                   // (terminated)
 		.reset_req_in0  (1'b0),                               // (terminated)
@@ -894,67 +894,8 @@ module DE1_SoC_QSYS (
 		.reset_req_in15 (1'b0)                                // (terminated)
 	);
 
-	altera_reset_controller #(
-		.NUM_RESET_INPUTS          (1),
-		.OUTPUT_RESET_SYNC_EDGES   ("deassert"),
-		.SYNC_DEPTH                (2),
-		.RESET_REQUEST_PRESENT     (0),
-		.RESET_REQ_WAIT_TIME       (1),
-		.MIN_RST_ASSERTION_TIME    (3),
-		.RESET_REQ_EARLY_DSRT_TIME (1),
-		.USE_RESET_REQUEST_IN0     (0),
-		.USE_RESET_REQUEST_IN1     (0),
-		.USE_RESET_REQUEST_IN2     (0),
-		.USE_RESET_REQUEST_IN3     (0),
-		.USE_RESET_REQUEST_IN4     (0),
-		.USE_RESET_REQUEST_IN5     (0),
-		.USE_RESET_REQUEST_IN6     (0),
-		.USE_RESET_REQUEST_IN7     (0),
-		.USE_RESET_REQUEST_IN8     (0),
-		.USE_RESET_REQUEST_IN9     (0),
-		.USE_RESET_REQUEST_IN10    (0),
-		.USE_RESET_REQUEST_IN11    (0),
-		.USE_RESET_REQUEST_IN12    (0),
-		.USE_RESET_REQUEST_IN13    (0),
-		.USE_RESET_REQUEST_IN14    (0),
-		.USE_RESET_REQUEST_IN15    (0),
-		.ADAPT_RESET_REQUEST       (0)
-	) rst_controller_004 (
-		.reset_in0      (~reset_reset_n),                     // reset_in0.reset
-		.clk            (vga_vga_clk_clk),                    //       clk.clk
-		.reset_out      (rst_controller_004_reset_out_reset), // reset_out.reset
-		.reset_req      (),                                   // (terminated)
-		.reset_req_in0  (1'b0),                               // (terminated)
-		.reset_in1      (1'b0),                               // (terminated)
-		.reset_req_in1  (1'b0),                               // (terminated)
-		.reset_in2      (1'b0),                               // (terminated)
-		.reset_req_in2  (1'b0),                               // (terminated)
-		.reset_in3      (1'b0),                               // (terminated)
-		.reset_req_in3  (1'b0),                               // (terminated)
-		.reset_in4      (1'b0),                               // (terminated)
-		.reset_req_in4  (1'b0),                               // (terminated)
-		.reset_in5      (1'b0),                               // (terminated)
-		.reset_req_in5  (1'b0),                               // (terminated)
-		.reset_in6      (1'b0),                               // (terminated)
-		.reset_req_in6  (1'b0),                               // (terminated)
-		.reset_in7      (1'b0),                               // (terminated)
-		.reset_req_in7  (1'b0),                               // (terminated)
-		.reset_in8      (1'b0),                               // (terminated)
-		.reset_req_in8  (1'b0),                               // (terminated)
-		.reset_in9      (1'b0),                               // (terminated)
-		.reset_req_in9  (1'b0),                               // (terminated)
-		.reset_in10     (1'b0),                               // (terminated)
-		.reset_req_in10 (1'b0),                               // (terminated)
-		.reset_in11     (1'b0),                               // (terminated)
-		.reset_req_in11 (1'b0),                               // (terminated)
-		.reset_in12     (1'b0),                               // (terminated)
-		.reset_req_in12 (1'b0),                               // (terminated)
-		.reset_in13     (1'b0),                               // (terminated)
-		.reset_req_in13 (1'b0),                               // (terminated)
-		.reset_in14     (1'b0),                               // (terminated)
-		.reset_req_in14 (1'b0),                               // (terminated)
-		.reset_in15     (1'b0),                               // (terminated)
-		.reset_req_in15 (1'b0)                                // (terminated)
-	);
+	assign clk_25_out_clk = clk_clk;
+
+	assign vga_vga_clk_clk = clk_clk;
 
 endmodule

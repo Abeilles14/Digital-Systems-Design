@@ -9558,7 +9558,7 @@ module DE1_SoC_QSYS_mm_interconnect_0 (
 		.src0_endofpacket   (rsp_demux_015_src0_endofpacket)                   //          .endofpacket
 	);
 
-	DE1_SoC_QSYS_mm_interconnect_0_rsp_demux_016 rsp_demux_016 (
+	DE1_SoC_QSYS_mm_interconnect_0_rsp_demux rsp_demux_016 (
 		.clk                (vga_clk_bridge_out_out_clk_1_clk),            //       clk.clk
 		.reset              (mouse_pos_reset_reset_bridge_in_reset_reset), // clk_reset.reset
 		.sink_ready         (router_019_src_ready),                        //      sink.ready
