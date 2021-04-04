@@ -4,6 +4,7 @@ module DDS_selector(
 	input logic en,
 	input logic lfsr,
 	input logic [31:0] phase_inc,
+	input logic [31:0] fsk_phase_inc,
 	input logic [7:0] sig_sel,
 	input logic [3:0] mod_sel,
 	output logic [11:0] sig_out,
@@ -15,11 +16,13 @@ logic [11:0] cos_out;
 logic [11:0] squ_out;
 logic [11:0] saw_out;
 
+logic [31:0] tuning_word;
+
 waveform_gen waveform(
 	.clk(clk),
 	.reset(reset),
 	.en(en),
-	.phase_inc(phase_inc),
+	.phase_inc(tuning_word),
 	.sin_out(sin_out),
 	.cos_out(cos_out),
 	.squ_out(squ_out),
@@ -41,11 +44,26 @@ always @(posedge clk) begin
 	endcase
 
 	case(mod_sel)		//select modulation (ask, fsk, bpsk, lfsr)
-		4'b0000: mod_out <= lfsr ? sin_out : 12'b0;		//ask
-		4'b0001: mod_out <= 12'b0;			//fsk??
-		4'b0010: mod_out <= lfsr ? sin_out : (~sin_out + 1'b1);  //bpsk - 2s complement of sin wave
-		4'b0011: mod_out <= lfsr ? 12'b0 : 12'b1000_0000_0000;		//lfsr
-		default: mod_out <= 12'b0;
+		4'b0000: begin
+			mod_out <= lfsr ? sin_out : 12'b0;		//ask
+			tuning_word <= phase_inc;
+		end
+		4'b0001: begin
+			mod_out <= sin_out;			//fsk
+			tuning_word <= fsk_phase_inc;
+		end
+		4'b0010: begin
+			mod_out <= lfsr ? sin_out : (~sin_out + 1'b1);  //bpsk - 2s complement of sin wave
+			tuning_word <= phase_inc;
+		end
+		4'b0011: begin
+			mod_out <= lfsr ? 12'b0 : 12'b1000_0000_0000;		//lfsr
+			tuning_word <= fsk_phase_inc;
+		end
+		default: begin
+			mod_out <= 12'b0;
+			tuning_word <= phase_inc;
+		end
 	endcase
 end
 endmodule

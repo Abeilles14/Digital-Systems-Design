@@ -40,7 +40,7 @@
 		.vga_alt_vip_itc_0_clocked_video_vid_v             (<connected-to-vga_alt_vip_itc_0_clocked_video_vid_v>),             //                                           .vid_v
 		.vga_vga_clk_clk                                   (<connected-to-vga_vga_clk_clk>),                                   //                                vga_vga_clk.clk
 		.lfsr_clk_interrupt_gen_external_connection_export (<connected-to-lfsr_clk_interrupt_gen_external_connection_export>), // lfsr_clk_interrupt_gen_external_connection.export
-		.dds_increment_external_connection_export          (<connected-to-dds_increment_external_connection_export>),          //          dds_increment_external_connection.export
-		.lfsr_val_external_connection_export               (<connected-to-lfsr_val_external_connection_export>)                //               lfsr_val_external_connection.export
+		.lfsr_val_external_connection_export               (<connected-to-lfsr_val_external_connection_export>),               //               lfsr_val_external_connection.export
+		.dds_increment_external_connection_export          (<connected-to-dds_increment_external_connection_export>)           //          dds_increment_external_connection.export
 	);
 

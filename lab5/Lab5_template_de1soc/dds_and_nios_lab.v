@@ -207,6 +207,7 @@ logic [15:0]to_histogram;
 logic synced_bar_on;
 logic [15:0] flash_audio_data_left_to_histogram, actual_audio_to_histogram;
 
+
 //modulator
 wire [7:0]signal_selector;
 wire [3:0]modulation_selector;
@@ -318,7 +319,12 @@ DE1_SoC_QSYS U0(
 	   .audio_sel_export                              (audio_selector),                               //                       audio_sel.export
 	   
        .vga_vga_clk_clk                               (video_clk_40Mhz),                               //                     vga_vga_clk.clk
-       .clk_25_out_clk                                (CLK_25MHZ),                                 //                      clk_25_out.clk
+       .clk_25_out_clk                                (CLK_25MHZ),	                                 //                      clk_25_out.clk
+
+        //lfsr and dds
+       .lfsr_clk_interrupt_gen_external_connection_export(lfsr_clk),  //lfsr_clk_interrupt_gen_external_connection.export
+	   .lfsr_val_external_connection_export({31'b0, LFSR[0]}),     //lfsr_val_external_connection.export
+	   .dds_increment_external_connection_export(dds_increment)      //dds_increment_external_connection.export
        
        //lfsr and dds
        .lfsr_clk_interrupt_gen_external_connection_export(clk_1hz),  //lfsr_clk_interrupt_gen_external_connection.export
@@ -334,16 +340,14 @@ DE1_SoC_QSYS U0(
 //
 ////////////////////////////////////////////////////////////////////		   
 
-(* keep = 1, preserve = 1 *)
-logic [11:0] actual_selected_modulation;
-logic [11:0] actual_selected_signal;
+	
+(* keep = 1, preserve = 1 *) logic [11:0] actual_selected_modulation;
+(* keep = 1, preserve = 1 *) logic [11:0] actual_selected_signal;
+
 
 //clk divider
 logic [31:0] div_clk_1hz;
-logic clk_1hz, pseudo_random;
-
-//lfsr
-logic [4:0] lfsr_out;
+logic sync_lfsr_50M;
 
 //dds
 logic [31:0] phase_inc;
@@ -357,15 +361,13 @@ wire[31:0] fsk_phase_inc;
 
 assign div_clk_1hz = 32'h17D7840;
 assign phase_inc = 32'd258;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
-assign pseudo_random = lfsr_out[0];
-
-//lfsr LED
-assign LEDR[0] = lfsr_out[0];
+//lfsr debugging
+assign LEDR[0] = LFSR[0];
 
 //CLOCK DIVIDER AND CLOCK DOMAIN CROSSING LOGIC
 clock_divider generate_1hz_clock(
 	.inclk(CLOCK_50),
-	.outclk(clk_1hz),
+	.outclk(lfsr_clk),
 	.div_clk_count(div_clk_1hz),
 	.reset(1'b1));
 
@@ -383,16 +385,16 @@ fast_to_slow_synchronizer sync_sig (
 
 //LFSR AND DDS
 LFSR lfsr_5_bit(
-	.clk(clk_1hz),
-	.lfsr(lfsr_out));
+	.clk(lfsr_clk),
+	.lfsr(LFSR));
 
 DDS_selector dds(
 	.clk(CLOCK_50),
 	.reset(1'b1),
-	.en(1'b1),
-	.lfsr(pseudo_random),		//use sync'd lfsr[0] and CLOCK_50 signal
+  .en(1'b1),
+	.lfsr(LFSR[0]),		//use sync'd lfsr[0] and CLOCK_50 signal
 	.phase_inc(phase_inc),
-	.fsk_phase_inc(fsk_phase_inc),
+	.fsk_phase_inc(dds_increment),
 	.sig_sel(signal_selector),
 	.mod_sel(modulation_selector),
 	.sig_out(sig_out),

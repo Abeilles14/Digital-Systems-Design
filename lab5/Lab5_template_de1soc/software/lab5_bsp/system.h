@@ -4,7 +4,7 @@
  * Machine generated for CPU 'cpu' in SOPC Builder design 'DE1_SoC_QSYS'
  * SOPC Builder design path: ../../DE1_SoC_QSYS.sopcinfo
  *
- * Generated: Fri Apr 02 15:00:21 PDT 2021
+ * Generated: Sat Apr 03 17:11:30 PDT 2021
  */
 
 /*
@@ -584,7 +584,7 @@
  */
 
 #define ALT_MODULE_CLASS_lfsr_clk_interrupt_gen altera_avalon_pio
-#define LFSR_CLK_INTERRUPT_GEN_BASE 0x80010b0
+#define LFSR_CLK_INTERRUPT_GEN_BASE 0x80010c0
 #define LFSR_CLK_INTERRUPT_GEN_BIT_CLEARING_EDGE_REGISTER 0
 #define LFSR_CLK_INTERRUPT_GEN_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LFSR_CLK_INTERRUPT_GEN_CAPTURE 1
@@ -611,7 +611,7 @@
  */
 
 #define ALT_MODULE_CLASS_lfsr_val altera_avalon_pio
-#define LFSR_VAL_BASE 0x80010c0
+#define LFSR_VAL_BASE 0x80010b0
 #define LFSR_VAL_BIT_CLEARING_EDGE_REGISTER 0
 #define LFSR_VAL_BIT_MODIFYING_OUTPUT_REGISTER 0
 #define LFSR_VAL_CAPTURE 0
@@ -764,7 +764,7 @@
 #define SYSID_QSYS_IRQ_INTERRUPT_CONTROLLER_ID -1
 #define SYSID_QSYS_NAME "/dev/sysid_qsys"
 #define SYSID_QSYS_SPAN 8
-#define SYSID_QSYS_TIMESTAMP 1617398150
+#define SYSID_QSYS_TIMESTAMP 1617494454
 #define SYSID_QSYS_TYPE "altera_avalon_sysid_qsys"
 
 

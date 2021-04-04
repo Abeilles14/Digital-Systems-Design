@@ -248,15 +248,15 @@ module DE1_SoC_QSYS_mm_interconnect_0_router
     end
 
     // ( 0x80010b0 .. 0x80010c0 )
-    if ( {address[RG:PAD5],{PAD5{1'b0}}} == 28'h80010b0   ) begin
+    if ( {address[RG:PAD5],{PAD5{1'b0}}} == 28'h80010b0  && read_transaction  ) begin
             src_channel = 25'b0000100000000000000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 16;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 17;
     end
 
     // ( 0x80010c0 .. 0x80010d0 )
-    if ( {address[RG:PAD6],{PAD6{1'b0}}} == 28'h80010c0  && read_transaction  ) begin
+    if ( {address[RG:PAD6],{PAD6{1'b0}}} == 28'h80010c0   ) begin
             src_channel = 25'b0000010000000000000000000;
-            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 17;
+            src_data[PKT_DEST_ID_H:PKT_DEST_ID_L] = 16;
     end
 
     // ( 0x80010d0 .. 0x80010e0 )
