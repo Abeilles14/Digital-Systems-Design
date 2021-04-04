@@ -9,6 +9,6 @@ end
 
 always @(posedge clk) begin
 	lfsr <= lfsr >> 1;				//shift registers every posedge
-	lfsr[4] <= lfsr[0] ^ lfsr[2];	//xor rap lfsr[0] and lfsr[2]
+	lfsr[4] <= lfsr[0] ^ lfsr[2];	//xor tap lfsr[0] and lfsr[2]
 end
 endmodule

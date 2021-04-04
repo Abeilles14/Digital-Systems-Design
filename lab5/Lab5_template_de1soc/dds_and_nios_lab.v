@@ -351,7 +351,7 @@ logic [11:0] sin_out, cos_out, squ_out, saw_out, ask_out, bpsk_out;
 //scope selector
 logic [11:0] sig_out, mod_out;
 
-assign div_clk_1hz = 32'h17D7840;
+assign div_clk_1hz = 32'h17D7840;	//1hz
 assign phase_inc = 32'd258;	//DDS tuning word to generate 3 Hz carrier, F_out=M*F_clk/2^n
 
 //lfsr debugging
