@@ -3,7 +3,7 @@ University of British Columbia
 *Isabelle Andre*
 
 # Digital Systems Design
-5 Labs and 3 Assignments completed using a System Verilog, VHDL, Assembly, with a DE1-SoC.
+5 Labs and 3 Assignments completed using System Verilog, VHDL, Picoblaze, Assembly, and a DE1-SoC.
 
 ## Lab 1 Single Octave Frequency Organ
 
@@ -21,18 +21,20 @@ An MP3 Player was developed in this lab using a DE1-SoC while interfacing with t
 A total of 0x200000 16-bit audio samples were read from flash memory and written to the 8-bit audio output through a D/A converter. An address counter FSM was used to increment or decrement the 32-bit addresses at which the 16-bit audio samples are read from the 32-bit Flash data.
 The even addresses are in the lower bytes, whereas the odd addresses are in the higher bytes, therefore the first 16-bit audio sample is located in the lower-half of the data at address 0, and the last sample is located in the upper half of the data at address 0x7FFFF.  
 For instance:  
-    Data at Address 0: 32'hBBBBAAAA  
+* Data at Address 0: 32'hBBBBAAAA  
     * 1st Audio Data: 16'hAAAA (even)  
     * 2nd Audio Data: 16'hBBBB (odd)  
-    Data at Address 32'hFFFFEEEE:  
+* Data at Address 32'hFFFFEEEE:  
     * 2nd Last Audio Data: 16'hEEEE (even)  
     * Last Audio Data: 16'hFFFF (odd)  
+
 Note: The prof goofed lol only need first 8-bits of audio data (last 8-bits ignored). Also addresses are only 23-bits, not 32-bits.  
 
 ### Sampling Rate
 A new value is read from the Flash memory and sent to the audio output every 0.045ms for a 22KHz sampling rate of the song. A frequency divider was used to divide the 50MHz clock to obtain a 22KHz clock, with each rising edge of the 22KHz clock being a stimulus for the Address Counter FSM to read a new value of the Flash Memory and write to the audio D/A converter.
 
 As a bonus, the input pin TD_CLK27 was used as a 27MHz clock for the frequency divider that generates the 22 KHz clock. This resulted in a a truly asynchronous 22KHz clock as compared to the 50MHz FSM clock.
+
 Note: Prof did an oopsie again, song sample rate was supposed to be 44KHz. A second frequency divider and additional functionalities to implement a 44KHz Sampling rate was added as a bonus.  
 
 #### Nyquist Sampling Theorem
@@ -57,9 +59,12 @@ The DE1-SoC Keys KEY[2:0] are used to control audio speed, by changing the frequ
     * KEY1 will decrease the speed
     * KEY2 will reset the speed to the original sample rate
 
-## Lab 3
+## Lab 3 Adding a Strength Meter to the Simple Ipod
 
+This lab consisted in enhancing the previous lab's MP3 Player by adding an LED strength meter showing the strength of the audio signal using Embedded Processors, Signal Professing, and Basic Filtering/Averaging. This was accomplished with an embedded PicoBlaze processor to further explore Digital Signal Processing with real-time averaging (a basic form of filtering).
 
+This lab was written in Assembly, with modules instantiated in the top level Verilog file. An interrupt routine is activated each time a new value is read from the Flash memory. Each sound sample has its own "intensity" or absolute value. Once the interrupt accumulates and sums 256 of these values, the interrupt routine divides this sum by 256 every 256th interrupt triggered, therefore creating an averaging filter operation.
+The PicoBlaze interrupt routine then outputs this average value to LEDR[9:2], with the LEDs being filled from left to right ( make the LEDs light up to the value of the most significant binary digit of the average). After each averaged value is output to the appropriate LEDs, the accumulator is set to 0 to prepare to average the next 256 values, and so on.
 
 ## Lab 4
 
