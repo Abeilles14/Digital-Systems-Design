@@ -47,17 +47,17 @@ Note: Prof did an oopsie again, song sample rate was supposed to be 44KHz. A sec
 As the 22KHz and 44KHz clocks were not synchronized with the FSM's 50MHz clock, a method to detect the 22KHz clock was required to generate stimulus. Clock domain crossing logic was implemented with synchronizers to synchronize the Keyboard, FSMs, and Sampling clock domains.
 
 ### Keyboard Interface and Speed Control
-An interface between the FSMs and the ASCII code received from the keyboard to control the music was constructed. The keyboard controls are as follows:
-    * D - Pause  
-    * E - Play  
-    * R - Reset  
-    * B - Rewind  
-    * F - Forward
+An interface between the FSMs and the ASCII code received from the keyboard to control the music was constructed. The keyboard controls are as follows:  
+* D - Pause  
+* E - Play  
+* R - Reset  
+* B - Rewind  
+* F - Forward
 
-The DE1-SoC Keys KEY[2:0] are used to control audio speed, by changing the frequency that generates the stimulus to the FSMs that reads data from the Flash. The normal frequency begins at 22KHz.
-    * KEY0 will increase the speed
-    * KEY1 will decrease the speed
-    * KEY2 will reset the speed to the original sample rate
+The DE1-SoC Keys KEY[2:0] are used to control audio speed, by changing the frequency that generates the stimulus to the FSMs that reads data from the Flash. The normal frequency begins at 22KHz.  
+* KEY0 will increase the speed
+* KEY1 will decrease the speed
+* KEY2 will reset the speed to the original sample rate
 
 ## Lab 3 Adding a Strength Meter to the Simple Ipod
 
