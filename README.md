@@ -125,3 +125,12 @@ All 3 FSMs are controlled and scheduled from a datapath indicating when each of 
 As a Bonus, multiple instantiations of the decryption cores (datapath) were created in order to search subsets of the keyspace simultaneously. Each of the 4 instantiated cores search 1/4 of the search space and once the correct key is found, all units are signaled to stop. The current Key being tested is shown on the DE1-SoC HEX display, and once the Key is found, the LED corresponding to the core having found the key is enabled.
 
 ## Lab 5
+
+This lab introduces the topics of Nios, Qsys, DDS (Direct Digital Synthesis), LFSR (Linear Feedback Shift Registers), Modulations (ASK, BPSK, FSK) and clock domain crossing. A VGA monitor is used with audio and real-time signal processing in the FPGA, giving an outlook of Real-Time Operating System (RTOS), in this case, the MicroC OS-II.  
+The signals were shown on the VGA screen. a DDS and LFSR were instantiated and connected to a Nios based Qsys system and the VGA oscilloscope. In the Qsys system, 3 PIO modules to connect the Qsys system to the DDS and the LFSR in order to generate the following modulations:  
+* ASK (Amplitude Shift Keying - On-Off Keying OOK)  
+* BPSK (Binary Phase Shift Keying)  
+* FSK (Frequency Shift Keying)  
+
+A 5-bit LFSR running at a clock rate of 1 Hz, generated using a frequency divider, and synchronized using a fast-to-slow synchronizer to handle the clock domain crossing logic. A DDS was instantiated to generate a 3 Hz carrier sine wave. The LFSR was then used to modulate the DDS carrier sine to generate ASK (OOK) and BPSK signals.  
+The modulated signals and DDS outputs and LFSR were connected through muxes controlled by the Nios, to the VGA oscilloscope for display. To generate the FSK signal, the LFSR, LFSR clock, and DDS signalsy were connected to the Qsys using the Nios and interrupts. Through out the process, appropriate clock crossing logic was implemented to handle instances of clock domain crossing.
