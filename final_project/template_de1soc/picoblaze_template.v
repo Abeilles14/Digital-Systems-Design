@@ -29,14 +29,14 @@ reg[7:0]  in_port;
 wire  write_strobe;
 wire  read_strobe;
 wire  interrupt_ack;
-// reg interrupt;
+reg interrupt;
 wire  kcpsm3_reset;
 
 //--
 //-- Signals used to generate interrupt 
 //--
 reg[26:0] int_count;
-reg event_1hz;
+//reg event_1hz;
 
 //-- Signals for LCD operation
 //--
@@ -103,20 +103,20 @@ pacoblaze3 led_8seg_kcpsm
 
 
 
- // //interrupts
+ //interrupts
 
- // always @ (posedge clk or posedge interrupt_ack)  //FF with clock "clk" and reset "interrupt_ack"
- // begin
- //      if (interrupt_ack) //if we get reset, reset interrupt in order to wait for next clock.
- //            interrupt <= 0;
- //      else
- //    begin 
- //          if (interupt_flag)   //clock enable
- //                interrupt <= 1;
- //              else
- //                interrupt <= interrupt;
- //      end
- // end
+ always @ (posedge clk or posedge interrupt_ack)  //FF with clock "clk" and reset "interrupt_ack"
+ begin
+      if (interrupt_ack) //if we get reset, reset interrupt in order to wait for next clock.
+            interrupt <= 0;
+      else
+    begin 
+          if (interupt_flag)   //clock enable
+                interrupt <= 1;
+              else
+                interrupt <= interrupt;
+      end
+ end
 
 //  --
 //  ----------------------------------------------------------------------------------------------------------------------------------
@@ -130,7 +130,7 @@ pacoblaze3 led_8seg_kcpsm
  always @ (posedge clk)
  begin
     case (port_id[7:0])
-        8'h0:    in_port <= input_data;
+        8'h0:    in_port <= start_flag;     //
         default: in_port <= 8'bx;
     endcase
 end
@@ -149,10 +149,10 @@ end
 
         //port 80 hex 
         if (write_strobe & port_id[7])  //1000_0000 LED_PORT 80
-          led <= out_port;
+          phoneme_out <= out_port;
 
         //port 40 hex 
         if (write_strobe & port_id[6])  // 0100_0000 LED_0_PORT 40
-          led_0 <= out_port;
+          done_flag <= out_port;
   end
 endmodule
