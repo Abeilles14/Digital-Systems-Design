@@ -169,8 +169,6 @@ CONSTANT phoneme_GG2      , 3D    ; phoneme code
 CONSTANT phoneme_EL       , 3E    ; phoneme code
 CONSTANT phoneme_BB2      , 3F    ; phoneme code
 
-CONSTANT start_flag			, 00
-CONSTANT done_flag 			, 04
 CONSTANT phoneme_out 		, 80
 
 ;;============================================================================

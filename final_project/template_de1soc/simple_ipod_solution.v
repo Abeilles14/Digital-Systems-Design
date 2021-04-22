@@ -229,7 +229,7 @@ wire Sample_Clk_Signal;
 logic clk_22khz, clk_44khz, clk_22khz_sync, clk_44khz_sync;
 logic[31:0] div_clk_22khz, div_clk_44khz;
 logic [31:0] flash_data;
-logic [15:0] audio_out, abs_sample;
+logic [7:0] audio_out;
 logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
 logic CLK_27M;
 
@@ -241,6 +241,11 @@ wire flash_mem_readdatavalid;
 wire [3:0] flash_mem_byteenable;
 wire [31:0] flash_mem_writedata;
 wire flash_mem_write;
+
+
+wire [23:0] start_address, end_address;
+wire [7:0] phoneme_sel;
+wire silent_flag, picoblaze_start_flag, picoblaze_done_flag;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
@@ -268,10 +273,10 @@ freq_divider generate_22khz_clock(.inclk(CLK_27M),		//can use CLK_50M
 								  .div_clk_count(div_clk_22khz),	//22khz init for 27M 32'h0265
 								  .reset(1'b1));
 //generate 44kHz clk
-freq_divider generate_44khz_clock(.inclk(CLK_27M),		//can use CLK_50M
-								  .outclk(clk_44khz),
-								  .div_clk_count(div_clk_44khz),	//44khz base 32'h0132
-								  .reset(1'b1));
+// freq_divider generate_44khz_clock(.inclk(CLK_27M),		//can use CLK_50M
+// 								  .outclk(clk_44khz),
+// 								  .div_clk_count(div_clk_44khz),	//44khz base 32'h0132
+// 								  .reset(1'b1));
 
 //sync address incremented flag and addr ready to read flag
 synchronizer sync_states(.vcc(1'b1),
@@ -286,12 +291,11 @@ synchronizer sync_clocks_22khz(.vcc(1'b1),
 						 .outclk(CLK_50M),
 						 .out_sync_sig(clk_22khz_sync));	//syncs 22kHz clk to 50MHz clk
 
-synchronizer sync_clocks_44khz(.vcc(1'b1),
-						 .gnd(1'b0),
-						 .async_sig(clk_44khz),
-						 .outclk(CLK_50M),
-						 .out_sync_sig(clk_44khz_sync));	//syncs 44kHz clk to 50MHz clk
-
+// synchronizer sync_clocks_44khz(.vcc(1'b1),
+// 						 .gnd(1'b0),
+// 						 .async_sig(clk_44khz),
+// 						 .outclk(CLK_50M),
+// 						 .out_sync_sig(clk_44khz_sync));	//syncs 44kHz clk to 50MHz clk
 
 synchronizer sync_keyboard(.vcc(1'b1),
 						 .gnd(1'b0),
@@ -300,6 +304,13 @@ synchronizer sync_keyboard(.vcc(1'b1),
 						 .out_sync_sig(read_keyboard_flag));	//ready to listen to keyboard input
 
 //iterate through addresses
+narrator_ctrl narrator (
+  .clk(CLK_50M),
+  .phoneme_sel(phoneme_sel),
+  .start_address(start_address),
+  .end_address(end_address),
+  .silent(silent_flag));
+
 address_counter count_addr (
 	.clk22K(clk_22khz_sync),			//50 MHz
 	.dir(direction_flag),				//going fwd or bck
@@ -308,17 +319,22 @@ address_counter count_addr (
 	.current_address(flash_mem_address),
 	.flash_data(flash_data),
 	.audio_out(audio_out),
+  .start_addr(start_address),
+  .end_addr(end_address),
+  .silent_flag(silent_flag),
 	.reset(reset_flag));
+
 
 //read addresses and data from flash
 read_flash read_FLASH(
 	.clk50M(CLK_50M),
 	.start_read_flag(start_read_flag),
 	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
-    .read_addr_flag(flash_mem_read),
+  .read_addr_flag(flash_mem_read),
 	.flash_data_in(flash_mem_readdata),
 	.flash_data_out(flash_data));
 
+//keyboard input
 keyboard_control keyboard_input(
 	.clk(clk_22khz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
@@ -345,15 +361,18 @@ flash flash_inst(
 //Audio Generation Signal
 //Note that the audio needs signed data - so convert 1 bit to 8 bits signed
 assign Sample_Clk_Signal = Clock_1KHz;
-wire [7:0] audio_data = audio_out[15:0];
+wire [7:0] audio_data = audio_out;
 
 //using picoblaze
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
-  .led(LED[9:2]),
-  .led_0(LED[0]),
+  // .led(LED[9:2]),
+  // .led_0(LED[0]),
   .clk(CLK_50M),
-  .input_data(audio_out[15:8]),      //pass in the 32 bit flash data audio output
-  .interrupt(start_read_flag)); //interrupt routine flag
+  .interrupt(start_read_flag)
+  .phoneme_out(phoneme_sel)
+  // .start_flag(picoblaze_start_flag),
+  // .done_flag(picoblaze_done_flag)
+  ); //interrupt routine flag
 
 //======================================================================================
 // 
