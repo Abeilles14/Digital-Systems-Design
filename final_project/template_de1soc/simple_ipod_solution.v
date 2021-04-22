@@ -322,6 +322,8 @@ address_counter count_addr (
   .start_addr(start_address),
   .end_addr(end_address),
   .silent_flag(silent_flag),
+  .picoblaze_start_flag(picoblaze_start_flag),
+  .picoblaze_done_flag(picoblaze_done_flag),
 	.reset(reset_flag));
 
 
@@ -368,10 +370,10 @@ picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   // .led(LED[9:2]),
   // .led_0(LED[0]),
   .clk(CLK_50M),
-  .interrupt(start_read_flag)
-  .phoneme_out(phoneme_sel)
-  // .start_flag(picoblaze_start_flag),
-  // .done_flag(picoblaze_done_flag)
+  .interrupt_flag(start_read_flag),
+  .phoneme_out(phoneme_sel),
+  .start_flag(picoblaze_start_flag),
+  .done_flag(picoblaze_done_flag)
   ); //interrupt routine flag
 
 //======================================================================================

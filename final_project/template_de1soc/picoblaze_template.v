@@ -6,11 +6,14 @@ picoblaze_template
 #(
 parameter clk_freq_in_hz = 25000000
 ) (
-        output reg[9:0] led,
-        output reg led_0,
+        //output reg[9:0] led,
+        //output reg led_0,
+        //input [7:0] input_data,
         input clk,
-        input [7:0] input_data,
-        input interrupt
+        input interrupt_flag,
+        output [7:0] phoneme_out,
+        input reg start_flag,
+        output reg done_flag
            );
 
 
@@ -111,7 +114,7 @@ pacoblaze3 led_8seg_kcpsm
             interrupt <= 0;
       else
     begin 
-          if (interupt_flag)   //clock enable
+          if (interrupt_flag)   //clock enable
                 interrupt <= 1;
               else
                 interrupt <= interrupt;
@@ -130,7 +133,7 @@ pacoblaze3 led_8seg_kcpsm
  always @ (posedge clk)
  begin
     case (port_id[7:0])
-        8'h0:    in_port <= start_flag;     //
+        8'h0:    in_port <= start_flag;     //0000_0000 start_flag PORT 00
         default: in_port <= 8'bx;
     endcase
 end
@@ -148,11 +151,11 @@ end
   begin
 
         //port 80 hex 
-        if (write_strobe & port_id[7])  //1000_0000 LED_PORT 80
+        if (write_strobe & port_id[7])  //1000_0000 phoneme_out PORT 80
           phoneme_out <= out_port;
 
         //port 40 hex 
-        if (write_strobe & port_id[6])  // 0100_0000 LED_0_PORT 40
+        if (write_strobe & port_id[6])  //0100_0000 done_flag PORT 40
           done_flag <= out_port;
   end
 endmodule
