@@ -315,7 +315,7 @@ address_counter count_addr (
 	.clk22K(clk_22khz_sync),			//50 MHz
 	.dir(direction_flag),				//going fwd or bck
 	.read_addr_start(read_addr_start),	
-	.addr_ready_flag(addr_ready_flag),
+	.addr_ready_flag(addr_ready_flag),         //to synchronizer, done incrementing addr, ready to read
 	.current_address(flash_mem_address),
 	.flash_data(flash_data),
 	.audio_out(audio_out),

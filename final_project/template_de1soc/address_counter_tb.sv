@@ -5,7 +5,12 @@ module address_counter_tb();
 	logic addr_ready_flag;
 	logic [22:0] current_address;
 	logic [31:0] flash_data;
-	logic [15:0] audio_out;
+	logic [7:0] audio_out;
+	logic [23:0] start_addr;
+	logic [23:0] end_addr;
+	logic silent_flag;
+	logic picoblaze_start_flag;
+	logic picoblaze_done_flag;
 	logic reset;
 
 	address_counter DUT(
@@ -16,11 +21,26 @@ module address_counter_tb();
 		.current_address(current_address),
 		.flash_data(flash_data),
 		.audio_out(audio_out),
+		.start_addr(start_addr),
+		.end_addr(end_addr),
+		.silent_flag(silent_flag),
+		.picoblaze_start_flag(picoblaze_start_flag),
+		.picoblaze_done_flag(picoblaze_done_flag),
 		.reset(reset));
+
+	FLASH memory(
+		.clk(clk22K),
+		.address(current_address),
+		.q(flash_data));
 
 	initial				//initial block
 	begin
 		read_addr_start = 1'b1;
+
+		start_addr = 23'd6;
+		end_addr = 23'd8;
+		silent_flag = 1'b0;
+
 		dir = 1'b1;
 		reset = 1'b0;
 
@@ -37,13 +57,8 @@ module address_counter_tb();
   	end
 
 	initial begin
-		#15;
-
-		flash_data = 32'hBBBBAAAA;
-
 		#20;
-		flash_data = 32'hDDDDCCCC;
 
-		#50;
+		#5000;
 	end
 endmodule

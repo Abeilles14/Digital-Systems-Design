@@ -1,11 +1,7 @@
 
 `default_nettype none
  `define USE_PACOBLAZE
-module 
-picoblaze_template
-#(
-parameter clk_freq_in_hz = 25000000
-) (
+module picoblaze_template #( parameter clk_freq_in_hz = 25000000) (
         //output reg[9:0] led,
         //output reg led_0,
         //input [7:0] input_data,
@@ -14,7 +10,7 @@ parameter clk_freq_in_hz = 25000000
         output [7:0] phoneme_out,
         input reg start_flag,
         output reg done_flag
-           );
+        );
 
 
   
@@ -153,9 +149,10 @@ end
         //port 80 hex 
         if (write_strobe & port_id[7])  //1000_0000 phoneme_out PORT 80
           phoneme_out <= out_port;
-
         //port 40 hex 
-        if (write_strobe & port_id[6])  //0100_0000 done_flag PORT 40
+        if (write_strobe & port_id[0])  //0100_0000 done_flag PORT 40
           done_flag <= out_port;
+
+        //led <= phoneme_out;
   end
 endmodule
