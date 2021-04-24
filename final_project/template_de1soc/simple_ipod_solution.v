@@ -254,6 +254,10 @@ logic silent_flag, picoblaze_start_flag, picoblaze_done_flag, visualizer_flag, d
 logic enc_disparity, dec_disparity, disparity_err, K_char;
 logic [9:0] enc_audio;
 
+//keyboard
+logic [7:0] valid_character;
+logic invalid_char_flag, audio_done_flag;
+
 //FLASH READ only
 assign flash_mem_write = 1'b0;
 assign flash_mem_writedata = 32'b0;
@@ -304,7 +308,6 @@ address_counter count_addr(
 .current_address(flash_mem_address),
 .flash_data(flash_mem_readdata),
 .read_data_flag(flash_mem_read),      //addr ready flag
-//.audio_finish(audio_done), 
 .led_start_flag(visualizer_flag),
 .start_read(read_addr_start),                  //start reading address
 .read_done_flag(done_flash_read),
@@ -361,8 +364,16 @@ keyboard_control keyboard_input(
 	.clk(clk_7200hz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
+  .valid_char(valid_character),
+  .error_flag(invalid_char_flag),
 	.read_addr_start(read_addr_start),
-	.reset(reset_flag));
+  .picoblaze_done_flag(picoblaze_done_flag),
+  .audio_done_flag(audio_done_flag),
+  .led0(LED[0]),
+  .led1(led1));
+
+logic led1;
+assign LED[1] = audio_done_flag;
 
 flash flash_inst(
     .clk_clk                 (CLK_50M),
@@ -386,13 +397,14 @@ wire [7:0] audio_data;
 
 //using picoblaze
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
-  // .led(LED[9:2]),
-  // .led_0(LED[0]),
   .clk(CLK_50M),
+  .input_data(valid_character),
+  .error_flag(invalid_char_flag),
   .interrupt_flag(start_read_flag),
   .phoneme_out(phoneme_sel),
   .start_phoneme_flag(picoblaze_start_flag),
-  .done_phoneme_flag(picoblaze_done_flag)
+  .done_phoneme_flag(picoblaze_done_flag),
+  .done_word_flag(audio_done_flag)
   ); //interrupt routine flag
 
 //======================================================================================

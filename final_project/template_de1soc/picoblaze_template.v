@@ -2,15 +2,14 @@
 `default_nettype none
  `define USE_PACOBLAZE
 module picoblaze_template #( parameter clk_freq_in_hz = 25000000) (
-        //output reg[9:0] led,
-        //output reg led_0,
-        //input [7:0] input_data,
         input clk,
+        input reg [7:0] input_data,
+        input reg error_flag,
         input interrupt_flag,
         output [7:0] phoneme_out,
-        input reg start_flag,
-        output reg done_flag
-        );
+        input reg start_phoneme_flag,
+        output reg done_phoneme_flag,
+        output reg done_word_flag);
 
 
   
@@ -129,7 +128,9 @@ pacoblaze3 led_8seg_kcpsm
  always @ (posedge clk)
  begin
     case (port_id[7:0])
-        8'h0:    in_port <= start_flag;     //0000_0000 start_flag PORT 00
+        8'h00: in_port <= start_phoneme_flag;     //0000_0000 start_phoneme_flag PORT 00
+        8'h40: in_port <= input_data;            //0100_0000 valid char PORT 40
+        8'h20: in_port <= error_flag;            //0010_0000 error flag PORT 20
         default: in_port <= 8'bx;
     endcase
 end
@@ -150,9 +151,10 @@ end
         if (write_strobe & port_id[7])  //1000_0000 phoneme_out PORT 80
           phoneme_out <= out_port;
         //port 40 hex 
-        if (write_strobe & port_id[0])  //0100_0000 done_flag PORT 40
-          done_flag <= out_port;
+        if (write_strobe & port_id[0])  //0000_0001 done_phoneme_flag PORT 01
+          done_phoneme_flag <= out_port;
 
-        //led <= phoneme_out;
+        if (write_strobe & port_id[6])  //0100_0000 done_word_flag PORT 30
+          done_word_flag <= out_port;
   end
 endmodule
