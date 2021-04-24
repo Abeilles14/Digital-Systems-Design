@@ -226,8 +226,8 @@ wire Sample_Clk_Signal;
 //
 //
 
-logic clk_22khz, clk_44khz, clk_22khz_sync, clk_44khz_sync;
-logic[31:0] div_clk_22khz, div_clk_44khz;
+logic clk_7200hz, clk_7200hz_sync;
+logic[31:0] div_clk_7200hz;
 logic [31:0] flash_data;
 logic [7:0] audio_out;
 logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
@@ -255,52 +255,46 @@ assign flash_mem_byteenable = 6'b000001;
 assign CLK_27M = TD_CLK27;		//TD_CLK27 pin to use a CLK_27M clk
 //assign div_clk_44khz = div_clk_22khz << 2;
 
-parameter clk_22khz_freq_50M = 32'h0471;
-parameter clk_22khz_freq_27M = 32'h0265;
-parameter clk_44khz_freq_50M = 32'h0238;
-parameter clk_44khz_freq_27M = 32'h0132;
+// parameter clk_22khz_freq_50M = 32'h0471;
+// parameter clk_22khz_freq_27M = 32'h0265;
+// parameter clk_44khz_freq_50M = 32'h0238;
+// parameter clk_44khz_freq_27M = 32'h0132;
 
 //control sampling speed with initial freq 22khz
-speed_controller div_control_22khz(.clk50M(CLK_50M),
+speed_controller div_control_7200hz(
+                  .clk50M(CLK_50M),
 									.up(speed_up_event),
 									.down(speed_down_event),
-									.div(div_clk_22khz), 		//outputs new clk division
+									.div(div_clk_7200hz), 		//outputs new clk division
 									.rst(speed_reset_event));
 
 //generate 22kHz clk
-freq_divider generate_22khz_clock(.inclk(CLK_27M),		//can use CLK_50M
-								  .outclk(clk_22khz),
-								  .div_clk_count(div_clk_22khz),	//22khz init for 27M 32'h0265
+freq_divider generate_7200hz_clock(
+                  .inclk(CLK_50M),		//can use CLK_50M
+								  .outclk(clk_7200hz),
+								  .div_clk_count(div_clk_7200hz),	//22khz init for 27M 32'h0265
 								  .reset(1'b1));
-//generate 44kHz clk
-// freq_divider generate_44khz_clock(.inclk(CLK_27M),		//can use CLK_50M
-// 								  .outclk(clk_44khz),
-// 								  .div_clk_count(div_clk_44khz),	//44khz base 32'h0132
-// 								  .reset(1'b1));
 
 //sync address incremented flag and addr ready to read flag
-synchronizer sync_states(.vcc(1'b1),
+synchronizer sync_states(
+             .vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(addr_ready_flag),		//done incrementing address
 						 .outclk(CLK_50M),
 						 .out_sync_sig(start_read_flag));	//ready to begin reading next address & start FSM
 
-synchronizer sync_clocks_22khz(.vcc(1'b1),
+synchronizer sync_clocks_7200hz(
+             .vcc(1'b1),
 						 .gnd(1'b0),
-						 .async_sig(clk_22khz),
+						 .async_sig(clk_7200hz),
 						 .outclk(CLK_50M),
-						 .out_sync_sig(clk_22khz_sync));	//syncs 22kHz clk to 50MHz clk
+						 .out_sync_sig(clk_7200hz_sync));	//syncs 22kHz clk to 50MHz clk
 
-// synchronizer sync_clocks_44khz(.vcc(1'b1),
-// 						 .gnd(1'b0),
-// 						 .async_sig(clk_44khz),
-// 						 .outclk(CLK_50M),
-// 						 .out_sync_sig(clk_44khz_sync));	//syncs 44kHz clk to 50MHz clk
-
-synchronizer sync_keyboard(.vcc(1'b1),
+synchronizer sync_keyboard(
+             .vcc(1'b1),
 						 .gnd(1'b0),
 						 .async_sig(kbd_data_ready),
-						 .outclk(clk_22khz_sync),
+						 .outclk(clk_7200hz_sync),
 						 .out_sync_sig(read_keyboard_flag));	//ready to listen to keyboard input
 
 //iterate through addresses
@@ -311,34 +305,47 @@ narrator_ctrl narrator (
   .end_address(end_address),
   .silent(silent_flag));
 
-address_counter count_addr (
-	.clk22K(clk_22khz_sync),			//50 MHz
-	.dir(direction_flag),				//going fwd or bck
-	.read_addr_start(read_addr_start),	
-	.addr_ready_flag(addr_ready_flag),         //to synchronizer, done incrementing addr, ready to read
-	.current_address(flash_mem_address),
-	.flash_data(flash_data),
-	.audio_out(audio_out),
-  .start_addr(start_address),
-  .end_addr(end_address),
-  .silent_flag(silent_flag),
-  .picoblaze_start_flag(picoblaze_start_flag),
-  .picoblaze_done_flag(picoblaze_done_flag),
-	.reset(reset_flag));
+address_counter count_addr(
+.clk(CLK_50M),
+.clk_22khz_sync(clk_7200hz_sync),
+.current_address(flash_mem_address),
+.flash_data(flash_mem_readdata),
+.read_data_flag(flash_mem_read),      //addr ready flag
+.pause(1'b0),                //read addr start
+//.audio_finish(audio_done), 
+//.visual_start(visual_start),
+.start_read(1'b1),
+.read_done_flag(timer_end),
+.audio_out(audio_out),
+.start_address(start_address),
+.end_address(end_address),
+.silent_flag(silent_flag),
+.picoblaze_start_flag(picoblaze_start_flag),         //start flag
+.picoblaze_done_flag(picoblaze_done_flag),         //done vlag
+.reset(reset_flag)); 
 
-
-//read addresses and data from flash
 read_flash read_FLASH(
-	.clk50M(CLK_50M),
-	.start_read_flag(start_read_flag),
-	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
-  .read_addr_flag(flash_mem_read),
-	.flash_data_in(flash_mem_readdata),
-	.flash_data_out(flash_data));
+.clk(CLK_50M),
+.start_read_flag(flash_mem_read),
+.wait_read_request(flash_mem_waitrequest), 
+.read_data_valid(flash_mem_readdatavalid),
+.read_data_flag(flash_mem_read),
+.done_read_flag(timer_end)); 
+
+logic start_flash_read, timer_end;
+
+// //read addresses and data from flash
+// read_flash read_FLASH(
+// 	.clk50M(CLK_50M),
+// 	.start_read_flag(start_read_flag),         //read new address 
+// 	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
+//   .read_addr_flag(flash_mem_read),
+// 	.flash_data_in(flash_mem_readdata),
+// 	.flash_data_out(flash_data));
 
 //keyboard input
 keyboard_control keyboard_input(
-	.clk(clk_22khz_sync),
+	.clk(clk_7200hz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
 	.read_addr_start(read_addr_start),
@@ -665,7 +672,7 @@ speed_reg_control_inst
 );
 
 logic [15:0] scope_sampling_clock_count;
-parameter [15:0] default_scope_sampling_clock_count = 12499; //2KHz
+parameter [15:0] default_scope_sampling_clock_count = 3472; //7200Hz
 
 
 always @ (posedge CLK_50M) 
@@ -673,8 +680,6 @@ begin
     scope_sampling_clock_count <= default_scope_sampling_clock_count+{{16{speed_control_val[15]}},speed_control_val};
 end 
 
-        
-        
 logic [7:0] Seven_Seg_Val[5:0];
 logic [3:0] Seven_Seg_Data[5:0];
     
@@ -713,11 +718,11 @@ begin
 end
 
 //seven segment display sampling rate divisor
-assign Seven_Seg_Data[0] = div_clk_22khz[3:0];
-assign Seven_Seg_Data[1] = div_clk_22khz[7:4];
-assign Seven_Seg_Data[2] = div_clk_22khz[11:8];
-assign Seven_Seg_Data[3] = div_clk_22khz[15:12];
-assign Seven_Seg_Data[4] = div_clk_22khz[19:16];
+assign Seven_Seg_Data[0] = div_clk_7200hz[3:0];
+assign Seven_Seg_Data[1] = div_clk_7200hz[7:4];
+assign Seven_Seg_Data[2] = div_clk_7200hz[11:8];
+assign Seven_Seg_Data[3] = div_clk_7200hz[15:12];
+assign Seven_Seg_Data[4] = div_clk_7200hz[19:16];
 
 assign actual_7seg_output =  scope_sampling_clock_count;
 

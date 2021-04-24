@@ -1,260 +1,160 @@
-//direction encodings
-`define UP 1'b1
-`define DOWN 1'b0
 
-//start and end addresses
-`define START 23'h00000
-`define END 23'h7FFFF
-
-module address_counter
-	(input logic clk22K,				//50 MHz
-	input logic dir,
-	input logic read_addr_start,		//keyboard pause/start
-	output logic addr_ready_flag,		//start read flag
-	output logic [22:0] current_address,		//address to read data from
-	input logic [31:0] flash_data,
+module address_counter(
+	input logic clk,
+	input logic clk_22khz_sync,
+	output logic [22:0] current_address,
+ 	input logic [31:0] flash_data,
+ 	output logic read_data_flag,
+	input logic pause,
+	input logic start_read,
+	input logic read_done_flag,
 	output logic [7:0] audio_out,
-	input logic [23:0] start_addr,
-	input logic [23:0] end_addr,
-	input logic silent_flag,
-	output logic picoblaze_start_flag,
-	input logic picoblaze_done_flag,
-	input logic reset);
+	input logic [23:0] start_address,
+ 	input logic [23:0] end_address,
+ 	input logic silent_flag,
+ 	output logic picoblaze_start_flag,
+ 	input logic picoblaze_done_flag,
+	input logic reset); 
 
-	logic [2:0] byte_count;
-	logic [3:0] state;
+logic [7:0] state;
 
-	parameter IDLE = 4'b0000;
-	parameter WAIT_AUDIO = 4'b0001;
-	parameter AUDIO_BYTE = 4'b0010;
-	parameter INCREMENT = 4'b0011;
-	parameter SELECT = 4'b0100;
-	parameter DONE = 4'b0101;
+logic [2:0] byte_count;
 
-	initial begin
-		current_address = start_addr/4;
-		audio_out = 8'h00;
-		byte_count = 3'b1;
-		addr_ready_flag = 1'b0;
-		state = IDLE;
-	end
+parameter IDLE = 8'b00001_00; 
+parameter READ_DATA = 8'b00010_01;
 
-	always_ff @(posedge clk22K or posedge reset)
-	begin
-		if(reset)	//start from start address
-		begin
-			addr_ready_flag <= 1'b0;
-			current_address <= start_addr/4;
-			audio_out <= 8'h00;
-			byte_count <= 3'b0;
-			state <= IDLE;
+parameter WAIT_AUDIO = 8'b00011_00;
+parameter WAIT_SYNC = 8'b00100_00;
+parameter AUDIO_BYTE = 8'b00101_00;
+
+parameter INCREMENT = 8'b00110_00;
+parameter GET_ADDRESS = 8'b00111_00;
+parameter pause_state = 8'b11111_00;  
+
+parameter DONE = 8'b01000_10;
+
+assign read_data_flag = state[0];  //output				//read state
+		
+always_ff@(posedge clk) begin 
+	case(state) 
+		
+		IDLE: begin
+			byte_count <= 3'd1;
+			state <= READ_DATA; //idle
 		end
-		else if(!read_addr_start)				//pause button
-		begin
-			addr_ready_flag <= addr_ready_flag;
-			current_address <= current_address;
-			audio_out <= 8'h00;
-			byte_count <= byte_count;
-			state <= state;
+			  
+		READ_DATA: begin
+			if(read_done_flag)
+				state <= WAIT_AUDIO;
 		end
-		else
-		begin
-			case(state)
-				IDLE: begin
-					addr_ready_flag <= 1'b0;
-					current_address <= start_addr/4;
+
+		WAIT_AUDIO: begin
+			if(byte_count == 3'd5)
+			begin
+				state <= INCREMENT;
+			end
+			else
+			begin
+				state <= WAIT_SYNC;
+			end
+		end
+
+		WAIT_SYNC: begin
+			if(clk_22khz_sync) state <= AUDIO_BYTE;
+		end
+
+
+		AUDIO_BYTE: begin
+			if(byte_count == 3'd1)		//1st byte audio
+			begin
+				if (silent_flag)
 					audio_out <= 8'h00;
-					byte_count <= 1'b1;
-					state <= WAIT_AUDIO;
-				end
-				WAIT_AUDIO: begin
-					addr_ready_flag <= addr_ready_flag;
-					current_address <= current_address;
-					audio_out <= audio_out;
-					byte_count <= byte_count;
+				else 
+					audio_out <= flash_data[7:0];
 
-					if (read_addr_start)
-					begin
-						state <= AUDIO_BYTE;
-					end
-				end
-				AUDIO_BYTE: begin
-					if(byte_count == 3'd1)		//1st byte audio
-					begin
-						if (silent_flag)
-							audio_out <= 8'h00;
-						else 
-							audio_out <= flash_data[7:0];
+				byte_count <= byte_count + 1'b1;
+				current_address <= current_address;
+			end
+			else if(byte_count == 3'd2)		//2nd byte audio
+			begin
+				if (silent_flag)
+					audio_out <= 8'h00;
+				else 
+					audio_out <= flash_data[15:8];
 
-						byte_count <= byte_count + 1'b1;
-						current_address <= current_address;
-						addr_ready_flag <= 1'b0;
-						state <= WAIT_AUDIO;
-					end
-					else if(byte_count == 3'd2)		//2nd byte audio
-					begin
-						if (silent_flag)
-							audio_out <= 8'h00;
-						else 
-							audio_out <= flash_data[15:8];
+				byte_count <= byte_count + 1'b1;
+				current_address <= current_address;
+			end
+			else if(byte_count == 3'd3)		//3rd byte audio
+			begin
+				if (silent_flag)
+					audio_out <= 8'h00;
+				else 
+					audio_out <= flash_data[23:16];
 
-						byte_count <= byte_count + 1'b1;
-						current_address <= current_address;
-						addr_ready_flag <= 1'b0;
-						state <= WAIT_AUDIO;
-					end
-					else if(byte_count == 3'd3)		//3rd byte audio
-					begin
-						if (silent_flag)
-							audio_out <= 8'h00;
-						else 
-							audio_out <= flash_data[23:16];
+				byte_count <= byte_count + 1'b1;
+				current_address <= current_address;
+			end
+			else if(byte_count == 3'd4)		//4th byte audio
+			begin
+				if (silent_flag)
+					audio_out <= 8'h00;
+				else 
+					audio_out <= flash_data[31:24];
 
-						byte_count <= byte_count + 1'b1;
-						current_address <= current_address;
-						addr_ready_flag <= 1'b0;
-						state <= WAIT_AUDIO;
-					end
-					else if(byte_count == 3'd4)		//4th byte audio
-					begin
-						if (silent_flag)
-							audio_out <= 8'h00;
-						else 
-							audio_out <= flash_data[31:24];
+				byte_count <= byte_count + 1'b1;
+				current_address <= current_address;
+			end
+			else
+			begin
+				audio_out <= audio_out;
+				byte_count <= 3'd1;
+				current_address <= current_address;
+				state <= IDLE;
+			end
 
-						byte_count <= 1'b1;
-						current_address <= current_address;
-						addr_ready_flag <= 1'b1;
-						state <= INCREMENT;
-					end
-					else
-					begin
-						audio_out <= audio_out;
-						byte_count <= 3'd1;
-						current_address <= current_address;
-						addr_ready_flag <= 1'b0;
-						state <= IDLE;
-					end
-				end
-				INCREMENT: begin
-					if(current_address == (end_addr/4))
-					begin
-						audio_out <= audio_out;
-						byte_count <= byte_count;
-						addr_ready_flag <= 1'b0;
-						state <= IDLE;
-					end
-					else
-					begin
-						current_address <= current_address + 1'b1;
-						state <= WAIT_AUDIO;
-					end
-				end
-			endcase
-
-
-			// if (silent_flag)				//silent
-			// begin
-			// 	audio_out <= 8'h00;
-			// 	byte_count <= byte_count;
-			// 	current_address <= current_address;
-			// 	addr_ready_flag <= 1'b0;	//don't read audio from flash, set here
-			// end
-			// else
-			// begin
-			// 	case(byte_count)
-			// 		3'd1: begin							//1st byte audio
-			// 			audio_out <= flash_data[7:0];
-			// 			byte_count <= byte_count + 1'b1;
-			// 			current_address <= current_address;
-			// 			addr_ready_flag <= 1'b0;
-			// 		end
-			// 		3'd2: begin 						//2nd byte audio
-			// 			audio_out <= flash_data[15:8];
-			// 			byte_count <= byte_count + 1'b1;
-			// 			current_address <= current_address;
-			// 			addr_ready_flag <= 1'b0;
-			// 		end
-			// 		3'd3: begin							//3rd byte audio
-			// 			audio_out <= flash_data[23:16];
-			// 			byte_count <= byte_count + 1'b1;
-			// 			current_address <= current_address;
-			// 			addr_ready_flag <= 1'b0;
-			// 		end
-			// 		3'd4: begin							//4th byte audio
-			// 			audio_out <= flash_data[31:24];
-			// 			byte_count <= 1'b1;
-			// 			current_address <= current_address;
-			// 			addr_ready_flag = 1'b1;	//TEMP LOOP
-
-			// 			if (current_address == (end_addr/4))		//if at last address, go to first
-			// 				current_address <= start_addr;	//TEMP LOOP
-			// 			else
-			// 			begin
-			// 				current_address <= current_address + 1'b1; //incr addr by 1
-			// 			end
-			// 		end
-			// 		default: begin
-			// 			current_address <= start_addr/4;
-			// 			audio_out <= 8'h00;
-			// 			byte_count <= 2'd1;
-			// 			addr_ready_flag <= 1'b0;
-			// 		end
-			// 	endcase
-			// end
-
-
-
-
-			// 	SELECT: begin
-			// 		if(picoblaze_done_flag)
-			// 		begin
-			// 			current_address <= start_addr/4;
-			// 			picoblaze_start_flag <= 1'b1;
-			// 			state <= WAIT_AUDIO;
-			// 		end
-			// 		else
-			// 		begin
-			// 			state <= SELECT;
-			// 		end
-
-			// 		audio_out <= 8'h00;
-			// 		byte_count <= 3'd1;
-			// 		addr_ready_flag <= 1'b0;
-			// 	end
-				// DONE: begin
-				// 	addr_ready_flag <= 1'b0;
-				// 	current_address <= current_address;
-				// 	audio_out <= 8'h00;
-				// 	byte_count <= byte_count;
-				// 	state <= DONE;
-				// end
-
-			
-
-				// `DOWN: begin
-				// 	addr_ready_flag <= 0;
-				// 	data_even_flag <= !data_even_flag;
-				// 	audio_out = data_even_flag ? flash_data[31:16] : flash_data[15:0];
-
-				// 	if(data_even_flag)
-				// 	begin
-				// 		if (current_address == `START)		//if at last address, go to first
-				// 			current_address <= `END;
-				// 		else
-				// 			current_address <= current_address - 23'h01;		//incr addr by 1
-				// 			addr_ready_flag <= 1'b1;
-				// 	end
-				// end
-
-
-			// 	default: begin
-			// 		audio_out <= 8'h00;
-			// 		byte_count <= 3'd1;
-			// 		current_address <= start_addr;
-			// 		addr_ready_flag <= 1'b0;
-			// 	end
-			// endcase
+			state <= WAIT_AUDIO;
 		end
-	end
+		
+		INCREMENT: begin
+			if(current_address  == (end_address/4))
+			begin
+				state <= GET_ADDRESS;
+				picoblaze_start_flag <= 1'b1;
+			end
+			else
+			begin
+				current_address <= current_address + 1'b1;
+
+				if (pause)
+					state  <= pause_state;
+				else
+					state <= DONE;
+			end
+		end
+		
+		GET_ADDRESS:begin
+			if  (picoblaze_done_flag)begin
+				current_address <= start_address/4;
+				state  <= DONE;
+				picoblaze_start_flag  <= 1'b0;
+			end
+		end
+		
+		pause_state: begin
+			if(!pause)
+				state<= DONE;
+		end
+		
+		DONE: begin
+			state <= IDLE; 
+		end
+		
+		default:begin
+			state <= IDLE;
+			current_address <= start_address/4; 
+			audio_out <= audio_out;	
+		end
+	endcase 
+end
 endmodule
