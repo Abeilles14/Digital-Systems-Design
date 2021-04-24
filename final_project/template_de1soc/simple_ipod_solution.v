@@ -226,13 +226,7 @@ wire Sample_Clk_Signal;
 //
 //
 
-logic clk_7200hz, clk_7200hz_sync;
-logic[31:0] div_clk_7200hz;
-logic [31:0] flash_data;
-logic [7:0] audio_out;
-logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
-logic CLK_27M;
-
+//flash mem vars
 wire flash_mem_read;
 wire flash_mem_waitrequest;
 wire [22:0] flash_mem_address;
@@ -242,10 +236,23 @@ wire [3:0] flash_mem_byteenable;
 wire [31:0] flash_mem_writedata;
 wire flash_mem_write;
 
+//clk crossing and sync
+logic clk_7200hz, clk_7200hz_sync;
+logic[31:0] div_clk_7200hz;
+logic CLK_27M;
+
+//flash fsm
+logic [31:0] flash_data;
+logic [7:0] audio_out;
+logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
 
 logic [23:0] start_address, end_address;
 logic [7:0] phoneme_sel;
 logic silent_flag, picoblaze_start_flag, picoblaze_done_flag, visualizer_flag, done_flash_read;
+
+//encoder decoder
+logic enc_disparity, dec_disparity, disparity_err, K_char;
+logic [9:0] enc_audio;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
@@ -332,6 +339,23 @@ audio_averaging visualizer(
   .silent_flag(silent_flag),
   .led_out(LED[9:2]));
 
+encoder_8b10b encoder (
+  .SBYTECLK(CLK_50M),
+  .reset(1'b0),
+  .K(K_char),
+  .ebi(audio_out),     //to be encoded
+  .tbi(enc_audio),          //encoded
+  .disparity(enc_disparity));
+
+decoder_8b10b decoder(
+  .RBYTECLK(CLK_50M),
+  .reset(1'b0),
+  .tbi(enc_audio),        //to be decoded
+  .K_out(K_char),
+  .ebi(audio_data),       //decoded
+  .disparity(dec_disparity),
+  .disparity_err(disparity_err));
+
 //keyboard input
 keyboard_control keyboard_input(
 	.clk(clk_7200hz_sync),
@@ -359,7 +383,7 @@ flash flash_inst(
 //Audio Generation Signal
 //Note that the audio needs signed data - so convert 1 bit to 8 bits signed
 assign Sample_Clk_Signal = Clock_1KHz;
-wire [7:0] audio_data = audio_out;
+wire [7:0] audio_data;
 
 //using picoblaze
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
