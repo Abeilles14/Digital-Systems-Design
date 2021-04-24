@@ -305,10 +305,9 @@ address_counter count_addr(
 .current_address(flash_mem_address),
 .flash_data(flash_mem_readdata),
 .read_data_flag(flash_mem_read),      //addr ready flag
-.pause(1'b0),                //read addr start
 //.audio_finish(audio_done), 
 .led_start_flag(visualizer_flag),
-.start_read(1'b1),
+.start_read(1'b1),                  //start reading address
 .read_done_flag(done_flash_read),
 .audio_out(audio_out),
 .start_address(start_address),
@@ -330,10 +329,8 @@ audio_averaging visualizer(
   .clk(CLK_50M),
   .start_averaging_flag(visualizer_flag),
   .input_audio(audio_out),
-  .led_out(LED[9:2]),
-  .led0(LED[0]));
-
-assign LED[1] = 1'b1;
+  .silent_flag(silent_flag),
+  .led_out(LED[9:2]));
 
 //keyboard input
 keyboard_control keyboard_input(

@@ -2,8 +2,8 @@ module audio_averaging(
 	input logic clk,
 	input logic start_averaging_flag,
 	input logic [7:0] input_audio,
-	output logic [7:0] led_out,
-	output logic led0);
+	input logic silent_flag,
+	output logic [7:0] led_out);
 
 	logic [3:0] state;
 	logic [7:0] abs_sample, avg_sample, counter;
@@ -14,8 +14,7 @@ module audio_averaging(
 	parameter OUTPUT_LED = 4'b0011;
 	parameter DONE = 4'b0100;
 
-	//assign abs_sample = input_audio[7] ? -input_audio : input_audio;		//absolute value
-	assign abs_sample = (input_audio < 8'h80) ? (~input_audio + 1'b1) : input_audio;
+	assign abs_sample = (input_audio < 8'h80) ? input_audio : (~input_audio + 1'b1);
 
 	initial begin
 		counter = 8'b0;
@@ -34,10 +33,15 @@ module audio_averaging(
 					state <= IDLE;
 			end
 			SUM: begin
-				if (counter > 8'd255)
+				if (counter == 8'd255)
 				begin
 					avg_sample <= (sum_sample >> 8);	//divide sum by 256
 					state <= OUTPUT_LED;
+				end
+				else if(silent_flag)
+				begin
+					counter <= counter + 1'b1;
+					state <= IDLE;
 				end
 				else
 				begin
@@ -47,8 +51,6 @@ module audio_averaging(
 				end
 			end
 			OUTPUT_LED: begin
-				led0 <= 1'b1;
-
 				if (avg_sample > 8'h80)
 					led_out <= 8'b1111_1111;
 				else if (avg_sample > 8'h40)
@@ -68,7 +70,6 @@ module audio_averaging(
 				else
 				begin
 					led_out <= 8'b0000_0000;
-					led0 <= 1'b0;
 				end
 
 				state <= DONE;

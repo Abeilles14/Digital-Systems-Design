@@ -5,7 +5,6 @@ module address_counter(
 	output logic [22:0] current_address,
  	input logic [31:0] flash_data,
  	output logic read_data_flag,
-	input logic pause,
 	output logic led_start_flag,
 	input logic start_read,
 	input logic read_done_flag,
@@ -30,7 +29,6 @@ parameter AUDIO_BYTE = 8'b00101_10;
 
 parameter INCREMENT = 8'b00110_00;
 parameter GET_ADDRESS = 8'b00111_00;
-parameter pause_state = 8'b11111_00;  
 
 parameter DONE = 8'b01000_00;
 
@@ -41,8 +39,11 @@ always_ff@(posedge clk) begin
 	case(state) 
 		
 		IDLE: begin
-			byte_count <= 3'd1;
-			state <= READ_DATA;
+			if(start_read)
+			begin
+				byte_count <= 3'd1;
+				state <= READ_DATA;
+			end
 		end
 			  
 		READ_DATA: begin
@@ -67,54 +68,36 @@ always_ff@(posedge clk) begin
 
 
 		AUDIO_BYTE: begin
-			if(byte_count == 3'd1)		//1st byte audio
+			if(silent_flag)
 			begin
-				if (silent_flag)
-					audio_out <= 8'h00;
-				else 
-					audio_out <= flash_data[7:0];
+				audio_out <= 8'h00;
+			end
 
-				byte_count <= byte_count + 1'b1;
-				current_address <= current_address;
+			else if(byte_count == 3'd1)		//1st byte audio
+			begin
+				audio_out <= flash_data[7:0];
 			end
 			else if(byte_count == 3'd2)		//2nd byte audio
 			begin
-				if (silent_flag)
-					audio_out <= 8'h00;
-				else 
-					audio_out <= flash_data[15:8];
-
-				byte_count <= byte_count + 1'b1;
-				current_address <= current_address;
+				audio_out <= flash_data[15:8];
 			end
 			else if(byte_count == 3'd3)		//3rd byte audio
 			begin
-				if (silent_flag)
-					audio_out <= 8'h00;
-				else 
-					audio_out <= flash_data[23:16];
-
-				byte_count <= byte_count + 1'b1;
-				current_address <= current_address;
+				audio_out <= flash_data[23:16];
 			end
 			else if(byte_count == 3'd4)		//4th byte audio
 			begin
-				if (silent_flag)
-					audio_out <= 8'h00;
-				else 
 					audio_out <= flash_data[31:24];
-
-				byte_count <= byte_count + 1'b1;
-				current_address <= current_address;
 			end
 			else
 			begin
 				audio_out <= audio_out;
-				byte_count <= 3'd1;
-				current_address <= current_address;
 				state <= IDLE;
 			end
 
+			byte_count <= byte_count + 1'b1;
+			current_address <= current_address;
+			
 			state <= WAIT_AUDIO;
 		end
 		
@@ -127,11 +110,7 @@ always_ff@(posedge clk) begin
 			else
 			begin
 				current_address <= current_address + 1'b1;
-
-				if (pause)
-					state  <= pause_state;
-				else
-					state <= DONE;
+				state <= DONE;
 			end
 		end
 		
@@ -142,12 +121,7 @@ always_ff@(posedge clk) begin
 				picoblaze_start_flag  <= 1'b0;
 			end
 		end
-		
-		pause_state: begin
-			if(!pause)
-				state<= DONE;
-		end
-		
+
 		DONE: begin
 			state <= IDLE; 
 		end

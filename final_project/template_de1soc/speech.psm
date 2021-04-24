@@ -169,7 +169,10 @@ CONSTANT phoneme_GG2      , 3D    ; phoneme code
 CONSTANT phoneme_EL       , 3E    ; phoneme code
 CONSTANT phoneme_BB2      , 3F    ; phoneme code
 
-CONSTANT phoneme_out 		, 80
+CONSTANT phoneme_out 	, 80
+CONSTANT done_flag 		, 00
+CONSTANT start_flag 	, 01
+
 
 ;;============================================================================
 ;; Infinite loop.
@@ -287,6 +290,7 @@ CONSTANT phoneme_out 		, 80
 ;; Test message and phoneme voicing subroutine.
 ;;============================================================================
 
+;================================================
 
 talkword0:
 	call	talkphonemeZZ
@@ -404,6 +408,45 @@ talkword17:
 talkword18:
 	call	talkword8
 	JUMP	talkwordteen
+
+talkworderror:
+	call talkphonemeEH
+	call talkphonemeXR
+	call talkphonemeOR
+	return
+
+talkwordplus:
+	call talkphonemePP
+	call talkphonemeLL
+	call talkphonemeAX
+	call talkphonemeAX
+	call talkphonemeSS
+	call talkphonemeSS
+	return
+
+talkwordminus:
+	call talkphonemeMM
+    call talkphonemeAY
+    call talkphonemeNN1
+    call talkphonemeIH
+    call talkphonemeAX
+    call talkphonemeAX
+    call talkphonemeSS
+    call talkphonemeSS	
+	return 		;JUMP back to fsm
+
+talkwordequals:
+	call talkphonemeIY
+	call talkphonemePA2
+	call talkphonemePA3
+	call talkphonemeKK3
+	call talkphonemeWH
+	call talkphonemeAX
+	call talkphonemeEL
+	call talkphonemeZZ
+	return
+
+;=====================================================
 
 talkword19:
 	call	talkword9
@@ -608,16 +651,18 @@ endword:
 
 say_phoneme:  
 	              ;make sure  to complete this subroutine in order for the synthesizer to work
-	; LOAD s2, 01
-	; INPUT s1, assembly_flag
-	; COMPARE s1, 01
-	; JUMP NZ, say_phoneme
+	LOAD s2, 01
+	INPUT s1, done_flag		;check if start routine
+	COMPARE s1, 01
+	JUMP NZ, say_phoneme
 				  
 	OUTPUT s0, phoneme_out
-	; OUTPUT s2, verilog_flag
- ; 	LOAD s2, 00
-	; OUTPUT s2, verilog_flag
-                  RETURN
+	OUTPUT s2, start_flag
+
+ 	LOAD s2, 00
+
+	OUTPUT s2, start_flag
+    RETURN
 
 
 talkphonemeAA:			; hOt
