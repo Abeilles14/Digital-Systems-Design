@@ -1,35 +1,32 @@
-`define F_E 3'b011		//play forward
-`define F_D	3'b010		//pause going forward
-
-`define B_E 3'b001		//play backward
-`define B_D 3'b000		//pause going backward
-
-`define F_R	3'b111		//reset going forward
-`define B_R	3'b101		//reset going backward
+`define F_E 4'b0011		//play forward
+`define F_D	4'b0010		//pause going forward
 
 module keyboard_control
 	(input logic clk,
-	 input logic read_keyboard_flag,
-	 input logic [7:0] character,
-	 output logic read_addr_start,
-	 output logic dir,
+	 input logic read_keyboard_flag,		//sync with 7200hz clk
+	 input logic [7:0] character,			//keyboard input ascii
+	 output logic read_addr_start,			//play/pause
 	 output logic reset);
 
-	logic start, restart, direction;
-	logic [2:0] state;
+	logic start, restart;
+	logic [3:0] state;
 
-	parameter character_B =8'h42;
+	// parameter IDLE = 4'b0000;
+	// parameter WAIT_DIGIT_1 = 4'b0001;
+	// parameter WAIT_SIGN = 4'b0010;
+	// parameter WAIT_DIGIT_2 = 4'b0011;
+	// parameter WAIT_EQUAL = 4'b0100;
+	// parameter CALCULATE = 4'b0101;
+	// parameter DONE = 4'b0110;
+
 	parameter character_D =8'h44;
 	parameter character_E =8'h45;
-	parameter character_F =8'h46;
-	parameter character_R =8'h52;
 
 	assign start = state[0];
-	assign direction = state[1];
 	assign restart = state[2];
 
 	initial begin
-        state = `F_D;		//initially wait for keyboard input E to go forward
+        state = `F_E;		//initially start forward enabled
     end
 
 	always_ff @(posedge read_keyboard_flag)
@@ -39,10 +36,6 @@ module keyboard_control
 				case(character)
 					character_D:
 						state <= `F_D;
-					character_B:
-						state <= `B_E;
-					character_R:
-						state <= `F_R;
 					default:
 						state <= `F_E;
 				endcase
@@ -51,44 +44,10 @@ module keyboard_control
 				case(character)
 					character_E:
 						state <= `F_E;
-					character_B:
-						state <= `B_D;
-					character_R:
-						state <= `F_R;
 					default:
 						state <= `F_D;
 				endcase
 			end
-			`B_E: begin
-				case(character)
-					character_D:
-						state <= `B_D;
-					character_F:
-						state <= `F_E;
-					character_R:
-						state <= `B_R;
-					default:
-						state <= `B_E;
-				endcase
-			end
-			`B_D: begin
-				case(character)
-					character_E:
-						state <= `B_E;
-					character_F:
-						state <= `F_D;
-					character_R:
-						state <= `B_R;
-					default:
-						state <= `B_D;
-				endcase
-			end
-			`F_R: begin
-				state <= `F_E;
-			end	
-			`B_R: begin
-				state <= `B_E;
-			end	
 			default:
 				state <= `F_D;
 		endcase
@@ -97,7 +56,6 @@ module keyboard_control
 	always_ff @(posedge clk)
 	begin
 		read_addr_start <= start;
-		dir <= direction;
 		reset <= restart;
 	end
 endmodule

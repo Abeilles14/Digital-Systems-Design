@@ -244,7 +244,7 @@ logic CLK_27M;
 //flash fsm
 logic [31:0] flash_data;
 logic [7:0] audio_out;
-logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, direction_flag, read_keyboard_flag;
+logic start_read_flag, read_addr_start, addr_ready_flag, reset_flag, read_keyboard_flag;
 
 logic [23:0] start_address, end_address;
 logic [7:0] phoneme_sel;
@@ -298,14 +298,6 @@ synchronizer sync_keyboard(
 						 .outclk(clk_7200hz_sync),
 						 .out_sync_sig(read_keyboard_flag));	//ready to listen to keyboard input
 
-//iterate through addresses
-narrator_ctrl narrator (
-  .clk(CLK_50M),
-  .phoneme_sel(phoneme_sel),
-  .start_address(start_address),
-  .end_address(end_address),
-  .silent(silent_flag));
-
 address_counter count_addr(
 .clk(CLK_50M),
 .clk_22khz_sync(clk_7200hz_sync),
@@ -314,7 +306,7 @@ address_counter count_addr(
 .read_data_flag(flash_mem_read),      //addr ready flag
 //.audio_finish(audio_done), 
 .led_start_flag(visualizer_flag),
-.start_read(1'b1),                  //start reading address
+.start_read(read_addr_start),                  //start reading address
 .read_done_flag(done_flash_read),
 .audio_out(audio_out),
 .start_address(start_address),
@@ -356,13 +348,20 @@ decoder_8b10b decoder(
   .disparity(dec_disparity),
   .disparity_err(disparity_err));
 
+//phoneme addresses
+narrator_ctrl narrator (
+  .clk(CLK_50M),
+  .phoneme_sel(phoneme_sel),      //phoneme address
+  .start_address(start_address),
+  .end_address(end_address),
+  .silent(silent_flag));
+
 //keyboard input
 keyboard_control keyboard_input(
 	.clk(clk_7200hz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
 	.read_addr_start(read_addr_start),
-	.dir(direction_flag),
 	.reset(reset_flag));
 
 flash flash_inst(
@@ -392,8 +391,8 @@ picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   .clk(CLK_50M),
   .interrupt_flag(start_read_flag),
   .phoneme_out(phoneme_sel),
-  .start_flag(picoblaze_start_flag),
-  .done_flag(picoblaze_done_flag)
+  .start_phoneme_flag(picoblaze_start_flag),
+  .done_phoneme_flag(picoblaze_done_flag)
   ); //interrupt routine flag
 
 //======================================================================================
