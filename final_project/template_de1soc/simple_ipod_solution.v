@@ -256,7 +256,7 @@ logic [9:0] enc_audio;
 
 //keyboard
 logic [7:0] valid_character;
-logic invalid_char_flag, audio_done_flag;
+logic invalid_char_flag, audio_done_flag, audio_start_flag;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
@@ -332,7 +332,9 @@ audio_averaging visualizer(
   .start_averaging_flag(visualizer_flag),
   .input_audio(audio_out),
   .silent_flag(silent_flag),
-  .led_out(LED[9:2]));
+  .led_out(ledtemp));//LED[9:2]));
+
+logic ledtemp;
 
 encoder_8b10b encoder (
   .SBYTECLK(CLK_50M),
@@ -374,6 +376,9 @@ keyboard_control keyboard_input(
 
 logic led1;
 assign LED[1] = audio_done_flag;
+assign LED[2] = read_addr_start;  //
+assign LED[3] = kbd_data_ready;
+assign LED[4] = read_keyboard_flag;
 
 flash flash_inst(
     .clk_clk                 (CLK_50M),
@@ -403,6 +408,7 @@ picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   .interrupt_flag(start_read_flag),
   .phoneme_out(phoneme_sel),
   .start_phoneme_flag(picoblaze_start_flag),
+  .start_word_flag(read_keyboard_flag),//read_addr_start),
   .done_phoneme_flag(picoblaze_done_flag),
   .done_word_flag(audio_done_flag)
   ); //interrupt routine flag

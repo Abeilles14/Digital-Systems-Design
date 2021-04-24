@@ -23,6 +23,8 @@ module keyboard_control
 	parameter CALCULATE = 4'b0101;
 	parameter DONE = 4'b0110;
 
+	parameter WAIT_AUDIO = 4'b0111;
+
 	parameter character_0 =8'h30;
 	parameter character_1 =8'h31;
 	parameter character_2 =8'h32;
@@ -55,26 +57,27 @@ module keyboard_control
 			IDLE: begin
 				read_addr_start <= 1'b0;
 				valid_char <= 8'hxx;
-				state <= WAIT_DIGIT_1;
+
+				if(read_keyboard_flag)
+					state <= WAIT_DIGIT_1;
+				else
+					state <= IDLE;
 			end
 			WAIT_DIGIT_1: begin
-				if(read_keyboard_flag)
+				led0 <= ~led0;
+				read_addr_start <= 1'b1;
+				valid_char <= character;
+				state <= WAIT_AUDIO;
+			end
+			WAIT_AUDIO: begin
+				read_addr_start <= 1'b1;
+				if(audio_done_flag)
 				begin
-					led0 <= ~led0;
-					read_addr_start <= 1'b1;
-					valid_char <= character;
-
-					if(audio_done_flag)
-					begin
-						led1 <= ~led1;
-						state <= DONE;
-					end
+					led1 <= ~led1;
+					state <= DONE;
 				end
 				else
-				begin
-					//valid_char <= 8'hxx;
-					state <= WAIT_DIGIT_1;
-				end
+					state <= WAIT_AUDIO;
 			end
 			DONE: begin
 				read_addr_start <= 1'b0;
