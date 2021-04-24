@@ -6,6 +6,7 @@ module address_counter(
  	input logic [31:0] flash_data,
  	output logic read_data_flag,
 	input logic pause,
+	output logic led_start_flag,
 	input logic start_read,
 	input logic read_done_flag,
 	output logic [7:0] audio_out,
@@ -25,22 +26,23 @@ parameter READ_DATA = 8'b00010_01;
 
 parameter WAIT_AUDIO = 8'b00011_00;
 parameter WAIT_SYNC = 8'b00100_00;
-parameter AUDIO_BYTE = 8'b00101_00;
+parameter AUDIO_BYTE = 8'b00101_10;
 
 parameter INCREMENT = 8'b00110_00;
 parameter GET_ADDRESS = 8'b00111_00;
 parameter pause_state = 8'b11111_00;  
 
-parameter DONE = 8'b01000_10;
+parameter DONE = 8'b01000_00;
 
-assign read_data_flag = state[0];  //output				//read state
+assign read_data_flag = state[0];  //output
+assign led_start_flag = state [1];		//start visualizer LED
 		
 always_ff@(posedge clk) begin 
 	case(state) 
 		
 		IDLE: begin
 			byte_count <= 3'd1;
-			state <= READ_DATA; //idle
+			state <= READ_DATA;
 		end
 			  
 		READ_DATA: begin

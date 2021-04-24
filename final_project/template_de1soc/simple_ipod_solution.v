@@ -243,9 +243,9 @@ wire [31:0] flash_mem_writedata;
 wire flash_mem_write;
 
 
-wire [23:0] start_address, end_address;
-wire [7:0] phoneme_sel;
-wire silent_flag, picoblaze_start_flag, picoblaze_done_flag;
+logic [23:0] start_address, end_address;
+logic [7:0] phoneme_sel;
+logic silent_flag, picoblaze_start_flag, picoblaze_done_flag, visualizer_flag, done_flash_read;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
@@ -253,12 +253,6 @@ assign flash_mem_writedata = 32'b0;
 assign flash_mem_byteenable = 6'b000001;
 
 assign CLK_27M = TD_CLK27;		//TD_CLK27 pin to use a CLK_27M clk
-//assign div_clk_44khz = div_clk_22khz << 2;
-
-// parameter clk_22khz_freq_50M = 32'h0471;
-// parameter clk_22khz_freq_27M = 32'h0265;
-// parameter clk_44khz_freq_50M = 32'h0238;
-// parameter clk_44khz_freq_27M = 32'h0132;
 
 //control sampling speed with initial freq 22khz
 speed_controller div_control_7200hz(
@@ -313,9 +307,9 @@ address_counter count_addr(
 .read_data_flag(flash_mem_read),      //addr ready flag
 .pause(1'b0),                //read addr start
 //.audio_finish(audio_done), 
-//.visual_start(visual_start),
+.led_start_flag(visualizer_flag),
 .start_read(1'b1),
-.read_done_flag(timer_end),
+.read_done_flag(done_flash_read),
 .audio_out(audio_out),
 .start_address(start_address),
 .end_address(end_address),
@@ -330,18 +324,16 @@ read_flash read_FLASH(
 .wait_read_request(flash_mem_waitrequest), 
 .read_data_valid(flash_mem_readdatavalid),
 .read_data_flag(flash_mem_read),
-.done_read_flag(timer_end)); 
+.done_read_flag(done_flash_read)); 
 
-logic start_flash_read, timer_end;
+audio_averaging visualizer(
+  .clk(CLK_50M),
+  .start_averaging_flag(visualizer_flag),
+  .input_audio(audio_out),
+  .led_out(LED[9:2]),
+  .led0(LED[0]));
 
-// //read addresses and data from flash
-// read_flash read_FLASH(
-// 	.clk50M(CLK_50M),
-// 	.start_read_flag(start_read_flag),         //read new address 
-// 	.read_data_flag(flash_mem_readdatavalid),	//address retrieved
-//   .read_addr_flag(flash_mem_read),
-// 	.flash_data_in(flash_mem_readdata),
-// 	.flash_data_out(flash_data));
+assign LED[1] = 1'b1;
 
 //keyboard input
 keyboard_control keyboard_input(
