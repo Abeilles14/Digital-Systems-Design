@@ -2,11 +2,8 @@ module keyboard_control_tb();
 	logic clk;
 	logic read_keyboard_flag;
 	logic [7:0] character;
-	logic [7:0] valid_char;
-	logic error_flag;
 	logic read_addr_start;
 	logic audio_done_flag;
-	output logic led0;
 
 	parameter character_0 =8'h30;
 	parameter character_1 =8'h31;
@@ -22,17 +19,12 @@ module keyboard_control_tb();
 keyboard_control DUT(
 	.clk(clk),
 	.read_keyboard_flag(read_keyboard_flag),
-	.character(kbd_received_ascii_code),
-	.valid_char(valid_character),
-	.error_flag(invalid_char_flag),
+	.character(character),
 	.read_addr_start(read_addr_start),
-	.audio_done_flag(audio_done_flag),
-	.led0(LED[0]));
+	.audio_done_flag(audio_done_flag));
 
 	initial				//initial block
 	begin
-		error_flag = 1'b0;
-
 		audio_done_flag = 1'b1;
 
     	clk = 0;		//simulates clk every 5ps
@@ -54,10 +46,12 @@ keyboard_control DUT(
 		read_keyboard_flag = 1'b0;
 		audio_done_flag = 1'b1;
 		#10;
-		audio_done_flag = 1'b0
+		audio_done_flag = 1'b0;
 		#10;
 		read_keyboard_flag = 1'b1;
 		character = character_4;
+		#20
+		audio_done_flag = 1'b1;
 		#5000;
 	end
 endmodule

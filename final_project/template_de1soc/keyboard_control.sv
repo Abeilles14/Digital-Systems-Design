@@ -13,7 +13,6 @@ module keyboard_control
 	parameter DONE = 7'b11111_00;
 
 	initial begin
-		read_addr_start = 1'b0;
         state = IDLE;		//initially start forward enabled
     end
 

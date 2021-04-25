@@ -4,7 +4,6 @@
 module picoblaze_template #( parameter clk_freq_in_hz = 25000000) (
         input clk,
         input reg [7:0] input_data,
-        input reg error_flag,
         input interrupt_flag,
         output [7:0] phoneme_out,
         input reg start_phoneme_flag,
@@ -132,7 +131,6 @@ pacoblaze3 led_8seg_kcpsm
         8'h00: in_port <= start_phoneme_flag;     //0000_0000 start_phoneme_flag PORT 00
         8'h02: in_port <= start_word_flag;        //0000_0010 start_word_flag PORT 02
         8'h40: in_port <= input_data;            //0100_0000 valid char PORT 40
-        8'h20: in_port <= error_flag;            //0010_0000 error flag PORT 20
         default: in_port <= 8'bx;
     endcase
 end

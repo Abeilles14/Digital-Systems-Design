@@ -321,7 +321,6 @@ address_counter count_addr(
 read_flash read_FLASH(
 .clk(CLK_50M),
 .start_read_flag(flash_mem_read),
-.wait_read_request(flash_mem_waitrequest), 
 .read_data_valid(flash_mem_readdatavalid),
 .read_data_flag(flash_mem_read),
 .done_read_flag(done_flash_read)); 

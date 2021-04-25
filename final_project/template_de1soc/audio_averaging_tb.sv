@@ -2,15 +2,15 @@ module audio_averaging_tb();
 	logic clk;
 	logic start_averaging_flag;
 	logic [7:0] input_audio;
+	logic silent_flag;
 	logic [7:0] led_out;
-	logic led0;
 
 	audio_averaging DUT(
 	  .clk(clk),
 	  .start_averaging_flag(start_averaging_flag),
 	  .input_audio(input_audio),
-	  .led_out(led_out),
-	  .led0(led0));
+	  .silent_flag(silent_flag),
+	  .led_out(led_out));
 
 	initial				//initial block
 	begin
@@ -30,6 +30,10 @@ module audio_averaging_tb();
   	end
 
 	initial begin
+		#200;
+		silent_flag = 1'b1;
+		#100;
+		silent_flag = 1'b0;
 		#5000;
 	end
 endmodule

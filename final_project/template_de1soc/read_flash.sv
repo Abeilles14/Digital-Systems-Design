@@ -1,7 +1,6 @@
 module read_flash(
 	input logic clk,
 	input logic start_read_flag,
-	input logic wait_read_request,
 	input logic read_data_valid,
 	input logic read_data_flag,
 	output logic done_read_flag); 

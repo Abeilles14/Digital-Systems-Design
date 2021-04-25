@@ -1,0 +1,3576 @@
+KCPSM3  v1.30.      Ken Chapman (Xilinx-UK) 2005
+
+The assembler for KCPSM3 Programmable State Machine
+
+PASS 1 - Reading input PSM file
+
+;; Define constants for all the ascii values.
+CONSTANT ascii_SPACE      , 20    ; ascii code
+CONSTANT ascii_EXCLAIM    , 21    ; ascii code
+CONSTANT ascii_DBLQUOT    , 22    ; ascii code
+CONSTANT ascii_NUMSIGN    , 23    ; ascii code
+CONSTANT ascii_DOLLAR     , 24    ; ascii code
+CONSTANT ascii_PERCENT    , 25    ; ascii code
+CONSTANT ascii_AMP        , 26    ; ascii code
+CONSTANT ascii_SINQUOT    , 27    ; ascii code
+CONSTANT ascii_LPAREN     , 28    ; ascii code
+CONSTANT ascii_RPAREN     , 29    ; ascii code
+CONSTANT ascii_ASTERISK   , 2A    ; ascii code
+CONSTANT ascii_PLUS       , 2B    ; ascii code
+CONSTANT ascii_COMMA      , 2C    ; ascii code
+CONSTANT ascii_MINUS      , 2D    ; ascii code
+CONSTANT ascii_PERIOD     , 2E    ; ascii code
+CONSTANT ascii_FWDSLASH   , 2F    ; ascii code
+CONSTANT ascii_0          , 30    ; ascii code
+CONSTANT ascii_1          , 31    ; ascii code
+CONSTANT ascii_2          , 32    ; ascii code
+CONSTANT ascii_3          , 33    ; ascii code
+CONSTANT ascii_4          , 34    ; ascii code
+CONSTANT ascii_5          , 35    ; ascii code
+CONSTANT ascii_6          , 36    ; ascii code
+CONSTANT ascii_7          , 37    ; ascii code
+CONSTANT ascii_8          , 38    ; ascii code
+CONSTANT ascii_9          , 39    ; ascii code
+CONSTANT ascii_COLON      , 3A    ; ascii code
+CONSTANT ascii_SEMI       , 3B    ; ascii code
+CONSTANT ascii_LESS       , 3C    ; ascii code
+CONSTANT ascii_EQUAL      , 3D    ; ascii code
+CONSTANT ascii_GREATER    , 3E    ; ascii code
+CONSTANT ascii_QUESTION   , 3F    ; ascii code
+CONSTANT ascii_CIRCAT     , 40    ; ascii code
+CONSTANT ascii_A          , 41    ; ascii code
+CONSTANT ascii_B          , 42    ; ascii code
+CONSTANT ascii_C          , 43    ; ascii code
+CONSTANT ascii_D          , 44    ; ascii code
+CONSTANT ascii_E          , 45    ; ascii code
+CONSTANT ascii_F          , 46    ; ascii code
+CONSTANT ascii_G          , 47    ; ascii code
+CONSTANT ascii_H          , 48    ; ascii code
+CONSTANT ascii_I          , 49    ; ascii code
+CONSTANT ascii_J          , 4A    ; ascii code
+CONSTANT ascii_K          , 4B    ; ascii code
+CONSTANT ascii_L          , 4C    ; ascii code
+CONSTANT ascii_M          , 4D    ; ascii code
+CONSTANT ascii_N          , 4E    ; ascii code
+CONSTANT ascii_O          , 4F    ; ascii code
+CONSTANT ascii_P          , 50    ; ascii code
+CONSTANT ascii_Q          , 51    ; ascii code
+CONSTANT ascii_R          , 52    ; ascii code
+CONSTANT ascii_S          , 53    ; ascii code
+CONSTANT ascii_T          , 54    ; ascii code
+CONSTANT ascii_U          , 55    ; ascii code
+CONSTANT ascii_V          , 56    ; ascii code
+CONSTANT ascii_W          , 57    ; ascii code
+CONSTANT ascii_X          , 58    ; ascii code
+CONSTANT ascii_Y          , 59    ; ascii code
+CONSTANT ascii_Z          , 5A    ; ascii code
+CONSTANT ascii_LBKT       , 5B    ; ascii code
+CONSTANT ascii_BKSLASH    , 5C    ; ascii code
+CONSTANT ascii_RBKT       , 5D    ; ascii code
+CONSTANT ascii_CARET      , 5E    ; ascii code
+CONSTANT ascii_DASH       , 5F    ; ascii code
+CONSTANT ascii_TICK       , 60    ; ascii code
+CONSTANT ascii_a          , 61    ; ascii code
+CONSTANT ascii_b          , 62    ; ascii code
+CONSTANT ascii_c          , 63    ; ascii code
+CONSTANT ascii_d          , 64    ; ascii code
+CONSTANT ascii_e          , 65    ; ascii code
+CONSTANT ascii_f          , 66    ; ascii code
+CONSTANT ascii_g          , 67    ; ascii code
+CONSTANT ascii_h          , 68    ; ascii code
+CONSTANT ascii_i          , 69    ; ascii code
+CONSTANT ascii_j          , 6A    ; ascii code
+CONSTANT ascii_k          , 6B    ; ascii code
+CONSTANT ascii_l          , 6C    ; ascii code
+CONSTANT ascii_m          , 6D    ; ascii code
+CONSTANT ascii_n          , 6E    ; ascii code
+CONSTANT ascii_o          , 6F    ; ascii code
+CONSTANT ascii_p          , 70    ; ascii code
+CONSTANT ascii_q          , 71    ; ascii code
+CONSTANT ascii_r          , 72    ; ascii code
+CONSTANT ascii_s          , 73    ; ascii code
+CONSTANT ascii_t          , 74    ; ascii code
+CONSTANT ascii_u          , 75    ; ascii code
+CONSTANT ascii_v          , 76    ; ascii code
+CONSTANT ascii_w          , 77    ; ascii code
+CONSTANT ascii_x          , 78    ; ascii code
+CONSTANT ascii_y          , 79    ; ascii code
+CONSTANT ascii_z          , 7A    ; ascii code
+CONSTANT ascii_LBRACE     , 7B    ; ascii code
+CONSTANT ascii_VBAR       , 7C    ; ascii code
+CONSTANT ascii_RBRACE     , 7D    ; ascii code
+CONSTANT ascii_TILDE      , 7E    ; ascii code
+CONSTANT ascii_ULINE      , 7F    ; ascii code
+;; Define constants for all the phoneme values.
+CONSTANT phoneme_PA1      , 00    ; phoneme code
+CONSTANT phoneme_PA2      , 01    ; phoneme code
+CONSTANT phoneme_PA3      , 02    ; phoneme code
+CONSTANT phoneme_PA4      , 03    ; phoneme code
+CONSTANT phoneme_PA5      , 04    ; phoneme code
+CONSTANT phoneme_OY       , 05    ; phoneme code
+CONSTANT phoneme_AY       , 06    ; phoneme code
+CONSTANT phoneme_EH       , 07    ; phoneme code
+CONSTANT phoneme_KK3      , 08    ; phoneme code
+CONSTANT phoneme_PP       , 09    ; phoneme code
+CONSTANT phoneme_JH       , 0A    ; phoneme code
+CONSTANT phoneme_NN1      , 0B    ; phoneme code
+CONSTANT phoneme_IH       , 0C    ; phoneme code
+CONSTANT phoneme_TT2      , 0D    ; phoneme code
+CONSTANT phoneme_RR1      , 0E    ; phoneme code
+CONSTANT phoneme_AX       , 0F    ; phoneme code
+CONSTANT phoneme_MM       , 10    ; phoneme code
+CONSTANT phoneme_TT1      , 11    ; phoneme code
+CONSTANT phoneme_DH1      , 12    ; phoneme code
+CONSTANT phoneme_IY       , 13    ; phoneme code
+CONSTANT phoneme_EY       , 14    ; phoneme code
+CONSTANT phoneme_DD1      , 15    ; phoneme code
+CONSTANT phoneme_UW1      , 16    ; phoneme code
+CONSTANT phoneme_AO       , 17    ; phoneme code
+CONSTANT phoneme_AA       , 18    ; phoneme code
+CONSTANT phoneme_YY2      , 19    ; phoneme code
+CONSTANT phoneme_AE       , 1A    ; phoneme code
+CONSTANT phoneme_HH1      , 1B    ; phoneme code
+CONSTANT phoneme_BB1      , 1C    ; phoneme code
+CONSTANT phoneme_TH       , 1D    ; phoneme code
+CONSTANT phoneme_UH       , 1E    ; phoneme code
+CONSTANT phoneme_UW2      , 1F    ; phoneme code
+CONSTANT phoneme_AW       , 20    ; phoneme code
+CONSTANT phoneme_DD2      , 21    ; phoneme code
+CONSTANT phoneme_GG3      , 22    ; phoneme code
+CONSTANT phoneme_VV       , 23    ; phoneme code
+CONSTANT phoneme_GG1      , 24    ; phoneme code
+CONSTANT phoneme_SH       , 25    ; phoneme code
+CONSTANT phoneme_ZH       , 26    ; phoneme code
+CONSTANT phoneme_RR2      , 27    ; phoneme code
+CONSTANT phoneme_FF       , 28    ; phoneme code
+CONSTANT phoneme_KK2      , 29    ; phoneme code
+CONSTANT phoneme_KK1      , 2A    ; phoneme code
+CONSTANT phoneme_ZZ       , 2B    ; phoneme code
+CONSTANT phoneme_NG       , 2C    ; phoneme code
+CONSTANT phoneme_LL       , 2D    ; phoneme code
+CONSTANT phoneme_WW       , 2E    ; phoneme code
+CONSTANT phoneme_XR       , 2F    ; phoneme code
+CONSTANT phoneme_WH       , 30    ; phoneme code
+CONSTANT phoneme_YY1      , 31    ; phoneme code
+CONSTANT phoneme_CH       , 32    ; phoneme code
+CONSTANT phoneme_ER1      , 33    ; phoneme code
+CONSTANT phoneme_ER2      , 34    ; phoneme code
+CONSTANT phoneme_OW       , 35    ; phoneme code
+CONSTANT phoneme_DH2      , 36    ; phoneme code
+CONSTANT phoneme_SS       , 37    ; phoneme code
+CONSTANT phoneme_NN2      , 38    ; phoneme code
+CONSTANT phoneme_HH2      , 39    ; phoneme code
+CONSTANT phoneme_OR       , 3A    ; phoneme code
+CONSTANT phoneme_AR       , 3B    ; phoneme code
+CONSTANT phoneme_YR       , 3C    ; phoneme code
+CONSTANT phoneme_GG2      , 3D    ; phoneme code
+CONSTANT phoneme_EL       , 3E    ; phoneme code
+CONSTANT phoneme_BB2      , 3F    ; phoneme code
+;INPUTS
+CONSTANT input_data    , 40
+CONSTANT start_phoneme_flag  , 00
+CONSTANT start_word_flag  , 02
+;OUTPUTS
+CONSTANT phoneme_out    , 80
+CONSTANT done_phoneme_flag   , 01
+CONSTANT done_word_flag   , 10
+;;============================================================================
+;; Infinite loop.
+;;============================================================================
+;REGISTER USE
+; s8 = IN input EQUALS (8 bits)
+; s7 = IN input DIGIT 2 ascii
+; s6 = IN input OPERATION (8 bits)
+; s3 = IN input DIGIT 1 ascii, FINAL RESULT (8 bits)
+; s5 = IN new input received flag
+; s4 = OUT done audio output flag
+; s0 - s2 = say_phoneme subroutine use
+cold_start:
+JUMP get_digit_1    ;loop
+done_audio:
+LOAD s4, 01     ;done flag
+OUTPUT s4, done_word_flag
+LOAD s4, 00     ;reset done flag
+OUTPUT s4, done_word_flag
+RETURN    ;loop to cold_start
+get_digit_1:
+INPUT s5, start_word_flag ;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_digit_1
+INPUT s3, input_data  ;get input data
+COMPARE s3, ascii_0  ;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0   ;output phoneme + done audio
+JUMP Z, get_operation
+COMPARE s3, ascii_1
+CALL Z, talkword1
+JUMP Z, get_operation
+COMPARE s3, ascii_2
+CALL Z, talkword2
+JUMP Z, get_operation
+COMPARE s3, ascii_3
+CALL Z, talkword3
+JUMP Z, get_operation
+COMPARE s3, ascii_4
+CALL Z, talkword4
+JUMP Z, get_operation
+COMPARE s3, ascii_5
+CALL Z, talkword5
+JUMP Z, get_operation
+COMPARE s3, ascii_6
+CALL Z, talkword6
+JUMP Z, get_operation
+COMPARE s3, ascii_7
+CALL Z, talkword7
+JUMP Z, get_operation
+COMPARE s3, ascii_8
+CALL Z, talkword8
+JUMP Z, get_operation
+COMPARE s3, ascii_9
+CALL Z, talkword9
+JUMP Z, get_operation
+CALL talkworderror  ;else output error
+JUMP cold_start   ;loop
+get_operation:
+INPUT s5, start_word_flag ;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_operation  ;loop
+INPUT s6, input_data  ;get input data
+COMPARE s6, ascii_MINUS
+CALL Z, talkwordminus
+JUMP Z, get_digit_2
+COMPARE s6, ascii_PLUS
+CALL Z, talkwordplus
+JUMP Z, get_digit_2
+CALL talkworderror  ;else output error
+JUMP get_operation
+get_digit_2:
+INPUT s5, start_word_flag ;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_digit_2  ;loop
+INPUT s7, input_data  ;get input data
+COMPARE s7, ascii_0  ;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0
+JUMP Z, get_equal
+COMPARE s7, ascii_1
+CALL Z, talkword1
+JUMP Z, get_equal
+COMPARE s7, ascii_2
+CALL Z, talkword2
+JUMP Z, get_equal
+COMPARE s7, ascii_3
+CALL Z, talkword3
+JUMP Z, get_equal
+COMPARE s7, ascii_4
+CALL Z, talkword4
+JUMP Z, get_equal
+COMPARE s7, ascii_5
+CALL Z, talkword5
+JUMP Z, get_equal
+COMPARE s7, ascii_6
+CALL Z, talkword6
+JUMP Z, get_equal
+COMPARE s7, ascii_7
+CALL Z, talkword7
+JUMP Z, get_equal
+COMPARE s7, ascii_8
+CALL Z, talkword8
+JUMP Z, get_equal
+COMPARE s7, ascii_9
+CALL Z, talkword9
+JUMP Z, get_equal
+CALL talkworderror  ;else output error
+JUMP get_digit_2
+get_equal:
+INPUT s5, start_word_flag ;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_equal  ;loop
+INPUT s8, input_data  ;get input data
+COMPARE s8, ascii_EQUAL
+CALL Z, talkwordequals
+JUMP Z, calculate
+CALL talkworderror  ;else output error
+JUMP get_equal
+calculate:   ; s3 +/- s7
+COMPARE s6, ascii_MINUS
+JUMP Z, op_minus   ;minus operation
+op_plus:      ;plus operation
+ADD s3, s7
+SUB s3, 60    ;sub 60 from total to get hex sum, not ascii
+JUMP result
+op_minus:
+SUB s3, s7
+COMPARE s3, 80              ;check left bit for negative
+JUMP C, result        ;if positive, get result
+CALL talkwordminus   ;else call talkwordminus
+XOR s3, FF                  ;take complement & abs value
+ADD s3, 01
+JUMP result
+result:
+COMPARE s3, 00  ;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0
+COMPARE s3, 01
+CALL Z, talkword1
+COMPARE s3, 02
+CALL Z, talkword2
+COMPARE s3, 03
+CALL Z, talkword3
+COMPARE s3, 04
+CALL Z, talkword4
+COMPARE s3, 05
+CALL Z, talkword5
+COMPARE s3, 06
+CALL Z, talkword6
+COMPARE s3, 07
+CALL Z, talkword7
+COMPARE s3, 08
+CALL Z, talkword8
+COMPARE s3, 09
+CALL Z, talkword9
+COMPARE s3, 0A
+CALL Z, talkword10
+COMPARE s3, 0B
+CALL Z, talkword11
+COMPARE s3, 0C
+CALL Z, talkword12
+COMPARE s3, 0D
+CALL Z, talkword13
+COMPARE s3, 0E
+CALL Z, talkword14
+COMPARE s3, 0F
+CALL Z, talkword15
+COMPARE s3, 10
+CALL Z, talkword16
+COMPARE s3, 11
+CALL Z, talkword17
+COMPARE s3, 12
+CALL Z, talkword18
+JUMP reset
+reset:
+LOAD s3, 00
+LOAD s4, 00
+LOAD s5, 00
+LOAD s6, 00
+LOAD s7, 00
+LOAD s8, 00
+JUMP cold_start
+;;============================================================================
+;; Test message and phoneme voicing subroutine.
+;;============================================================================
+;================================================
+talkword0:
+call talkphonemeZZ
+call talkphonemeEH
+call talkphonemeRR2
+call talkphonemeOW
+call  done_audio
+return
+talkword1:
+call talkphonemeWW
+call talkphonemeAO
+call talkphonemeNN1
+call  done_audio
+return
+talkword2:
+call talkphonemeTT2
+call talkphonemeUW2
+call  done_audio
+return
+talkword3:
+call talkphonemeTH
+call talkphonemeRR2
+call talkphonemeIY
+call  done_audio
+return
+talkword4:
+call talkphonemeFF
+call talkphonemeOR
+call  done_audio
+return
+talkword5:
+call talkphonemeFF
+call talkphonemeAY
+call talkphonemeVV
+call  done_audio
+return
+talkword6:
+call talkphonemeSS
+call talkphonemeIH
+call talkphonemeKK2
+call talkphonemeSS
+call talkphonemeSS
+call  done_audio
+return
+talkword7:
+call talkphonemeSS
+call talkphonemeEH
+call talkphonemeVV
+call talkphonemeAX
+call talkphonemeNN1
+call  done_audio
+return
+talkword8:
+call talkphonemeEY
+call talkphonemeTT1
+;call  done_audio
+return
+talkword9:
+call talkphonemeNN2
+call talkphonemeAY
+call talkphonemeNN1
+call  done_audio
+return
+talkword10:
+call talkphonemeTT2
+call talkphonemeEH
+call talkphonemeNN1
+call  done_audio
+return
+talkword11:
+call talkphonemeIH
+call talkphonemeLL
+call talkphonemeEH
+call talkphonemeVV
+call talkphonemeEH
+call talkphonemeNN1
+call  done_audio
+return
+talkword12:
+call talkphonemeTT2
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeEL
+call talkphonemeVV
+call  done_audio
+return
+talkword13:
+call talkphonemeTH
+call talkphonemeER2
+JUMP    talkwordteen
+talkwordteen:
+call talkphonemeTT2
+call talkphonemeIY
+call talkphonemeNN1
+call  done_audio
+return
+talkword14:
+call talkword4
+JUMP talkwordteen
+talkword15:
+call talkphonemeFF
+call talkphonemeIH
+call talkphonemeFF
+JUMP talkwordteen
+talkword16:
+call talkword6
+JUMP talkwordteen
+talkword17:
+call talkword7
+JUMP talkwordteen
+talkword18:
+call talkword8
+JUMP talkwordteen
+talkwordplus:
+call talkphonemePP
+call talkphonemeLL
+call talkphonemeAX
+call talkphonemeAX
+call talkphonemeSS
+call talkphonemeSS
+call done_audio
+return
+talkwordminus:
+call talkphonemeMM
+call talkphonemeAY
+call talkphonemeNN1
+call talkphonemeIH
+call talkphonemeAX
+call talkphonemeAX
+call talkphonemeSS
+call talkphonemeSS
+call done_audio
+return
+talkwordequals:
+call talkphonemeIY
+call talkphonemePA2
+call talkphonemePA3
+call talkphonemeKK3
+call talkphonemeWH
+call talkphonemeAX
+call talkphonemeEL
+call talkphonemeZZ
+call done_audio
+return
+talkworderror:
+call talkphonemeEH
+call talkphonemeXR
+call talkphonemeOR
+call done_audio
+return
+;=====================================================
+talkword19:
+call talkword9
+JUMP talkwordteen
+talkword20:
+call talkphonemeTT2
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeNN1
+talkwordty:
+call talkphonemeTT2
+call talkphonemeIY
+return
+talkword30:
+call talkphonemeTH
+call talkphonemeER1
+JUMP talkwordty
+talkword40:
+call talkword4
+JUMP talkwordty
+talkword50:
+call talkphonemeFF
+call talkphonemeIH
+call talkphonemeFF
+JUMP talkwordty
+talkword60:
+call talkword6
+JUMP talkwordty
+talkword70:
+call talkword7
+JUMP talkwordty
+talkword80:
+call talkword8
+JUMP talkwordty
+talkword90:
+call talkword9
+JUMP talkwordty
+talkwordhundred:
+call talkphonemeHH2
+call talkphonemeAX
+call talkphonemeNN1
+call talkphonemeDD2
+call talkphonemeRR2
+call talkphonemeDD1
+return
+talkworddepth:
+call talkphonemeDD2
+call talkphonemeEH
+call talkphonemeEH
+call talkphonemePP
+call talkphonemeTH
+JUMP endword
+talkwordpoint:
+call talkphonemePP
+call talkphonemeOY
+call talkphonemeTT1
+JUMP endword
+talkwordanchor:
+call talkphonemeEY
+call talkphonemeKK3
+call talkphonemeAE
+JUMP endword
+talkwordalarm:
+call talkphonemeAE
+call talkphonemeLL
+call talkphonemeAR
+call talkphonemeMM
+JUMP endword
+talkwordon:
+call talkphonemeAO
+call talkphonemeNG
+JUMP endword
+talkwordoff:
+call talkphonemeAO
+call talkphonemeFF
+call talkphonemeFF
+JUMP endword
+talkwordshallow:
+call talkphonemeSH
+call talkphonemeAE
+call talkphonemeLL
+call talkphonemeOW
+JUMP endword
+talkwordand:
+call talkphonemeIH
+call talkphonemeIH
+call talkphonemeNN1
+call talkphonemeDD2
+JUMP endword
+talkwordwatch:
+call talkphonemeWW
+call talkphonemeAO
+call talkphonemeTT1
+call talkphonemeCH
+JUMP endword
+talkwordlimit:
+call talkphonemeLL
+call talkphonemeIH
+call talkphonemeMM
+call talkphonemeIH
+call talkphonemeTT1
+JUMP endword
+talkwordset:
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeEH
+call talkphonemeTT2
+JUMP endword
+talkwordheading:
+call talkphonemeHH1
+call talkphonemeEH
+call talkphonemeDD2
+call talkphonemeIH
+call talkphonemeNG
+JUMP endword
+talkwordgps:
+call talkphonemeJH
+call talkphonemeIY
+call talkphonemePP
+call talkphonemeIY
+call talkphonemeEH
+call talkphonemeSS
+call talkphonemeSS
+JUMP endword
+talkwordno:
+call talkphonemeNN2
+call talkphonemeOW
+JUMP endword
+talkworddata:
+call talkphonemeDD2
+call talkphonemeEY
+call talkphonemeTT2
+call talkphonemeAX
+JUMP endword
+talkwordnorth:
+call talkphonemeNN2
+call talkphonemeOR
+call talkphonemeHH1
+JUMP endword
+talkwordsouth:
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeAW
+call talkphonemeTH
+call talkphonemeTH
+JUMP endword
+talkwordeast:
+call talkphonemeIY
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeTT2
+JUMP endword
+talkwordwest:
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeTT2
+JUMP endword
+talkwordposition:
+call talkphonemePP
+call talkphonemeIH
+call talkphonemeZZ
+call talkphonemeIH
+call talkphonemeSH
+call talkphonemeNN1
+JUMP endword
+endword:
+call talkphonemePA5
+return
+say_phoneme:
+;make sure  to complete this subroutine in order for the synthesizer to work
+;LOAD s2, 01
+INPUT s1, start_phoneme_flag  ;check if start routine
+COMPARE s1, 01
+JUMP NZ, say_phoneme
+OUTPUT s0, phoneme_out
+LOAD s2, 01
+OUTPUT s2, done_phoneme_flag
+LOAD s2, 00
+OUTPUT s2, done_phoneme_flag
+RETURN
+talkphonemeAA:   ; hOt
+LOAD s0, phoneme_AA  ; can be doubled
+JUMP say_phoneme
+talkphonemeAE:   ; hAt
+LOAD s0, phoneme_AE  ; can be doubled
+JUMP say_phoneme
+talkphonemeAO:   ; AUght
+LOAD s0, phoneme_AO  ; can be doubled
+JUMP say_phoneme
+talkphonemeAR:   ; alARm
+LOAD s0, phoneme_AR
+JUMP say_phoneme
+talkphonemeAW:   ; dOWn
+LOAD s0, phoneme_AW
+JUMP say_phoneme
+talkphonemeAX:   ; sUceed
+LOAD s0, phoneme_AX  ; can be doubled
+JUMP say_phoneme
+talkphonemeAY:   ; kIte
+LOAD s0, phoneme_AY
+JUMP say_phoneme
+talkphonemeBB1:   ; riB
+LOAD s0, phoneme_BB1  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeBB2:   ; Beast
+LOAD s0, phoneme_BB2  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeCH:   ; CHurCH
+LOAD s0, phoneme_CH
+JUMP say_phoneme
+talkphonemeDD1:   ; enD
+LOAD s0, phoneme_DD1  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeDD2:   ; Down
+LOAD s0, phoneme_DD2 ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeDH1:   ; THis
+LOAD s0, phoneme_DH1
+JUMP say_phoneme
+talkphonemeDH2:   ; baTHe
+LOAD s0, phoneme_DH2
+JUMP say_phoneme
+talkphonemeEH:   ; End
+LOAD s0, phoneme_EH ; can be doubled
+JUMP say_phoneme
+talkphonemeEL:   ; angLE
+LOAD s0, phoneme_EL
+JUMP say_phoneme
+talkphonemeER1:   ; lettER
+LOAD s0, phoneme_ER1
+JUMP say_phoneme
+talkphonemeER2:   ; fERn
+LOAD s0, phoneme_ER2
+JUMP say_phoneme
+talkphonemeEY:   ; trAY
+LOAD s0, phoneme_EY
+JUMP say_phoneme
+talkphonemeFF:   ; Food
+LOAD s0, phoneme_FF  ; usually double for initial
+JUMP say_phoneme
+talkphonemeGG1:   ; Guest
+LOAD s0, phoneme_GG1  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeGG2:   ; Got
+LOAD s0, phoneme_GG2  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeGG3:   ; peG
+LOAD s0, phoneme_GG3  ; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeHH1:   ; He
+LOAD s0, phoneme_HH1 ; usually double for initial
+JUMP say_phoneme
+talkphonemeHH2:   ; Hoe
+LOAD s0, phoneme_HH2  ; usually double for initial
+JUMP say_phoneme
+talkphonemeIH:   ; sIt
+LOAD s0, phoneme_IH  ; can be doubled
+JUMP say_phoneme
+talkphonemeIY:   ; sEE
+LOAD s0, phoneme_IY
+JUMP say_phoneme
+talkphonemeJH:   ; JudGe
+LOAD s0, phoneme_JH
+JUMP say_phoneme
+talkphonemeKK1:   ; Can't
+LOAD s0, phoneme_KK1 ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeKK2:   ; speaK
+LOAD s0, phoneme_KK2  ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeKK3:   ; Crane
+LOAD s0,    phoneme_KK3 ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeLL:   ; Like
+LOAD s0, phoneme_LL
+JUMP say_phoneme
+talkphonemeMM:   ; Milk
+LOAD s0, phoneme_MM
+JUMP say_phoneme
+talkphonemeNG:   ; aNGer
+LOAD s0, phoneme_NG
+JUMP say_phoneme
+talkphonemeNN1:   ; thiN
+LOAD s0, phoneme_NN1
+JUMP say_phoneme
+talkphonemeNN2:   ; No
+LOAD s0, phoneme_NN2
+JUMP say_phoneme
+talkphonemeOR:   ; fORtune
+LOAD s0, phoneme_OR
+JUMP say_phoneme
+talkphonemeOW:   ; zOne
+LOAD s0, phoneme_OW
+JUMP say_phoneme
+talkphonemeOY:   ; vOIce
+LOAD s0, phoneme_OY
+JUMP say_phoneme
+talkphonemePP:   ; Pow
+LOAD s0, phoneme_PP  ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeRR1:   ; Read
+LOAD s0, phoneme_RR1
+JUMP say_phoneme
+talkphonemeRR2:   ; cRane
+LOAD s0, phoneme_RR2
+JUMP say_phoneme
+talkphonemeSH:   ; SHip
+LOAD s0, phoneme_SH  ; usually double for initial
+JUMP say_phoneme
+talkphonemeSS:   ; veSt
+LOAD s0, phoneme_SS  ; usually double for initial
+JUMP say_phoneme
+talkphonemeTH:   ; THin
+LOAD s0, phoneme_TH  ; usually double for initial
+JUMP say_phoneme
+talkphonemeTT1:   ; parTs
+LOAD s0, phoneme_TT1 ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeTT2:   ; To
+LOAD s0, phoneme_TT2  ; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeUH:   ; bOOk
+LOAD s0, phoneme_UH  ; may be doubled
+JUMP say_phoneme
+talkphonemeUW1:   ; tO
+LOAD s0, phoneme_UW1
+JUMP say_phoneme
+talkphonemeUW2:   ; fOOd
+LOAD s0, phoneme_UW2
+JUMP say_phoneme
+talkphonemeVV:   ; Vest
+LOAD s0, phoneme_VV
+JUMP say_phoneme
+talkphonemeWH:   ; WHig
+LOAD s0, phoneme_WH ; usually double for initial
+JUMP say_phoneme
+talkphonemeWW:   ; We
+LOAD s0, phoneme_WW
+JUMP say_phoneme
+talkphonemeXR:   ; stARs
+LOAD s0, phoneme_XR
+JUMP say_phoneme
+talkphonemeYR:   ; hEAr
+LOAD s0, phoneme_YR
+JUMP say_phoneme
+talkphonemeYY1:   ; cUte
+LOAD s0, phoneme_YY1
+JUMP say_phoneme
+talkphonemeYY2:   ; Yes
+LOAD s0, phoneme_YY2
+JUMP say_phoneme
+talkphonemeZH:   ; pleaSure
+LOAD s0, phoneme_ZH
+JUMP say_phoneme
+talkphonemeZZ:   ; Zoo
+LOAD s0, phoneme_ZZ
+JUMP say_phoneme
+talkphonemePA1:   ; 10 mS silence
+LOAD s0, phoneme_PA1
+JUMP say_phoneme
+talkphonemePA2:   ; 30 mS silence
+LOAD s0, phoneme_PA2
+JUMP say_phoneme
+talkphonemePA3:   ; 50 mS silence
+LOAD s0, phoneme_PA3
+JUMP say_phoneme
+talkphonemePA4:   ; 100 mS silence
+LOAD s0, phoneme_PA4
+JUMP say_phoneme
+talkphonemePA5:   ; 200 mS silence
+LOAD s0, phoneme_PA5
+JUMP say_phoneme
+talkphonemePA6:   ; 500 mS silence
+call talkphonemePA5
+call talkphonemePA5
+call talkphonemePA4
+JUMP say_phoneme
+
+PASS 2 - Testing Instructions
+
+;; Define constants for all the ascii values.
+CONSTANT ascii_SPACE, 20; ascii code
+CONSTANT ascii_EXCLAIM, 21; ascii code
+CONSTANT ascii_DBLQUOT, 22; ascii code
+CONSTANT ascii_NUMSIGN, 23; ascii code
+CONSTANT ascii_DOLLAR, 24; ascii code
+CONSTANT ascii_PERCENT, 25; ascii code
+CONSTANT ascii_AMP, 26; ascii code
+CONSTANT ascii_SINQUOT, 27; ascii code
+CONSTANT ascii_LPAREN, 28; ascii code
+CONSTANT ascii_RPAREN, 29; ascii code
+CONSTANT ascii_ASTERISK, 2A; ascii code
+CONSTANT ascii_PLUS, 2B; ascii code
+CONSTANT ascii_COMMA, 2C; ascii code
+CONSTANT ascii_MINUS, 2D; ascii code
+CONSTANT ascii_PERIOD, 2E; ascii code
+CONSTANT ascii_FWDSLASH, 2F; ascii code
+CONSTANT ascii_0, 30; ascii code
+CONSTANT ascii_1, 31; ascii code
+CONSTANT ascii_2, 32; ascii code
+CONSTANT ascii_3, 33; ascii code
+CONSTANT ascii_4, 34; ascii code
+CONSTANT ascii_5, 35; ascii code
+CONSTANT ascii_6, 36; ascii code
+CONSTANT ascii_7, 37; ascii code
+CONSTANT ascii_8, 38; ascii code
+CONSTANT ascii_9, 39; ascii code
+CONSTANT ascii_COLON, 3A; ascii code
+CONSTANT ascii_SEMI, 3B; ascii code
+CONSTANT ascii_LESS, 3C; ascii code
+CONSTANT ascii_EQUAL, 3D; ascii code
+CONSTANT ascii_GREATER, 3E; ascii code
+CONSTANT ascii_QUESTION, 3F; ascii code
+CONSTANT ascii_CIRCAT, 40; ascii code
+CONSTANT ascii_A, 41; ascii code
+CONSTANT ascii_B, 42; ascii code
+CONSTANT ascii_C, 43; ascii code
+CONSTANT ascii_D, 44; ascii code
+CONSTANT ascii_E, 45; ascii code
+CONSTANT ascii_F, 46; ascii code
+CONSTANT ascii_G, 47; ascii code
+CONSTANT ascii_H, 48; ascii code
+CONSTANT ascii_I, 49; ascii code
+CONSTANT ascii_J, 4A; ascii code
+CONSTANT ascii_K, 4B; ascii code
+CONSTANT ascii_L, 4C; ascii code
+CONSTANT ascii_M, 4D; ascii code
+CONSTANT ascii_N, 4E; ascii code
+CONSTANT ascii_O, 4F; ascii code
+CONSTANT ascii_P, 50; ascii code
+CONSTANT ascii_Q, 51; ascii code
+CONSTANT ascii_R, 52; ascii code
+CONSTANT ascii_S, 53; ascii code
+CONSTANT ascii_T, 54; ascii code
+CONSTANT ascii_U, 55; ascii code
+CONSTANT ascii_V, 56; ascii code
+CONSTANT ascii_W, 57; ascii code
+CONSTANT ascii_X, 58; ascii code
+CONSTANT ascii_Y, 59; ascii code
+CONSTANT ascii_Z, 5A; ascii code
+CONSTANT ascii_LBKT, 5B; ascii code
+CONSTANT ascii_BKSLASH, 5C; ascii code
+CONSTANT ascii_RBKT, 5D; ascii code
+CONSTANT ascii_CARET, 5E; ascii code
+CONSTANT ascii_DASH, 5F; ascii code
+CONSTANT ascii_TICK, 60; ascii code
+CONSTANT ascii_a, 61; ascii code
+CONSTANT ascii_b, 62; ascii code
+CONSTANT ascii_c, 63; ascii code
+CONSTANT ascii_d, 64; ascii code
+CONSTANT ascii_e, 65; ascii code
+CONSTANT ascii_f, 66; ascii code
+CONSTANT ascii_g, 67; ascii code
+CONSTANT ascii_h, 68; ascii code
+CONSTANT ascii_i, 69; ascii code
+CONSTANT ascii_j, 6A; ascii code
+CONSTANT ascii_k, 6B; ascii code
+CONSTANT ascii_l, 6C; ascii code
+CONSTANT ascii_m, 6D; ascii code
+CONSTANT ascii_n, 6E; ascii code
+CONSTANT ascii_o, 6F; ascii code
+CONSTANT ascii_p, 70; ascii code
+CONSTANT ascii_q, 71; ascii code
+CONSTANT ascii_r, 72; ascii code
+CONSTANT ascii_s, 73; ascii code
+CONSTANT ascii_t, 74; ascii code
+CONSTANT ascii_u, 75; ascii code
+CONSTANT ascii_v, 76; ascii code
+CONSTANT ascii_w, 77; ascii code
+CONSTANT ascii_x, 78; ascii code
+CONSTANT ascii_y, 79; ascii code
+CONSTANT ascii_z, 7A; ascii code
+CONSTANT ascii_LBRACE, 7B; ascii code
+CONSTANT ascii_VBAR, 7C; ascii code
+CONSTANT ascii_RBRACE, 7D; ascii code
+CONSTANT ascii_TILDE, 7E; ascii code
+CONSTANT ascii_ULINE, 7F; ascii code
+;; Define constants for all the phoneme values.
+CONSTANT phoneme_PA1, 00; phoneme code
+CONSTANT phoneme_PA2, 01; phoneme code
+CONSTANT phoneme_PA3, 02; phoneme code
+CONSTANT phoneme_PA4, 03; phoneme code
+CONSTANT phoneme_PA5, 04; phoneme code
+CONSTANT phoneme_OY, 05; phoneme code
+CONSTANT phoneme_AY, 06; phoneme code
+CONSTANT phoneme_EH, 07; phoneme code
+CONSTANT phoneme_KK3, 08; phoneme code
+CONSTANT phoneme_PP, 09; phoneme code
+CONSTANT phoneme_JH, 0A; phoneme code
+CONSTANT phoneme_NN1, 0B; phoneme code
+CONSTANT phoneme_IH, 0C; phoneme code
+CONSTANT phoneme_TT2, 0D; phoneme code
+CONSTANT phoneme_RR1, 0E; phoneme code
+CONSTANT phoneme_AX, 0F; phoneme code
+CONSTANT phoneme_MM, 10; phoneme code
+CONSTANT phoneme_TT1, 11; phoneme code
+CONSTANT phoneme_DH1, 12; phoneme code
+CONSTANT phoneme_IY, 13; phoneme code
+CONSTANT phoneme_EY, 14; phoneme code
+CONSTANT phoneme_DD1, 15; phoneme code
+CONSTANT phoneme_UW1, 16; phoneme code
+CONSTANT phoneme_AO, 17; phoneme code
+CONSTANT phoneme_AA, 18; phoneme code
+CONSTANT phoneme_YY2, 19; phoneme code
+CONSTANT phoneme_AE, 1A; phoneme code
+CONSTANT phoneme_HH1, 1B; phoneme code
+CONSTANT phoneme_BB1, 1C; phoneme code
+CONSTANT phoneme_TH, 1D; phoneme code
+CONSTANT phoneme_UH, 1E; phoneme code
+CONSTANT phoneme_UW2, 1F; phoneme code
+CONSTANT phoneme_AW, 20; phoneme code
+CONSTANT phoneme_DD2, 21; phoneme code
+CONSTANT phoneme_GG3, 22; phoneme code
+CONSTANT phoneme_VV, 23; phoneme code
+CONSTANT phoneme_GG1, 24; phoneme code
+CONSTANT phoneme_SH, 25; phoneme code
+CONSTANT phoneme_ZH, 26; phoneme code
+CONSTANT phoneme_RR2, 27; phoneme code
+CONSTANT phoneme_FF, 28; phoneme code
+CONSTANT phoneme_KK2, 29; phoneme code
+CONSTANT phoneme_KK1, 2A; phoneme code
+CONSTANT phoneme_ZZ, 2B; phoneme code
+CONSTANT phoneme_NG, 2C; phoneme code
+CONSTANT phoneme_LL, 2D; phoneme code
+CONSTANT phoneme_WW, 2E; phoneme code
+CONSTANT phoneme_XR, 2F; phoneme code
+CONSTANT phoneme_WH, 30; phoneme code
+CONSTANT phoneme_YY1, 31; phoneme code
+CONSTANT phoneme_CH, 32; phoneme code
+CONSTANT phoneme_ER1, 33; phoneme code
+CONSTANT phoneme_ER2, 34; phoneme code
+CONSTANT phoneme_OW, 35; phoneme code
+CONSTANT phoneme_DH2, 36; phoneme code
+CONSTANT phoneme_SS, 37; phoneme code
+CONSTANT phoneme_NN2, 38; phoneme code
+CONSTANT phoneme_HH2, 39; phoneme code
+CONSTANT phoneme_OR, 3A; phoneme code
+CONSTANT phoneme_AR, 3B; phoneme code
+CONSTANT phoneme_YR, 3C; phoneme code
+CONSTANT phoneme_GG2, 3D; phoneme code
+CONSTANT phoneme_EL, 3E; phoneme code
+CONSTANT phoneme_BB2, 3F; phoneme code
+;INPUTS
+CONSTANT input_data, 40
+CONSTANT start_phoneme_flag, 00
+CONSTANT start_word_flag, 02
+;OUTPUTS
+CONSTANT phoneme_out, 80
+CONSTANT done_phoneme_flag, 01
+CONSTANT done_word_flag, 10
+;;============================================================================
+;; Infinite loop.
+;;============================================================================
+;REGISTER USE
+; s8 = IN input EQUALS (8 bits)
+; s7 = IN input DIGIT 2 ascii
+; s6 = IN input OPERATION (8 bits)
+; s3 = IN input DIGIT 1 ascii, FINAL RESULT (8 bits)
+; s5 = IN new input received flag
+; s4 = OUT done audio output flag
+; s0 - s2 = say_phoneme subroutine use
+cold_start: 
+JUMP get_digit_1;loop
+done_audio: 
+LOAD s4, 01;done flag
+OUTPUT s4, done_word_flag
+LOAD s4, 00;reset done flag
+OUTPUT s4, done_word_flag
+RETURN;loop to cold_start
+get_digit_1: 
+INPUT s5, start_word_flag;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_digit_1
+INPUT s3, input_data;get input data
+COMPARE s3, ascii_0;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0;output phoneme + done audio
+JUMP Z, get_operation
+COMPARE s3, ascii_1
+CALL Z, talkword1
+JUMP Z, get_operation
+COMPARE s3, ascii_2
+CALL Z, talkword2
+JUMP Z, get_operation
+COMPARE s3, ascii_3
+CALL Z, talkword3
+JUMP Z, get_operation
+COMPARE s3, ascii_4
+CALL Z, talkword4
+JUMP Z, get_operation
+COMPARE s3, ascii_5
+CALL Z, talkword5
+JUMP Z, get_operation
+COMPARE s3, ascii_6
+CALL Z, talkword6
+JUMP Z, get_operation
+COMPARE s3, ascii_7
+CALL Z, talkword7
+JUMP Z, get_operation
+COMPARE s3, ascii_8
+CALL Z, talkword8
+JUMP Z, get_operation
+COMPARE s3, ascii_9
+CALL Z, talkword9
+JUMP Z, get_operation
+CALL talkworderror;else output error
+JUMP cold_start;loop
+get_operation: 
+INPUT s5, start_word_flag;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_operation;loop
+INPUT s6, input_data;get input data
+COMPARE s6, ascii_MINUS
+CALL Z, talkwordminus
+JUMP Z, get_digit_2
+COMPARE s6, ascii_PLUS
+CALL Z, talkwordplus
+JUMP Z, get_digit_2
+CALL talkworderror;else output error
+JUMP get_operation
+get_digit_2: 
+INPUT s5, start_word_flag;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_digit_2;loop
+INPUT s7, input_data;get input data
+COMPARE s7, ascii_0;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0
+JUMP Z, get_equal
+COMPARE s7, ascii_1
+CALL Z, talkword1
+JUMP Z, get_equal
+COMPARE s7, ascii_2
+CALL Z, talkword2
+JUMP Z, get_equal
+COMPARE s7, ascii_3
+CALL Z, talkword3
+JUMP Z, get_equal
+COMPARE s7, ascii_4
+CALL Z, talkword4
+JUMP Z, get_equal
+COMPARE s7, ascii_5
+CALL Z, talkword5
+JUMP Z, get_equal
+COMPARE s7, ascii_6
+CALL Z, talkword6
+JUMP Z, get_equal
+COMPARE s7, ascii_7
+CALL Z, talkword7
+JUMP Z, get_equal
+COMPARE s7, ascii_8
+CALL Z, talkword8
+JUMP Z, get_equal
+COMPARE s7, ascii_9
+CALL Z, talkword9
+JUMP Z, get_equal
+CALL talkworderror;else output error
+JUMP get_digit_2
+get_equal: 
+INPUT s5, start_word_flag;wait for start flag, key stroke entered
+COMPARE s5, 01
+JUMP NZ, get_equal;loop
+INPUT s8, input_data;get input data
+COMPARE s8, ascii_EQUAL
+CALL Z, talkwordequals
+JUMP Z, calculate
+CALL talkworderror;else output error
+JUMP get_equal
+calculate: ; s3 +/- s7
+COMPARE s6, ascii_MINUS
+JUMP Z, op_minus;minus operation
+op_plus: ;plus operation
+ADD s3, s7
+SUB s3, 60;sub 60 from total to get hex sum, not ascii
+JUMP result
+op_minus: 
+SUB s3, s7
+COMPARE s3, 80;check left bit for negative
+JUMP C, result;if positive, get result
+CALL talkwordminus;else call talkwordminus
+XOR s3, FF;take complement & abs value
+ADD s3, 01
+JUMP result
+result: 
+COMPARE s3, 00;if zero flag set (input s3 == ascii 0)
+CALL Z, talkword0
+COMPARE s3, 01
+CALL Z, talkword1
+COMPARE s3, 02
+CALL Z, talkword2
+COMPARE s3, 03
+CALL Z, talkword3
+COMPARE s3, 04
+CALL Z, talkword4
+COMPARE s3, 05
+CALL Z, talkword5
+COMPARE s3, 06
+CALL Z, talkword6
+COMPARE s3, 07
+CALL Z, talkword7
+COMPARE s3, 08
+CALL Z, talkword8
+COMPARE s3, 09
+CALL Z, talkword9
+COMPARE s3, 0A
+CALL Z, talkword10
+COMPARE s3, 0B
+CALL Z, talkword11
+COMPARE s3, 0C
+CALL Z, talkword12
+COMPARE s3, 0D
+CALL Z, talkword13
+COMPARE s3, 0E
+CALL Z, talkword14
+COMPARE s3, 0F
+CALL Z, talkword15
+COMPARE s3, 10
+CALL Z, talkword16
+COMPARE s3, 11
+CALL Z, talkword17
+COMPARE s3, 12
+CALL Z, talkword18
+JUMP reset
+reset: 
+LOAD s3, 00
+LOAD s4, 00
+LOAD s5, 00
+LOAD s6, 00
+LOAD s7, 00
+LOAD s8, 00
+JUMP cold_start
+;;============================================================================
+;; Test message and phoneme voicing subroutine.
+;;============================================================================
+;================================================
+talkword0: 
+call talkphonemeZZ
+call talkphonemeEH
+call talkphonemeRR2
+call talkphonemeOW
+call done_audio
+return
+talkword1: 
+call talkphonemeWW
+call talkphonemeAO
+call talkphonemeNN1
+call done_audio
+return
+talkword2: 
+call talkphonemeTT2
+call talkphonemeUW2
+call done_audio
+return
+talkword3: 
+call talkphonemeTH
+call talkphonemeRR2
+call talkphonemeIY
+call done_audio
+return
+talkword4: 
+call talkphonemeFF
+call talkphonemeOR
+call done_audio
+return
+talkword5: 
+call talkphonemeFF
+call talkphonemeAY
+call talkphonemeVV
+call done_audio
+return
+talkword6: 
+call talkphonemeSS
+call talkphonemeIH
+call talkphonemeKK2
+call talkphonemeSS
+call talkphonemeSS
+call done_audio
+return
+talkword7: 
+call talkphonemeSS
+call talkphonemeEH
+call talkphonemeVV
+call talkphonemeAX
+call talkphonemeNN1
+call done_audio
+return
+talkword8: 
+call talkphonemeEY
+call talkphonemeTT1
+;call  done_audio
+return
+talkword9: 
+call talkphonemeNN2
+call talkphonemeAY
+call talkphonemeNN1
+call done_audio
+return
+talkword10: 
+call talkphonemeTT2
+call talkphonemeEH
+call talkphonemeNN1
+call done_audio
+return
+talkword11: 
+call talkphonemeIH
+call talkphonemeLL
+call talkphonemeEH
+call talkphonemeVV
+call talkphonemeEH
+call talkphonemeNN1
+call done_audio
+return
+talkword12: 
+call talkphonemeTT2
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeEL
+call talkphonemeVV
+call done_audio
+return
+talkword13: 
+call talkphonemeTH
+call talkphonemeER2
+JUMP talkwordteen
+talkwordteen: 
+call talkphonemeTT2
+call talkphonemeIY
+call talkphonemeNN1
+call done_audio
+return
+talkword14: 
+call talkword4
+JUMP talkwordteen
+talkword15: 
+call talkphonemeFF
+call talkphonemeIH
+call talkphonemeFF
+JUMP talkwordteen
+talkword16: 
+call talkword6
+JUMP talkwordteen
+talkword17: 
+call talkword7
+JUMP talkwordteen
+talkword18: 
+call talkword8
+JUMP talkwordteen
+talkwordplus: 
+call talkphonemePP
+call talkphonemeLL
+call talkphonemeAX
+call talkphonemeAX
+call talkphonemeSS
+call talkphonemeSS
+call done_audio
+return
+talkwordminus: 
+call talkphonemeMM
+call talkphonemeAY
+call talkphonemeNN1
+call talkphonemeIH
+call talkphonemeAX
+call talkphonemeAX
+call talkphonemeSS
+call talkphonemeSS
+call done_audio
+return
+talkwordequals: 
+call talkphonemeIY
+call talkphonemePA2
+call talkphonemePA3
+call talkphonemeKK3
+call talkphonemeWH
+call talkphonemeAX
+call talkphonemeEL
+call talkphonemeZZ
+call done_audio
+return
+talkworderror: 
+call talkphonemeEH
+call talkphonemeXR
+call talkphonemeOR
+call done_audio
+return
+;=====================================================
+talkword19: 
+call talkword9
+JUMP talkwordteen
+talkword20: 
+call talkphonemeTT2
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeNN1
+talkwordty: 
+call talkphonemeTT2
+call talkphonemeIY
+return
+talkword30: 
+call talkphonemeTH
+call talkphonemeER1
+JUMP talkwordty
+talkword40: 
+call talkword4
+JUMP talkwordty
+talkword50: 
+call talkphonemeFF
+call talkphonemeIH
+call talkphonemeFF
+JUMP talkwordty
+talkword60: 
+call talkword6
+JUMP talkwordty
+talkword70: 
+call talkword7
+JUMP talkwordty
+talkword80: 
+call talkword8
+JUMP talkwordty
+talkword90: 
+call talkword9
+JUMP talkwordty
+talkwordhundred: 
+call talkphonemeHH2
+call talkphonemeAX
+call talkphonemeNN1
+call talkphonemeDD2
+call talkphonemeRR2
+call talkphonemeDD1
+return
+talkworddepth: 
+call talkphonemeDD2
+call talkphonemeEH
+call talkphonemeEH
+call talkphonemePP
+call talkphonemeTH
+JUMP endword
+talkwordpoint: 
+call talkphonemePP
+call talkphonemeOY
+call talkphonemeTT1
+JUMP endword
+talkwordanchor: 
+call talkphonemeEY
+call talkphonemeKK3
+call talkphonemeAE
+JUMP endword
+talkwordalarm: 
+call talkphonemeAE
+call talkphonemeLL
+call talkphonemeAR
+call talkphonemeMM
+JUMP endword
+talkwordon: 
+call talkphonemeAO
+call talkphonemeNG
+JUMP endword
+talkwordoff: 
+call talkphonemeAO
+call talkphonemeFF
+call talkphonemeFF
+JUMP endword
+talkwordshallow: 
+call talkphonemeSH
+call talkphonemeAE
+call talkphonemeLL
+call talkphonemeOW
+JUMP endword
+talkwordand: 
+call talkphonemeIH
+call talkphonemeIH
+call talkphonemeNN1
+call talkphonemeDD2
+JUMP endword
+talkwordwatch: 
+call talkphonemeWW
+call talkphonemeAO
+call talkphonemeTT1
+call talkphonemeCH
+JUMP endword
+talkwordlimit: 
+call talkphonemeLL
+call talkphonemeIH
+call talkphonemeMM
+call talkphonemeIH
+call talkphonemeTT1
+JUMP endword
+talkwordset: 
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeEH
+call talkphonemeTT2
+JUMP endword
+talkwordheading: 
+call talkphonemeHH1
+call talkphonemeEH
+call talkphonemeDD2
+call talkphonemeIH
+call talkphonemeNG
+JUMP endword
+talkwordgps: 
+call talkphonemeJH
+call talkphonemeIY
+call talkphonemePP
+call talkphonemeIY
+call talkphonemeEH
+call talkphonemeSS
+call talkphonemeSS
+JUMP endword
+talkwordno: 
+call talkphonemeNN2
+call talkphonemeOW
+JUMP endword
+talkworddata: 
+call talkphonemeDD2
+call talkphonemeEY
+call talkphonemeTT2
+call talkphonemeAX
+JUMP endword
+talkwordnorth: 
+call talkphonemeNN2
+call talkphonemeOR
+call talkphonemeHH1
+JUMP endword
+talkwordsouth: 
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeAW
+call talkphonemeTH
+call talkphonemeTH
+JUMP endword
+talkwordeast: 
+call talkphonemeIY
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeTT2
+JUMP endword
+talkwordwest: 
+call talkphonemeWW
+call talkphonemeEH
+call talkphonemeSS
+call talkphonemeSS
+call talkphonemeTT2
+JUMP endword
+talkwordposition: 
+call talkphonemePP
+call talkphonemeIH
+call talkphonemeZZ
+call talkphonemeIH
+call talkphonemeSH
+call talkphonemeNN1
+JUMP endword
+endword: 
+call talkphonemePA5
+return
+say_phoneme: 
+;make sure  to complete this subroutine in order for the synthesizer to work
+;LOAD s2, 01
+INPUT s1, start_phoneme_flag;check if start routine
+COMPARE s1, 01
+JUMP NZ, say_phoneme
+OUTPUT s0, phoneme_out
+LOAD s2, 01
+OUTPUT s2, done_phoneme_flag
+LOAD s2, 00
+OUTPUT s2, done_phoneme_flag
+RETURN
+talkphonemeAA: ; hOt
+LOAD s0, phoneme_AA; can be doubled
+JUMP say_phoneme
+talkphonemeAE: ; hAt
+LOAD s0, phoneme_AE; can be doubled
+JUMP say_phoneme
+talkphonemeAO: ; AUght
+LOAD s0, phoneme_AO; can be doubled
+JUMP say_phoneme
+talkphonemeAR: ; alARm
+LOAD s0, phoneme_AR
+JUMP say_phoneme
+talkphonemeAW: ; dOWn
+LOAD s0, phoneme_AW
+JUMP say_phoneme
+talkphonemeAX: ; sUceed
+LOAD s0, phoneme_AX; can be doubled
+JUMP say_phoneme
+talkphonemeAY: ; kIte
+LOAD s0, phoneme_AY
+JUMP say_phoneme
+talkphonemeBB1: ; riB
+LOAD s0, phoneme_BB1; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeBB2: ; Beast
+LOAD s0, phoneme_BB2; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeCH: ; CHurCH
+LOAD s0, phoneme_CH
+JUMP say_phoneme
+talkphonemeDD1: ; enD
+LOAD s0, phoneme_DD1; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeDD2: ; Down
+LOAD s0, phoneme_DD2; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeDH1: ; THis
+LOAD s0, phoneme_DH1
+JUMP say_phoneme
+talkphonemeDH2: ; baTHe
+LOAD s0, phoneme_DH2
+JUMP say_phoneme
+talkphonemeEH: ; End
+LOAD s0, phoneme_EH; can be doubled
+JUMP say_phoneme
+talkphonemeEL: ; angLE
+LOAD s0, phoneme_EL
+JUMP say_phoneme
+talkphonemeER1: ; lettER
+LOAD s0, phoneme_ER1
+JUMP say_phoneme
+talkphonemeER2: ; fERn
+LOAD s0, phoneme_ER2
+JUMP say_phoneme
+talkphonemeEY: ; trAY
+LOAD s0, phoneme_EY
+JUMP say_phoneme
+talkphonemeFF: ; Food
+LOAD s0, phoneme_FF; usually double for initial
+JUMP say_phoneme
+talkphonemeGG1: ; Guest
+LOAD s0, phoneme_GG1; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeGG2: ; Got
+LOAD s0, phoneme_GG2; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeGG3: ; peG
+LOAD s0, phoneme_GG3; usually preceed with 10-30 mS silence
+JUMP say_phoneme
+talkphonemeHH1: ; He
+LOAD s0, phoneme_HH1; usually double for initial
+JUMP say_phoneme
+talkphonemeHH2: ; Hoe
+LOAD s0, phoneme_HH2; usually double for initial
+JUMP say_phoneme
+talkphonemeIH: ; sIt
+LOAD s0, phoneme_IH; can be doubled
+JUMP say_phoneme
+talkphonemeIY: ; sEE
+LOAD s0, phoneme_IY
+JUMP say_phoneme
+talkphonemeJH: ; JudGe
+LOAD s0, phoneme_JH
+JUMP say_phoneme
+talkphonemeKK1: ; Can't
+LOAD s0, phoneme_KK1; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeKK2: ; speaK
+LOAD s0, phoneme_KK2; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeKK3: ; Crane
+LOAD s0, phoneme_KK3; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeLL: ; Like
+LOAD s0, phoneme_LL
+JUMP say_phoneme
+talkphonemeMM: ; Milk
+LOAD s0, phoneme_MM
+JUMP say_phoneme
+talkphonemeNG: ; aNGer
+LOAD s0, phoneme_NG
+JUMP say_phoneme
+talkphonemeNN1: ; thiN
+LOAD s0, phoneme_NN1
+JUMP say_phoneme
+talkphonemeNN2: ; No
+LOAD s0, phoneme_NN2
+JUMP say_phoneme
+talkphonemeOR: ; fORtune
+LOAD s0, phoneme_OR
+JUMP say_phoneme
+talkphonemeOW: ; zOne
+LOAD s0, phoneme_OW
+JUMP say_phoneme
+talkphonemeOY: ; vOIce
+LOAD s0, phoneme_OY
+JUMP say_phoneme
+talkphonemePP: ; Pow
+LOAD s0, phoneme_PP; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeRR1: ; Read
+LOAD s0, phoneme_RR1
+JUMP say_phoneme
+talkphonemeRR2: ; cRane
+LOAD s0, phoneme_RR2
+JUMP say_phoneme
+talkphonemeSH: ; SHip
+LOAD s0, phoneme_SH; usually double for initial
+JUMP say_phoneme
+talkphonemeSS: ; veSt
+LOAD s0, phoneme_SS; usually double for initial
+JUMP say_phoneme
+talkphonemeTH: ; THin
+LOAD s0, phoneme_TH; usually double for initial
+JUMP say_phoneme
+talkphonemeTT1: ; parTs
+LOAD s0, phoneme_TT1; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeTT2: ; To
+LOAD s0, phoneme_TT2; usually preceed with 50-80 mS silence
+JUMP say_phoneme
+talkphonemeUH: ; bOOk
+LOAD s0, phoneme_UH; may be doubled
+JUMP say_phoneme
+talkphonemeUW1: ; tO
+LOAD s0, phoneme_UW1
+JUMP say_phoneme
+talkphonemeUW2: ; fOOd
+LOAD s0, phoneme_UW2
+JUMP say_phoneme
+talkphonemeVV: ; Vest
+LOAD s0, phoneme_VV
+JUMP say_phoneme
+talkphonemeWH: ; WHig
+LOAD s0, phoneme_WH; usually double for initial
+JUMP say_phoneme
+talkphonemeWW: ; We
+LOAD s0, phoneme_WW
+JUMP say_phoneme
+talkphonemeXR: ; stARs
+LOAD s0, phoneme_XR
+JUMP say_phoneme
+talkphonemeYR: ; hEAr
+LOAD s0, phoneme_YR
+JUMP say_phoneme
+talkphonemeYY1: ; cUte
+LOAD s0, phoneme_YY1
+JUMP say_phoneme
+talkphonemeYY2: ; Yes
+LOAD s0, phoneme_YY2
+JUMP say_phoneme
+talkphonemeZH: ; pleaSure
+LOAD s0, phoneme_ZH
+JUMP say_phoneme
+talkphonemeZZ: ; Zoo
+LOAD s0, phoneme_ZZ
+JUMP say_phoneme
+talkphonemePA1: ; 10 mS silence
+LOAD s0, phoneme_PA1
+JUMP say_phoneme
+talkphonemePA2: ; 30 mS silence
+LOAD s0, phoneme_PA2
+JUMP say_phoneme
+talkphonemePA3: ; 50 mS silence
+LOAD s0, phoneme_PA3
+JUMP say_phoneme
+talkphonemePA4: ; 100 mS silence
+LOAD s0, phoneme_PA4
+JUMP say_phoneme
+talkphonemePA5: ; 200 mS silence
+LOAD s0, phoneme_PA5
+JUMP say_phoneme
+talkphonemePA6: ; 500 mS silence
+call talkphonemePA5
+call talkphonemePA5
+call talkphonemePA4
+JUMP say_phoneme
+
+PASS 3 - Resolving addresses and line labels
+
+000 ;; Define constants for all the ascii values.
+000 CONSTANT ascii_SPACE, 20; ascii code
+000 CONSTANT ascii_EXCLAIM, 21; ascii code
+000 CONSTANT ascii_DBLQUOT, 22; ascii code
+000 CONSTANT ascii_NUMSIGN, 23; ascii code
+000 CONSTANT ascii_DOLLAR, 24; ascii code
+000 CONSTANT ascii_PERCENT, 25; ascii code
+000 CONSTANT ascii_AMP, 26; ascii code
+000 CONSTANT ascii_SINQUOT, 27; ascii code
+000 CONSTANT ascii_LPAREN, 28; ascii code
+000 CONSTANT ascii_RPAREN, 29; ascii code
+000 CONSTANT ascii_ASTERISK, 2A; ascii code
+000 CONSTANT ascii_PLUS, 2B; ascii code
+000 CONSTANT ascii_COMMA, 2C; ascii code
+000 CONSTANT ascii_MINUS, 2D; ascii code
+000 CONSTANT ascii_PERIOD, 2E; ascii code
+000 CONSTANT ascii_FWDSLASH, 2F; ascii code
+000 CONSTANT ascii_0, 30; ascii code
+000 CONSTANT ascii_1, 31; ascii code
+000 CONSTANT ascii_2, 32; ascii code
+000 CONSTANT ascii_3, 33; ascii code
+000 CONSTANT ascii_4, 34; ascii code
+000 CONSTANT ascii_5, 35; ascii code
+000 CONSTANT ascii_6, 36; ascii code
+000 CONSTANT ascii_7, 37; ascii code
+000 CONSTANT ascii_8, 38; ascii code
+000 CONSTANT ascii_9, 39; ascii code
+000 CONSTANT ascii_COLON, 3A; ascii code
+000 CONSTANT ascii_SEMI, 3B; ascii code
+000 CONSTANT ascii_LESS, 3C; ascii code
+000 CONSTANT ascii_EQUAL, 3D; ascii code
+000 CONSTANT ascii_GREATER, 3E; ascii code
+000 CONSTANT ascii_QUESTION, 3F; ascii code
+000 CONSTANT ascii_CIRCAT, 40; ascii code
+000 CONSTANT ascii_A, 41; ascii code
+000 CONSTANT ascii_B, 42; ascii code
+000 CONSTANT ascii_C, 43; ascii code
+000 CONSTANT ascii_D, 44; ascii code
+000 CONSTANT ascii_E, 45; ascii code
+000 CONSTANT ascii_F, 46; ascii code
+000 CONSTANT ascii_G, 47; ascii code
+000 CONSTANT ascii_H, 48; ascii code
+000 CONSTANT ascii_I, 49; ascii code
+000 CONSTANT ascii_J, 4A; ascii code
+000 CONSTANT ascii_K, 4B; ascii code
+000 CONSTANT ascii_L, 4C; ascii code
+000 CONSTANT ascii_M, 4D; ascii code
+000 CONSTANT ascii_N, 4E; ascii code
+000 CONSTANT ascii_O, 4F; ascii code
+000 CONSTANT ascii_P, 50; ascii code
+000 CONSTANT ascii_Q, 51; ascii code
+000 CONSTANT ascii_R, 52; ascii code
+000 CONSTANT ascii_S, 53; ascii code
+000 CONSTANT ascii_T, 54; ascii code
+000 CONSTANT ascii_U, 55; ascii code
+000 CONSTANT ascii_V, 56; ascii code
+000 CONSTANT ascii_W, 57; ascii code
+000 CONSTANT ascii_X, 58; ascii code
+000 CONSTANT ascii_Y, 59; ascii code
+000 CONSTANT ascii_Z, 5A; ascii code
+000 CONSTANT ascii_LBKT, 5B; ascii code
+000 CONSTANT ascii_BKSLASH, 5C; ascii code
+000 CONSTANT ascii_RBKT, 5D; ascii code
+000 CONSTANT ascii_CARET, 5E; ascii code
+000 CONSTANT ascii_DASH, 5F; ascii code
+000 CONSTANT ascii_TICK, 60; ascii code
+000 CONSTANT ascii_a, 61; ascii code
+000 CONSTANT ascii_b, 62; ascii code
+000 CONSTANT ascii_c, 63; ascii code
+000 CONSTANT ascii_d, 64; ascii code
+000 CONSTANT ascii_e, 65; ascii code
+000 CONSTANT ascii_f, 66; ascii code
+000 CONSTANT ascii_g, 67; ascii code
+000 CONSTANT ascii_h, 68; ascii code
+000 CONSTANT ascii_i, 69; ascii code
+000 CONSTANT ascii_j, 6A; ascii code
+000 CONSTANT ascii_k, 6B; ascii code
+000 CONSTANT ascii_l, 6C; ascii code
+000 CONSTANT ascii_m, 6D; ascii code
+000 CONSTANT ascii_n, 6E; ascii code
+000 CONSTANT ascii_o, 6F; ascii code
+000 CONSTANT ascii_p, 70; ascii code
+000 CONSTANT ascii_q, 71; ascii code
+000 CONSTANT ascii_r, 72; ascii code
+000 CONSTANT ascii_s, 73; ascii code
+000 CONSTANT ascii_t, 74; ascii code
+000 CONSTANT ascii_u, 75; ascii code
+000 CONSTANT ascii_v, 76; ascii code
+000 CONSTANT ascii_w, 77; ascii code
+000 CONSTANT ascii_x, 78; ascii code
+000 CONSTANT ascii_y, 79; ascii code
+000 CONSTANT ascii_z, 7A; ascii code
+000 CONSTANT ascii_LBRACE, 7B; ascii code
+000 CONSTANT ascii_VBAR, 7C; ascii code
+000 CONSTANT ascii_RBRACE, 7D; ascii code
+000 CONSTANT ascii_TILDE, 7E; ascii code
+000 CONSTANT ascii_ULINE, 7F; ascii code
+000 ;; Define constants for all the phoneme values.
+000 CONSTANT phoneme_PA1, 00; phoneme code
+000 CONSTANT phoneme_PA2, 01; phoneme code
+000 CONSTANT phoneme_PA3, 02; phoneme code
+000 CONSTANT phoneme_PA4, 03; phoneme code
+000 CONSTANT phoneme_PA5, 04; phoneme code
+000 CONSTANT phoneme_OY, 05; phoneme code
+000 CONSTANT phoneme_AY, 06; phoneme code
+000 CONSTANT phoneme_EH, 07; phoneme code
+000 CONSTANT phoneme_KK3, 08; phoneme code
+000 CONSTANT phoneme_PP, 09; phoneme code
+000 CONSTANT phoneme_JH, 0A; phoneme code
+000 CONSTANT phoneme_NN1, 0B; phoneme code
+000 CONSTANT phoneme_IH, 0C; phoneme code
+000 CONSTANT phoneme_TT2, 0D; phoneme code
+000 CONSTANT phoneme_RR1, 0E; phoneme code
+000 CONSTANT phoneme_AX, 0F; phoneme code
+000 CONSTANT phoneme_MM, 10; phoneme code
+000 CONSTANT phoneme_TT1, 11; phoneme code
+000 CONSTANT phoneme_DH1, 12; phoneme code
+000 CONSTANT phoneme_IY, 13; phoneme code
+000 CONSTANT phoneme_EY, 14; phoneme code
+000 CONSTANT phoneme_DD1, 15; phoneme code
+000 CONSTANT phoneme_UW1, 16; phoneme code
+000 CONSTANT phoneme_AO, 17; phoneme code
+000 CONSTANT phoneme_AA, 18; phoneme code
+000 CONSTANT phoneme_YY2, 19; phoneme code
+000 CONSTANT phoneme_AE, 1A; phoneme code
+000 CONSTANT phoneme_HH1, 1B; phoneme code
+000 CONSTANT phoneme_BB1, 1C; phoneme code
+000 CONSTANT phoneme_TH, 1D; phoneme code
+000 CONSTANT phoneme_UH, 1E; phoneme code
+000 CONSTANT phoneme_UW2, 1F; phoneme code
+000 CONSTANT phoneme_AW, 20; phoneme code
+000 CONSTANT phoneme_DD2, 21; phoneme code
+000 CONSTANT phoneme_GG3, 22; phoneme code
+000 CONSTANT phoneme_VV, 23; phoneme code
+000 CONSTANT phoneme_GG1, 24; phoneme code
+000 CONSTANT phoneme_SH, 25; phoneme code
+000 CONSTANT phoneme_ZH, 26; phoneme code
+000 CONSTANT phoneme_RR2, 27; phoneme code
+000 CONSTANT phoneme_FF, 28; phoneme code
+000 CONSTANT phoneme_KK2, 29; phoneme code
+000 CONSTANT phoneme_KK1, 2A; phoneme code
+000 CONSTANT phoneme_ZZ, 2B; phoneme code
+000 CONSTANT phoneme_NG, 2C; phoneme code
+000 CONSTANT phoneme_LL, 2D; phoneme code
+000 CONSTANT phoneme_WW, 2E; phoneme code
+000 CONSTANT phoneme_XR, 2F; phoneme code
+000 CONSTANT phoneme_WH, 30; phoneme code
+000 CONSTANT phoneme_YY1, 31; phoneme code
+000 CONSTANT phoneme_CH, 32; phoneme code
+000 CONSTANT phoneme_ER1, 33; phoneme code
+000 CONSTANT phoneme_ER2, 34; phoneme code
+000 CONSTANT phoneme_OW, 35; phoneme code
+000 CONSTANT phoneme_DH2, 36; phoneme code
+000 CONSTANT phoneme_SS, 37; phoneme code
+000 CONSTANT phoneme_NN2, 38; phoneme code
+000 CONSTANT phoneme_HH2, 39; phoneme code
+000 CONSTANT phoneme_OR, 3A; phoneme code
+000 CONSTANT phoneme_AR, 3B; phoneme code
+000 CONSTANT phoneme_YR, 3C; phoneme code
+000 CONSTANT phoneme_GG2, 3D; phoneme code
+000 CONSTANT phoneme_EL, 3E; phoneme code
+000 CONSTANT phoneme_BB2, 3F; phoneme code
+000 ;INPUTS
+000 CONSTANT input_data, 40
+000 CONSTANT start_phoneme_flag, 00
+000 CONSTANT start_word_flag, 02
+000 ;OUTPUTS
+000 CONSTANT phoneme_out, 80
+000 CONSTANT done_phoneme_flag, 01
+000 CONSTANT done_word_flag, 10
+000 
+;;============================================================================
+000 ;; Infinite loop.
+000 
+;;============================================================================
+000 ;REGISTER USE
+000 ; s8 = IN input EQUALS (8 bits)
+000 ; s7 = IN input DIGIT 2 ascii
+000 ; s6 = IN input OPERATION (8 bits)
+000 ; s3 = IN input DIGIT 1 ascii, FINAL RESULT (8 bits)
+000 ; s5 = IN new input received flag
+000 ; s4 = OUT done audio output flag
+000 ; s0 - s2 = say_phoneme subroutine use
+000 cold_start: 
+000 JUMP get_digit_1;loop
+001 done_audio: 
+001 LOAD s4, 01;done flag
+002 OUTPUT s4, done_word_flag
+003 LOAD s4, 00;reset done flag
+004 OUTPUT s4, done_word_flag
+005 RETURN;loop to cold_start
+006 get_digit_1: 
+006 INPUT s5, start_word_flag;wait for start flag, key stroke entered
+007 COMPARE s5, 01
+008 JUMP NZ, get_digit_1
+009 INPUT s3, input_data;get input data
+00A COMPARE s3, ascii_0;if zero flag set (input s3 == ascii 0)
+00B CALL Z, talkword0;output phoneme + done audio
+00C JUMP Z, get_operation
+00D COMPARE s3, ascii_1
+00E CALL Z, talkword1
+00F JUMP Z, get_operation
+010 COMPARE s3, ascii_2
+011 CALL Z, talkword2
+012 JUMP Z, get_operation
+013 COMPARE s3, ascii_3
+014 CALL Z, talkword3
+015 JUMP Z, get_operation
+016 COMPARE s3, ascii_4
+017 CALL Z, talkword4
+018 JUMP Z, get_operation
+019 COMPARE s3, ascii_5
+01A CALL Z, talkword5
+01B JUMP Z, get_operation
+01C COMPARE s3, ascii_6
+01D CALL Z, talkword6
+01E JUMP Z, get_operation
+01F COMPARE s3, ascii_7
+020 CALL Z, talkword7
+021 JUMP Z, get_operation
+022 COMPARE s3, ascii_8
+023 CALL Z, talkword8
+024 JUMP Z, get_operation
+025 COMPARE s3, ascii_9
+026 CALL Z, talkword9
+027 JUMP Z, get_operation
+028 CALL talkworderror;else output error
+029 JUMP cold_start;loop
+02A get_operation: 
+02A INPUT s5, start_word_flag;wait for start flag, key stroke entered
+02B COMPARE s5, 01
+02C JUMP NZ, get_operation;loop
+02D INPUT s6, input_data;get input data
+02E COMPARE s6, ascii_MINUS
+02F CALL Z, talkwordminus
+030 JUMP Z, get_digit_2
+031 COMPARE s6, ascii_PLUS
+032 CALL Z, talkwordplus
+033 JUMP Z, get_digit_2
+034 CALL talkworderror;else output error
+035 JUMP get_operation
+036 get_digit_2: 
+036 INPUT s5, start_word_flag;wait for start flag, key stroke entered
+037 COMPARE s5, 01
+038 JUMP NZ, get_digit_2;loop
+039 INPUT s7, input_data;get input data
+03A COMPARE s7, ascii_0;if zero flag set (input s3 == ascii 0)
+03B CALL Z, talkword0
+03C JUMP Z, get_equal
+03D COMPARE s7, ascii_1
+03E CALL Z, talkword1
+03F JUMP Z, get_equal
+040 COMPARE s7, ascii_2
+041 CALL Z, talkword2
+042 JUMP Z, get_equal
+043 COMPARE s7, ascii_3
+044 CALL Z, talkword3
+045 JUMP Z, get_equal
+046 COMPARE s7, ascii_4
+047 CALL Z, talkword4
+048 JUMP Z, get_equal
+049 COMPARE s7, ascii_5
+04A CALL Z, talkword5
+04B JUMP Z, get_equal
+04C COMPARE s7, ascii_6
+04D CALL Z, talkword6
+04E JUMP Z, get_equal
+04F COMPARE s7, ascii_7
+050 CALL Z, talkword7
+051 JUMP Z, get_equal
+052 COMPARE s7, ascii_8
+053 CALL Z, talkword8
+054 JUMP Z, get_equal
+055 COMPARE s7, ascii_9
+056 CALL Z, talkword9
+057 JUMP Z, get_equal
+058 CALL talkworderror;else output error
+059 JUMP get_digit_2
+05A get_equal: 
+05A INPUT s5, start_word_flag;wait for start flag, key stroke entered
+05B COMPARE s5, 01
+05C JUMP NZ, get_equal;loop
+05D INPUT s8, input_data;get input data
+05E COMPARE s8, ascii_EQUAL
+05F CALL Z, talkwordequals
+060 JUMP Z, calculate
+061 CALL talkworderror;else output error
+062 JUMP get_equal
+063 calculate: ; s3 +/- s7
+063 COMPARE s6, ascii_MINUS
+064 JUMP Z, op_minus;minus operation
+065 op_plus: ;plus operation
+065 ADD s3, s7
+066 SUB s3, 60;sub 60 from total to get hex sum, not ascii
+067 JUMP result
+068 op_minus: 
+068 SUB s3, s7
+069 COMPARE s3, 80;check left bit for negative
+06A JUMP C, result;if positive, get result
+06B CALL talkwordminus;else call talkwordminus
+06C XOR s3, FF;take complement & abs value
+06D ADD s3, 01
+06E JUMP result
+06F result: 
+06F COMPARE s3, 00;if zero flag set (input s3 == ascii 0)
+070 CALL Z, talkword0
+071 COMPARE s3, 01
+072 CALL Z, talkword1
+073 COMPARE s3, 02
+074 CALL Z, talkword2
+075 COMPARE s3, 03
+076 CALL Z, talkword3
+077 COMPARE s3, 04
+078 CALL Z, talkword4
+079 COMPARE s3, 05
+07A CALL Z, talkword5
+07B COMPARE s3, 06
+07C CALL Z, talkword6
+07D COMPARE s3, 07
+07E CALL Z, talkword7
+07F COMPARE s3, 08
+080 CALL Z, talkword8
+081 COMPARE s3, 09
+082 CALL Z, talkword9
+083 COMPARE s3, 0A
+084 CALL Z, talkword10
+085 COMPARE s3, 0B
+086 CALL Z, talkword11
+087 COMPARE s3, 0C
+088 CALL Z, talkword12
+089 COMPARE s3, 0D
+08A CALL Z, talkword13
+08B COMPARE s3, 0E
+08C CALL Z, talkword14
+08D COMPARE s3, 0F
+08E CALL Z, talkword15
+08F COMPARE s3, 10
+090 CALL Z, talkword16
+091 COMPARE s3, 11
+092 CALL Z, talkword17
+093 COMPARE s3, 12
+094 CALL Z, talkword18
+095 JUMP reset
+096 reset: 
+096 LOAD s3, 00
+097 LOAD s4, 00
+098 LOAD s5, 00
+099 LOAD s6, 00
+09A LOAD s7, 00
+09B LOAD s8, 00
+09C JUMP cold_start
+09D 
+;;============================================================================
+09D ;; Test message and phoneme voicing subroutine.
+09D 
+;;============================================================================
+09D ;================================================
+09D talkword0: 
+09D CALL talkphonemeZZ
+09E CALL talkphonemeEH
+09F CALL talkphonemeRR2
+0A0 CALL talkphonemeOW
+0A1 CALL done_audio
+0A2 RETURN
+0A3 talkword1: 
+0A3 CALL talkphonemeWW
+0A4 CALL talkphonemeAO
+0A5 CALL talkphonemeNN1
+0A6 CALL done_audio
+0A7 RETURN
+0A8 talkword2: 
+0A8 CALL talkphonemeTT2
+0A9 CALL talkphonemeUW2
+0AA CALL done_audio
+0AB RETURN
+0AC talkword3: 
+0AC CALL talkphonemeTH
+0AD CALL talkphonemeRR2
+0AE CALL talkphonemeIY
+0AF CALL done_audio
+0B0 RETURN
+0B1 talkword4: 
+0B1 CALL talkphonemeFF
+0B2 CALL talkphonemeOR
+0B3 CALL done_audio
+0B4 RETURN
+0B5 talkword5: 
+0B5 CALL talkphonemeFF
+0B6 CALL talkphonemeAY
+0B7 CALL talkphonemeVV
+0B8 CALL done_audio
+0B9 RETURN
+0BA talkword6: 
+0BA CALL talkphonemeSS
+0BB CALL talkphonemeIH
+0BC CALL talkphonemeKK2
+0BD CALL talkphonemeSS
+0BE CALL talkphonemeSS
+0BF CALL done_audio
+0C0 RETURN
+0C1 talkword7: 
+0C1 CALL talkphonemeSS
+0C2 CALL talkphonemeEH
+0C3 CALL talkphonemeVV
+0C4 CALL talkphonemeAX
+0C5 CALL talkphonemeNN1
+0C6 CALL done_audio
+0C7 RETURN
+0C8 talkword8: 
+0C8 CALL talkphonemeEY
+0C9 CALL talkphonemeTT1
+0CA ;call  done_audio
+0CA RETURN
+0CB talkword9: 
+0CB CALL talkphonemeNN2
+0CC CALL talkphonemeAY
+0CD CALL talkphonemeNN1
+0CE CALL done_audio
+0CF RETURN
+0D0 talkword10: 
+0D0 CALL talkphonemeTT2
+0D1 CALL talkphonemeEH
+0D2 CALL talkphonemeNN1
+0D3 CALL done_audio
+0D4 RETURN
+0D5 talkword11: 
+0D5 CALL talkphonemeIH
+0D6 CALL talkphonemeLL
+0D7 CALL talkphonemeEH
+0D8 CALL talkphonemeVV
+0D9 CALL talkphonemeEH
+0DA CALL talkphonemeNN1
+0DB CALL done_audio
+0DC RETURN
+0DD talkword12: 
+0DD CALL talkphonemeTT2
+0DE CALL talkphonemeWW
+0DF CALL talkphonemeEH
+0E0 CALL talkphonemeEL
+0E1 CALL talkphonemeVV
+0E2 CALL done_audio
+0E3 RETURN
+0E4 talkword13: 
+0E4 CALL talkphonemeTH
+0E5 CALL talkphonemeER2
+0E6 JUMP talkwordteen
+0E7 talkwordteen: 
+0E7 CALL talkphonemeTT2
+0E8 CALL talkphonemeIY
+0E9 CALL talkphonemeNN1
+0EA CALL done_audio
+0EB RETURN
+0EC talkword14: 
+0EC CALL talkword4
+0ED JUMP talkwordteen
+0EE talkword15: 
+0EE CALL talkphonemeFF
+0EF CALL talkphonemeIH
+0F0 CALL talkphonemeFF
+0F1 JUMP talkwordteen
+0F2 talkword16: 
+0F2 CALL talkword6
+0F3 JUMP talkwordteen
+0F4 talkword17: 
+0F4 CALL talkword7
+0F5 JUMP talkwordteen
+0F6 talkword18: 
+0F6 CALL talkword8
+0F7 JUMP talkwordteen
+0F8 talkwordplus: 
+0F8 CALL talkphonemePP
+0F9 CALL talkphonemeLL
+0FA CALL talkphonemeAX
+0FB CALL talkphonemeAX
+0FC CALL talkphonemeSS
+0FD CALL talkphonemeSS
+0FE CALL done_audio
+0FF RETURN
+100 talkwordminus: 
+100 CALL talkphonemeMM
+101 CALL talkphonemeAY
+102 CALL talkphonemeNN1
+103 CALL talkphonemeIH
+104 CALL talkphonemeAX
+105 CALL talkphonemeAX
+106 CALL talkphonemeSS
+107 CALL talkphonemeSS
+108 CALL done_audio
+109 RETURN
+10A talkwordequals: 
+10A CALL talkphonemeIY
+10B CALL talkphonemePA2
+10C CALL talkphonemePA3
+10D CALL talkphonemeKK3
+10E CALL talkphonemeWH
+10F CALL talkphonemeAX
+110 CALL talkphonemeEL
+111 CALL talkphonemeZZ
+112 CALL done_audio
+113 RETURN
+114 talkworderror: 
+114 CALL talkphonemeEH
+115 CALL talkphonemeXR
+116 CALL talkphonemeOR
+117 CALL done_audio
+118 RETURN
+119 ;=====================================================
+119 talkword19: 
+119 CALL talkword9
+11A JUMP talkwordteen
+11B talkword20: 
+11B CALL talkphonemeTT2
+11C CALL talkphonemeWW
+11D CALL talkphonemeEH
+11E CALL talkphonemeNN1
+11F talkwordty: 
+11F CALL talkphonemeTT2
+120 CALL talkphonemeIY
+121 RETURN
+122 talkword30: 
+122 CALL talkphonemeTH
+123 CALL talkphonemeER1
+124 JUMP talkwordty
+125 talkword40: 
+125 CALL talkword4
+126 JUMP talkwordty
+127 talkword50: 
+127 CALL talkphonemeFF
+128 CALL talkphonemeIH
+129 CALL talkphonemeFF
+12A JUMP talkwordty
+12B talkword60: 
+12B CALL talkword6
+12C JUMP talkwordty
+12D talkword70: 
+12D CALL talkword7
+12E JUMP talkwordty
+12F talkword80: 
+12F CALL talkword8
+130 JUMP talkwordty
+131 talkword90: 
+131 CALL talkword9
+132 JUMP talkwordty
+133 talkwordhundred: 
+133 CALL talkphonemeHH2
+134 CALL talkphonemeAX
+135 CALL talkphonemeNN1
+136 CALL talkphonemeDD2
+137 CALL talkphonemeRR2
+138 CALL talkphonemeDD1
+139 RETURN
+13A talkworddepth: 
+13A CALL talkphonemeDD2
+13B CALL talkphonemeEH
+13C CALL talkphonemeEH
+13D CALL talkphonemePP
+13E CALL talkphonemeTH
+13F JUMP endword
+140 talkwordpoint: 
+140 CALL talkphonemePP
+141 CALL talkphonemeOY
+142 CALL talkphonemeTT1
+143 JUMP endword
+144 talkwordanchor: 
+144 CALL talkphonemeEY
+145 CALL talkphonemeKK3
+146 CALL talkphonemeAE
+147 JUMP endword
+148 talkwordalarm: 
+148 CALL talkphonemeAE
+149 CALL talkphonemeLL
+14A CALL talkphonemeAR
+14B CALL talkphonemeMM
+14C JUMP endword
+14D talkwordon: 
+14D CALL talkphonemeAO
+14E CALL talkphonemeNG
+14F JUMP endword
+150 talkwordoff: 
+150 CALL talkphonemeAO
+151 CALL talkphonemeFF
+152 CALL talkphonemeFF
+153 JUMP endword
+154 talkwordshallow: 
+154 CALL talkphonemeSH
+155 CALL talkphonemeAE
+156 CALL talkphonemeLL
+157 CALL talkphonemeOW
+158 JUMP endword
+159 talkwordand: 
+159 CALL talkphonemeIH
+15A CALL talkphonemeIH
+15B CALL talkphonemeNN1
+15C CALL talkphonemeDD2
+15D JUMP endword
+15E talkwordwatch: 
+15E CALL talkphonemeWW
+15F CALL talkphonemeAO
+160 CALL talkphonemeTT1
+161 CALL talkphonemeCH
+162 JUMP endword
+163 talkwordlimit: 
+163 CALL talkphonemeLL
+164 CALL talkphonemeIH
+165 CALL talkphonemeMM
+166 CALL talkphonemeIH
+167 CALL talkphonemeTT1
+168 JUMP endword
+169 talkwordset: 
+169 CALL talkphonemeSS
+16A CALL talkphonemeSS
+16B CALL talkphonemeEH
+16C CALL talkphonemeTT2
+16D JUMP endword
+16E talkwordheading: 
+16E CALL talkphonemeHH1
+16F CALL talkphonemeEH
+170 CALL talkphonemeDD2
+171 CALL talkphonemeIH
+172 CALL talkphonemeNG
+173 JUMP endword
+174 talkwordgps: 
+174 CALL talkphonemeJH
+175 CALL talkphonemeIY
+176 CALL talkphonemePP
+177 CALL talkphonemeIY
+178 CALL talkphonemeEH
+179 CALL talkphonemeSS
+17A CALL talkphonemeSS
+17B JUMP endword
+17C talkwordno: 
+17C CALL talkphonemeNN2
+17D CALL talkphonemeOW
+17E JUMP endword
+17F talkworddata: 
+17F CALL talkphonemeDD2
+180 CALL talkphonemeEY
+181 CALL talkphonemeTT2
+182 CALL talkphonemeAX
+183 JUMP endword
+184 talkwordnorth: 
+184 CALL talkphonemeNN2
+185 CALL talkphonemeOR
+186 CALL talkphonemeHH1
+187 JUMP endword
+188 talkwordsouth: 
+188 CALL talkphonemeSS
+189 CALL talkphonemeSS
+18A CALL talkphonemeAW
+18B CALL talkphonemeTH
+18C CALL talkphonemeTH
+18D JUMP endword
+18E talkwordeast: 
+18E CALL talkphonemeIY
+18F CALL talkphonemeSS
+190 CALL talkphonemeSS
+191 CALL talkphonemeTT2
+192 JUMP endword
+193 talkwordwest: 
+193 CALL talkphonemeWW
+194 CALL talkphonemeEH
+195 CALL talkphonemeSS
+196 CALL talkphonemeSS
+197 CALL talkphonemeTT2
+198 JUMP endword
+199 talkwordposition: 
+199 CALL talkphonemePP
+19A CALL talkphonemeIH
+19B CALL talkphonemeZZ
+19C CALL talkphonemeIH
+19D CALL talkphonemeSH
+19E CALL talkphonemeNN1
+19F JUMP endword
+1A0 endword: 
+1A0 CALL talkphonemePA5
+1A1 RETURN
+1A2 say_phoneme: 
+1A2 ;make sure  to complete this subroutine in order for the synthesizer to work
+1A2 ;LOAD s2, 01
+1A2 INPUT s1, start_phoneme_flag;check if start routine
+1A3 COMPARE s1, 01
+1A4 JUMP NZ, say_phoneme
+1A5 OUTPUT s0, phoneme_out
+1A6 LOAD s2, 01
+1A7 OUTPUT s2, done_phoneme_flag
+1A8 LOAD s2, 00
+1A9 OUTPUT s2, done_phoneme_flag
+1AA RETURN
+1AB talkphonemeAA: ; hOt
+1AB LOAD s0, phoneme_AA; can be doubled
+1AC JUMP say_phoneme
+1AD talkphonemeAE: ; hAt
+1AD LOAD s0, phoneme_AE; can be doubled
+1AE JUMP say_phoneme
+1AF talkphonemeAO: ; AUght
+1AF LOAD s0, phoneme_AO; can be doubled
+1B0 JUMP say_phoneme
+1B1 talkphonemeAR: ; alARm
+1B1 LOAD s0, phoneme_AR
+1B2 JUMP say_phoneme
+1B3 talkphonemeAW: ; dOWn
+1B3 LOAD s0, phoneme_AW
+1B4 JUMP say_phoneme
+1B5 talkphonemeAX: ; sUceed
+1B5 LOAD s0, phoneme_AX; can be doubled
+1B6 JUMP say_phoneme
+1B7 talkphonemeAY: ; kIte
+1B7 LOAD s0, phoneme_AY
+1B8 JUMP say_phoneme
+1B9 talkphonemeBB1: ; riB
+1B9 LOAD s0, phoneme_BB1; usually preceed with 10-30 mS silence
+1BA JUMP say_phoneme
+1BB talkphonemeBB2: ; Beast
+1BB LOAD s0, phoneme_BB2; usually preceed with 10-30 mS silence
+1BC JUMP say_phoneme
+1BD talkphonemeCH: ; CHurCH
+1BD LOAD s0, phoneme_CH
+1BE JUMP say_phoneme
+1BF talkphonemeDD1: ; enD
+1BF LOAD s0, phoneme_DD1; usually preceed with 10-30 mS silence
+1C0 JUMP say_phoneme
+1C1 talkphonemeDD2: ; Down
+1C1 LOAD s0, phoneme_DD2; usually preceed with 10-30 mS silence
+1C2 JUMP say_phoneme
+1C3 talkphonemeDH1: ; THis
+1C3 LOAD s0, phoneme_DH1
+1C4 JUMP say_phoneme
+1C5 talkphonemeDH2: ; baTHe
+1C5 LOAD s0, phoneme_DH2
+1C6 JUMP say_phoneme
+1C7 talkphonemeEH: ; End
+1C7 LOAD s0, phoneme_EH; can be doubled
+1C8 JUMP say_phoneme
+1C9 talkphonemeEL: ; angLE
+1C9 LOAD s0, phoneme_EL
+1CA JUMP say_phoneme
+1CB talkphonemeER1: ; lettER
+1CB LOAD s0, phoneme_ER1
+1CC JUMP say_phoneme
+1CD talkphonemeER2: ; fERn
+1CD LOAD s0, phoneme_ER2
+1CE JUMP say_phoneme
+1CF talkphonemeEY: ; trAY
+1CF LOAD s0, phoneme_EY
+1D0 JUMP say_phoneme
+1D1 talkphonemeFF: ; Food
+1D1 LOAD s0, phoneme_FF; usually double for initial
+1D2 JUMP say_phoneme
+1D3 talkphonemeGG1: ; Guest
+1D3 LOAD s0, phoneme_GG1; usually preceed with 10-30 mS silence
+1D4 JUMP say_phoneme
+1D5 talkphonemeGG2: ; Got
+1D5 LOAD s0, phoneme_GG2; usually preceed with 10-30 mS silence
+1D6 JUMP say_phoneme
+1D7 talkphonemeGG3: ; peG
+1D7 LOAD s0, phoneme_GG3; usually preceed with 10-30 mS silence
+1D8 JUMP say_phoneme
+1D9 talkphonemeHH1: ; He
+1D9 LOAD s0, phoneme_HH1; usually double for initial
+1DA JUMP say_phoneme
+1DB talkphonemeHH2: ; Hoe
+1DB LOAD s0, phoneme_HH2; usually double for initial
+1DC JUMP say_phoneme
+1DD talkphonemeIH: ; sIt
+1DD LOAD s0, phoneme_IH; can be doubled
+1DE JUMP say_phoneme
+1DF talkphonemeIY: ; sEE
+1DF LOAD s0, phoneme_IY
+1E0 JUMP say_phoneme
+1E1 talkphonemeJH: ; JudGe
+1E1 LOAD s0, phoneme_JH
+1E2 JUMP say_phoneme
+1E3 talkphonemeKK1: ; Can't
+1E3 LOAD s0, phoneme_KK1; usually preceed with 50-80 mS silence
+1E4 JUMP say_phoneme
+1E5 talkphonemeKK2: ; speaK
+1E5 LOAD s0, phoneme_KK2; usually preceed with 50-80 mS silence
+1E6 JUMP say_phoneme
+1E7 talkphonemeKK3: ; Crane
+1E7 LOAD s0, phoneme_KK3; usually preceed with 50-80 mS silence
+1E8 JUMP say_phoneme
+1E9 talkphonemeLL: ; Like
+1E9 LOAD s0, phoneme_LL
+1EA JUMP say_phoneme
+1EB talkphonemeMM: ; Milk
+1EB LOAD s0, phoneme_MM
+1EC JUMP say_phoneme
+1ED talkphonemeNG: ; aNGer
+1ED LOAD s0, phoneme_NG
+1EE JUMP say_phoneme
+1EF talkphonemeNN1: ; thiN
+1EF LOAD s0, phoneme_NN1
+1F0 JUMP say_phoneme
+1F1 talkphonemeNN2: ; No
+1F1 LOAD s0, phoneme_NN2
+1F2 JUMP say_phoneme
+1F3 talkphonemeOR: ; fORtune
+1F3 LOAD s0, phoneme_OR
+1F4 JUMP say_phoneme
+1F5 talkphonemeOW: ; zOne
+1F5 LOAD s0, phoneme_OW
+1F6 JUMP say_phoneme
+1F7 talkphonemeOY: ; vOIce
+1F7 LOAD s0, phoneme_OY
+1F8 JUMP say_phoneme
+1F9 talkphonemePP: ; Pow
+1F9 LOAD s0, phoneme_PP; usually preceed with 50-80 mS silence
+1FA JUMP say_phoneme
+1FB talkphonemeRR1: ; Read
+1FB LOAD s0, phoneme_RR1
+1FC JUMP say_phoneme
+1FD talkphonemeRR2: ; cRane
+1FD LOAD s0, phoneme_RR2
+1FE JUMP say_phoneme
+1FF talkphonemeSH: ; SHip
+1FF LOAD s0, phoneme_SH; usually double for initial
+200 JUMP say_phoneme
+201 talkphonemeSS: ; veSt
+201 LOAD s0, phoneme_SS; usually double for initial
+202 JUMP say_phoneme
+203 talkphonemeTH: ; THin
+203 LOAD s0, phoneme_TH; usually double for initial
+204 JUMP say_phoneme
+205 talkphonemeTT1: ; parTs
+205 LOAD s0, phoneme_TT1; usually preceed with 50-80 mS silence
+206 JUMP say_phoneme
+207 talkphonemeTT2: ; To
+207 LOAD s0, phoneme_TT2; usually preceed with 50-80 mS silence
+208 JUMP say_phoneme
+209 talkphonemeUH: ; bOOk
+209 LOAD s0, phoneme_UH; may be doubled
+20A JUMP say_phoneme
+20B talkphonemeUW1: ; tO
+20B LOAD s0, phoneme_UW1
+20C JUMP say_phoneme
+20D talkphonemeUW2: ; fOOd
+20D LOAD s0, phoneme_UW2
+20E JUMP say_phoneme
+20F talkphonemeVV: ; Vest
+20F LOAD s0, phoneme_VV
+210 JUMP say_phoneme
+211 talkphonemeWH: ; WHig
+211 LOAD s0, phoneme_WH; usually double for initial
+212 JUMP say_phoneme
+213 talkphonemeWW: ; We
+213 LOAD s0, phoneme_WW
+214 JUMP say_phoneme
+215 talkphonemeXR: ; stARs
+215 LOAD s0, phoneme_XR
+216 JUMP say_phoneme
+217 talkphonemeYR: ; hEAr
+217 LOAD s0, phoneme_YR
+218 JUMP say_phoneme
+219 talkphonemeYY1: ; cUte
+219 LOAD s0, phoneme_YY1
+21A JUMP say_phoneme
+21B talkphonemeYY2: ; Yes
+21B LOAD s0, phoneme_YY2
+21C JUMP say_phoneme
+21D talkphonemeZH: ; pleaSure
+21D LOAD s0, phoneme_ZH
+21E JUMP say_phoneme
+21F talkphonemeZZ: ; Zoo
+21F LOAD s0, phoneme_ZZ
+220 JUMP say_phoneme
+221 talkphonemePA1: ; 10 mS silence
+221 LOAD s0, phoneme_PA1
+222 JUMP say_phoneme
+223 talkphonemePA2: ; 30 mS silence
+223 LOAD s0, phoneme_PA2
+224 JUMP say_phoneme
+225 talkphonemePA3: ; 50 mS silence
+225 LOAD s0, phoneme_PA3
+226 JUMP say_phoneme
+227 talkphonemePA4: ; 100 mS silence
+227 LOAD s0, phoneme_PA4
+228 JUMP say_phoneme
+229 talkphonemePA5: ; 200 mS silence
+229 LOAD s0, phoneme_PA5
+22A JUMP say_phoneme
+22B talkphonemePA6: ; 500 mS silence
+22B CALL talkphonemePA5
+22C CALL talkphonemePA5
+22D CALL talkphonemePA4
+22E JUMP say_phoneme
+
+PASS 4 - Resolving Operands
+
+000 ;; Define constants for all the ascii values.
+000 CONSTANT ascii_SPACE, 20; ascii code
+000 CONSTANT ascii_EXCLAIM, 21; ascii code
+000 CONSTANT ascii_DBLQUOT, 22; ascii code
+000 CONSTANT ascii_NUMSIGN, 23; ascii code
+000 CONSTANT ascii_DOLLAR, 24; ascii code
+000 CONSTANT ascii_PERCENT, 25; ascii code
+000 CONSTANT ascii_AMP, 26; ascii code
+000 CONSTANT ascii_SINQUOT, 27; ascii code
+000 CONSTANT ascii_LPAREN, 28; ascii code
+000 CONSTANT ascii_RPAREN, 29; ascii code
+000 CONSTANT ascii_ASTERISK, 2A; ascii code
+000 CONSTANT ascii_PLUS, 2B; ascii code
+000 CONSTANT ascii_COMMA, 2C; ascii code
+000 CONSTANT ascii_MINUS, 2D; ascii code
+000 CONSTANT ascii_PERIOD, 2E; ascii code
+000 CONSTANT ascii_FWDSLASH, 2F; ascii code
+000 CONSTANT ascii_0, 30; ascii code
+000 CONSTANT ascii_1, 31; ascii code
+000 CONSTANT ascii_2, 32; ascii code
+000 CONSTANT ascii_3, 33; ascii code
+000 CONSTANT ascii_4, 34; ascii code
+000 CONSTANT ascii_5, 35; ascii code
+000 CONSTANT ascii_6, 36; ascii code
+000 CONSTANT ascii_7, 37; ascii code
+000 CONSTANT ascii_8, 38; ascii code
+000 CONSTANT ascii_9, 39; ascii code
+000 CONSTANT ascii_COLON, 3A; ascii code
+000 CONSTANT ascii_SEMI, 3B; ascii code
+000 CONSTANT ascii_LESS, 3C; ascii code
+000 CONSTANT ascii_EQUAL, 3D; ascii code
+000 CONSTANT ascii_GREATER, 3E; ascii code
+000 CONSTANT ascii_QUESTION, 3F; ascii code
+000 CONSTANT ascii_CIRCAT, 40; ascii code
+000 CONSTANT ascii_A, 41; ascii code
+000 CONSTANT ascii_B, 42; ascii code
+000 CONSTANT ascii_C, 43; ascii code
+000 CONSTANT ascii_D, 44; ascii code
+000 CONSTANT ascii_E, 45; ascii code
+000 CONSTANT ascii_F, 46; ascii code
+000 CONSTANT ascii_G, 47; ascii code
+000 CONSTANT ascii_H, 48; ascii code
+000 CONSTANT ascii_I, 49; ascii code
+000 CONSTANT ascii_J, 4A; ascii code
+000 CONSTANT ascii_K, 4B; ascii code
+000 CONSTANT ascii_L, 4C; ascii code
+000 CONSTANT ascii_M, 4D; ascii code
+000 CONSTANT ascii_N, 4E; ascii code
+000 CONSTANT ascii_O, 4F; ascii code
+000 CONSTANT ascii_P, 50; ascii code
+000 CONSTANT ascii_Q, 51; ascii code
+000 CONSTANT ascii_R, 52; ascii code
+000 CONSTANT ascii_S, 53; ascii code
+000 CONSTANT ascii_T, 54; ascii code
+000 CONSTANT ascii_U, 55; ascii code
+000 CONSTANT ascii_V, 56; ascii code
+000 CONSTANT ascii_W, 57; ascii code
+000 CONSTANT ascii_X, 58; ascii code
+000 CONSTANT ascii_Y, 59; ascii code
+000 CONSTANT ascii_Z, 5A; ascii code
+000 CONSTANT ascii_LBKT, 5B; ascii code
+000 CONSTANT ascii_BKSLASH, 5C; ascii code
+000 CONSTANT ascii_RBKT, 5D; ascii code
+000 CONSTANT ascii_CARET, 5E; ascii code
+000 CONSTANT ascii_DASH, 5F; ascii code
+000 CONSTANT ascii_TICK, 60; ascii code
+000 CONSTANT ascii_a, 61; ascii code
+000 CONSTANT ascii_b, 62; ascii code
+000 CONSTANT ascii_c, 63; ascii code
+000 CONSTANT ascii_d, 64; ascii code
+000 CONSTANT ascii_e, 65; ascii code
+000 CONSTANT ascii_f, 66; ascii code
+000 CONSTANT ascii_g, 67; ascii code
+000 CONSTANT ascii_h, 68; ascii code
+000 CONSTANT ascii_i, 69; ascii code
+000 CONSTANT ascii_j, 6A; ascii code
+000 CONSTANT ascii_k, 6B; ascii code
+000 CONSTANT ascii_l, 6C; ascii code
+000 CONSTANT ascii_m, 6D; ascii code
+000 CONSTANT ascii_n, 6E; ascii code
+000 CONSTANT ascii_o, 6F; ascii code
+000 CONSTANT ascii_p, 70; ascii code
+000 CONSTANT ascii_q, 71; ascii code
+000 CONSTANT ascii_r, 72; ascii code
+000 CONSTANT ascii_s, 73; ascii code
+000 CONSTANT ascii_t, 74; ascii code
+000 CONSTANT ascii_u, 75; ascii code
+000 CONSTANT ascii_v, 76; ascii code
+000 CONSTANT ascii_w, 77; ascii code
+000 CONSTANT ascii_x, 78; ascii code
+000 CONSTANT ascii_y, 79; ascii code
+000 CONSTANT ascii_z, 7A; ascii code
+000 CONSTANT ascii_LBRACE, 7B; ascii code
+000 CONSTANT ascii_VBAR, 7C; ascii code
+000 CONSTANT ascii_RBRACE, 7D; ascii code
+000 CONSTANT ascii_TILDE, 7E; ascii code
+000 CONSTANT ascii_ULINE, 7F; ascii code
+000 ;; Define constants for all the phoneme values.
+000 CONSTANT phoneme_PA1, 00; phoneme code
+000 CONSTANT phoneme_PA2, 01; phoneme code
+000 CONSTANT phoneme_PA3, 02; phoneme code
+000 CONSTANT phoneme_PA4, 03; phoneme code
+000 CONSTANT phoneme_PA5, 04; phoneme code
+000 CONSTANT phoneme_OY, 05; phoneme code
+000 CONSTANT phoneme_AY, 06; phoneme code
+000 CONSTANT phoneme_EH, 07; phoneme code
+000 CONSTANT phoneme_KK3, 08; phoneme code
+000 CONSTANT phoneme_PP, 09; phoneme code
+000 CONSTANT phoneme_JH, 0A; phoneme code
+000 CONSTANT phoneme_NN1, 0B; phoneme code
+000 CONSTANT phoneme_IH, 0C; phoneme code
+000 CONSTANT phoneme_TT2, 0D; phoneme code
+000 CONSTANT phoneme_RR1, 0E; phoneme code
+000 CONSTANT phoneme_AX, 0F; phoneme code
+000 CONSTANT phoneme_MM, 10; phoneme code
+000 CONSTANT phoneme_TT1, 11; phoneme code
+000 CONSTANT phoneme_DH1, 12; phoneme code
+000 CONSTANT phoneme_IY, 13; phoneme code
+000 CONSTANT phoneme_EY, 14; phoneme code
+000 CONSTANT phoneme_DD1, 15; phoneme code
+000 CONSTANT phoneme_UW1, 16; phoneme code
+000 CONSTANT phoneme_AO, 17; phoneme code
+000 CONSTANT phoneme_AA, 18; phoneme code
+000 CONSTANT phoneme_YY2, 19; phoneme code
+000 CONSTANT phoneme_AE, 1A; phoneme code
+000 CONSTANT phoneme_HH1, 1B; phoneme code
+000 CONSTANT phoneme_BB1, 1C; phoneme code
+000 CONSTANT phoneme_TH, 1D; phoneme code
+000 CONSTANT phoneme_UH, 1E; phoneme code
+000 CONSTANT phoneme_UW2, 1F; phoneme code
+000 CONSTANT phoneme_AW, 20; phoneme code
+000 CONSTANT phoneme_DD2, 21; phoneme code
+000 CONSTANT phoneme_GG3, 22; phoneme code
+000 CONSTANT phoneme_VV, 23; phoneme code
+000 CONSTANT phoneme_GG1, 24; phoneme code
+000 CONSTANT phoneme_SH, 25; phoneme code
+000 CONSTANT phoneme_ZH, 26; phoneme code
+000 CONSTANT phoneme_RR2, 27; phoneme code
+000 CONSTANT phoneme_FF, 28; phoneme code
+000 CONSTANT phoneme_KK2, 29; phoneme code
+000 CONSTANT phoneme_KK1, 2A; phoneme code
+000 CONSTANT phoneme_ZZ, 2B; phoneme code
+000 CONSTANT phoneme_NG, 2C; phoneme code
+000 CONSTANT phoneme_LL, 2D; phoneme code
+000 CONSTANT phoneme_WW, 2E; phoneme code
+000 CONSTANT phoneme_XR, 2F; phoneme code
+000 CONSTANT phoneme_WH, 30; phoneme code
+000 CONSTANT phoneme_YY1, 31; phoneme code
+000 CONSTANT phoneme_CH, 32; phoneme code
+000 CONSTANT phoneme_ER1, 33; phoneme code
+000 CONSTANT phoneme_ER2, 34; phoneme code
+000 CONSTANT phoneme_OW, 35; phoneme code
+000 CONSTANT phoneme_DH2, 36; phoneme code
+000 CONSTANT phoneme_SS, 37; phoneme code
+000 CONSTANT phoneme_NN2, 38; phoneme code
+000 CONSTANT phoneme_HH2, 39; phoneme code
+000 CONSTANT phoneme_OR, 3A; phoneme code
+000 CONSTANT phoneme_AR, 3B; phoneme code
+000 CONSTANT phoneme_YR, 3C; phoneme code
+000 CONSTANT phoneme_GG2, 3D; phoneme code
+000 CONSTANT phoneme_EL, 3E; phoneme code
+000 CONSTANT phoneme_BB2, 3F; phoneme code
+000 ;INPUTS
+000 CONSTANT input_data, 40
+000 CONSTANT start_phoneme_flag, 00
+000 CONSTANT start_word_flag, 02
+000 ;OUTPUTS
+000 CONSTANT phoneme_out, 80
+000 CONSTANT done_phoneme_flag, 01
+000 CONSTANT done_word_flag, 10
+000 
+;;============================================================================
+000 ;; Infinite loop.
+000 
+;;============================================================================
+000 ;REGISTER USE
+000 ; s8 = IN input EQUALS (8 bits)
+000 ; s7 = IN input DIGIT 2 ascii
+000 ; s6 = IN input OPERATION (8 bits)
+000 ; s3 = IN input DIGIT 1 ascii, FINAL RESULT (8 bits)
+000 ; s5 = IN new input received flag
+000 ; s4 = OUT done audio output flag
+000 ; s0 - s2 = say_phoneme subroutine use
+000 cold_start: 
+000 JUMP get_digit_1;loop
+001 done_audio: 
+001 LOAD s4, 01;done flag
+002 OUTPUT s4, done_word_flag
+003 LOAD s4, 00;reset done flag
+004 OUTPUT s4, done_word_flag
+005 RETURN;loop to cold_start
+006 get_digit_1: 
+006 INPUT s5, start_word_flag;wait for start flag, key stroke entered
+007 COMPARE s5, 01
+008 JUMP NZ, get_digit_1
+009 INPUT s3, input_data;get input data
+00A COMPARE s3, ascii_0;if zero flag set (input s3 == ascii 0)
+00B CALL Z, talkword0;output phoneme + done audio
+00C JUMP Z, get_operation
+00D COMPARE s3, ascii_1
+00E CALL Z, talkword1
+00F JUMP Z, get_operation
+010 COMPARE s3, ascii_2
+011 CALL Z, talkword2
+012 JUMP Z, get_operation
+013 COMPARE s3, ascii_3
+014 CALL Z, talkword3
+015 JUMP Z, get_operation
+016 COMPARE s3, ascii_4
+017 CALL Z, talkword4
+018 JUMP Z, get_operation
+019 COMPARE s3, ascii_5
+01A CALL Z, talkword5
+01B JUMP Z, get_operation
+01C COMPARE s3, ascii_6
+01D CALL Z, talkword6
+01E JUMP Z, get_operation
+01F COMPARE s3, ascii_7
+020 CALL Z, talkword7
+021 JUMP Z, get_operation
+022 COMPARE s3, ascii_8
+023 CALL Z, talkword8
+024 JUMP Z, get_operation
+025 COMPARE s3, ascii_9
+026 CALL Z, talkword9
+027 JUMP Z, get_operation
+028 CALL talkworderror;else output error
+029 JUMP cold_start;loop
+02A get_operation: 
+02A INPUT s5, start_word_flag;wait for start flag, key stroke entered
+02B COMPARE s5, 01
+02C JUMP NZ, get_operation;loop
+02D INPUT s6, input_data;get input data
+02E COMPARE s6, ascii_MINUS
+02F CALL Z, talkwordminus
+030 JUMP Z, get_digit_2
+031 COMPARE s6, ascii_PLUS
+032 CALL Z, talkwordplus
+033 JUMP Z, get_digit_2
+034 CALL talkworderror;else output error
+035 JUMP get_operation
+036 get_digit_2: 
+036 INPUT s5, start_word_flag;wait for start flag, key stroke entered
+037 COMPARE s5, 01
+038 JUMP NZ, get_digit_2;loop
+039 INPUT s7, input_data;get input data
+03A COMPARE s7, ascii_0;if zero flag set (input s3 == ascii 0)
+03B CALL Z, talkword0
+03C JUMP Z, get_equal
+03D COMPARE s7, ascii_1
+03E CALL Z, talkword1
+03F JUMP Z, get_equal
+040 COMPARE s7, ascii_2
+041 CALL Z, talkword2
+042 JUMP Z, get_equal
+043 COMPARE s7, ascii_3
+044 CALL Z, talkword3
+045 JUMP Z, get_equal
+046 COMPARE s7, ascii_4
+047 CALL Z, talkword4
+048 JUMP Z, get_equal
+049 COMPARE s7, ascii_5
+04A CALL Z, talkword5
+04B JUMP Z, get_equal
+04C COMPARE s7, ascii_6
+04D CALL Z, talkword6
+04E JUMP Z, get_equal
+04F COMPARE s7, ascii_7
+050 CALL Z, talkword7
+051 JUMP Z, get_equal
+052 COMPARE s7, ascii_8
+053 CALL Z, talkword8
+054 JUMP Z, get_equal
+055 COMPARE s7, ascii_9
+056 CALL Z, talkword9
+057 JUMP Z, get_equal
+058 CALL talkworderror;else output error
+059 JUMP get_digit_2
+05A get_equal: 
+05A INPUT s5, start_word_flag;wait for start flag, key stroke entered
+05B COMPARE s5, 01
+05C JUMP NZ, get_equal;loop
+05D INPUT s8, input_data;get input data
+05E COMPARE s8, ascii_EQUAL
+05F CALL Z, talkwordequals
+060 JUMP Z, calculate
+061 CALL talkworderror;else output error
+062 JUMP get_equal
+063 calculate: ; s3 +/- s7
+063 COMPARE s6, ascii_MINUS
+064 JUMP Z, op_minus;minus operation
+065 op_plus: ;plus operation
+065 ADD s3, s7
+066 SUB s3, 60;sub 60 from total to get hex sum, not ascii
+067 JUMP result
+068 op_minus: 
+068 SUB s3, s7
+069 COMPARE s3, 80;check left bit for negative
+06A JUMP C, result;if positive, get result
+06B CALL talkwordminus;else call talkwordminus
+06C XOR s3, FF;take complement & abs value
+06D ADD s3, 01
+06E JUMP result
+06F result: 
+06F COMPARE s3, 00;if zero flag set (input s3 == ascii 0)
+070 CALL Z, talkword0
+071 COMPARE s3, 01
+072 CALL Z, talkword1
+073 COMPARE s3, 02
+074 CALL Z, talkword2
+075 COMPARE s3, 03
+076 CALL Z, talkword3
+077 COMPARE s3, 04
+078 CALL Z, talkword4
+079 COMPARE s3, 05
+07A CALL Z, talkword5
+07B COMPARE s3, 06
+07C CALL Z, talkword6
+07D COMPARE s3, 07
+07E CALL Z, talkword7
+07F COMPARE s3, 08
+080 CALL Z, talkword8
+081 COMPARE s3, 09
+082 CALL Z, talkword9
+083 COMPARE s3, 0A
+084 CALL Z, talkword10
+085 COMPARE s3, 0B
+086 CALL Z, talkword11
+087 COMPARE s3, 0C
+088 CALL Z, talkword12
+089 COMPARE s3, 0D
+08A CALL Z, talkword13
+08B COMPARE s3, 0E
+08C CALL Z, talkword14
+08D COMPARE s3, 0F
+08E CALL Z, talkword15
+08F COMPARE s3, 10
+090 CALL Z, talkword16
+091 COMPARE s3, 11
+092 CALL Z, talkword17
+093 COMPARE s3, 12
+094 CALL Z, talkword18
+095 JUMP reset
+096 reset: 
+096 LOAD s3, 00
+097 LOAD s4, 00
+098 LOAD s5, 00
+099 LOAD s6, 00
+09A LOAD s7, 00
+09B LOAD s8, 00
+09C JUMP cold_start
+09D 
+;;============================================================================
+09D ;; Test message and phoneme voicing subroutine.
+09D 
+;;============================================================================
+09D ;================================================
+09D talkword0: 
+09D CALL talkphonemeZZ
+09E CALL talkphonemeEH
+09F CALL talkphonemeRR2
+0A0 CALL talkphonemeOW
+0A1 CALL done_audio
+0A2 RETURN
+0A3 talkword1: 
+0A3 CALL talkphonemeWW
+0A4 CALL talkphonemeAO
+0A5 CALL talkphonemeNN1
+0A6 CALL done_audio
+0A7 RETURN
+0A8 talkword2: 
+0A8 CALL talkphonemeTT2
+0A9 CALL talkphonemeUW2
+0AA CALL done_audio
+0AB RETURN
+0AC talkword3: 
+0AC CALL talkphonemeTH
+0AD CALL talkphonemeRR2
+0AE CALL talkphonemeIY
+0AF CALL done_audio
+0B0 RETURN
+0B1 talkword4: 
+0B1 CALL talkphonemeFF
+0B2 CALL talkphonemeOR
+0B3 CALL done_audio
+0B4 RETURN
+0B5 talkword5: 
+0B5 CALL talkphonemeFF
+0B6 CALL talkphonemeAY
+0B7 CALL talkphonemeVV
+0B8 CALL done_audio
+0B9 RETURN
+0BA talkword6: 
+0BA CALL talkphonemeSS
+0BB CALL talkphonemeIH
+0BC CALL talkphonemeKK2
+0BD CALL talkphonemeSS
+0BE CALL talkphonemeSS
+0BF CALL done_audio
+0C0 RETURN
+0C1 talkword7: 
+0C1 CALL talkphonemeSS
+0C2 CALL talkphonemeEH
+0C3 CALL talkphonemeVV
+0C4 CALL talkphonemeAX
+0C5 CALL talkphonemeNN1
+0C6 CALL done_audio
+0C7 RETURN
+0C8 talkword8: 
+0C8 CALL talkphonemeEY
+0C9 CALL talkphonemeTT1
+0CA ;call  done_audio
+0CA RETURN
+0CB talkword9: 
+0CB CALL talkphonemeNN2
+0CC CALL talkphonemeAY
+0CD CALL talkphonemeNN1
+0CE CALL done_audio
+0CF RETURN
+0D0 talkword10: 
+0D0 CALL talkphonemeTT2
+0D1 CALL talkphonemeEH
+0D2 CALL talkphonemeNN1
+0D3 CALL done_audio
+0D4 RETURN
+0D5 talkword11: 
+0D5 CALL talkphonemeIH
+0D6 CALL talkphonemeLL
+0D7 CALL talkphonemeEH
+0D8 CALL talkphonemeVV
+0D9 CALL talkphonemeEH
+0DA CALL talkphonemeNN1
+0DB CALL done_audio
+0DC RETURN
+0DD talkword12: 
+0DD CALL talkphonemeTT2
+0DE CALL talkphonemeWW
+0DF CALL talkphonemeEH
+0E0 CALL talkphonemeEL
+0E1 CALL talkphonemeVV
+0E2 CALL done_audio
+0E3 RETURN
+0E4 talkword13: 
+0E4 CALL talkphonemeTH
+0E5 CALL talkphonemeER2
+0E6 JUMP talkwordteen
+0E7 talkwordteen: 
+0E7 CALL talkphonemeTT2
+0E8 CALL talkphonemeIY
+0E9 CALL talkphonemeNN1
+0EA CALL done_audio
+0EB RETURN
+0EC talkword14: 
+0EC CALL talkword4
+0ED JUMP talkwordteen
+0EE talkword15: 
+0EE CALL talkphonemeFF
+0EF CALL talkphonemeIH
+0F0 CALL talkphonemeFF
+0F1 JUMP talkwordteen
+0F2 talkword16: 
+0F2 CALL talkword6
+0F3 JUMP talkwordteen
+0F4 talkword17: 
+0F4 CALL talkword7
+0F5 JUMP talkwordteen
+0F6 talkword18: 
+0F6 CALL talkword8
+0F7 JUMP talkwordteen
+0F8 talkwordplus: 
+0F8 CALL talkphonemePP
+0F9 CALL talkphonemeLL
+0FA CALL talkphonemeAX
+0FB CALL talkphonemeAX
+0FC CALL talkphonemeSS
+0FD CALL talkphonemeSS
+0FE CALL done_audio
+0FF RETURN
+100 talkwordminus: 
+100 CALL talkphonemeMM
+101 CALL talkphonemeAY
+102 CALL talkphonemeNN1
+103 CALL talkphonemeIH
+104 CALL talkphonemeAX
+105 CALL talkphonemeAX
+106 CALL talkphonemeSS
+107 CALL talkphonemeSS
+108 CALL done_audio
+109 RETURN
+10A talkwordequals: 
+10A CALL talkphonemeIY
+10B CALL talkphonemePA2
+10C CALL talkphonemePA3
+10D CALL talkphonemeKK3
+10E CALL talkphonemeWH
+10F CALL talkphonemeAX
+110 CALL talkphonemeEL
+111 CALL talkphonemeZZ
+112 CALL done_audio
+113 RETURN
+114 talkworderror: 
+114 CALL talkphonemeEH
+115 CALL talkphonemeXR
+116 CALL talkphonemeOR
+117 CALL done_audio
+118 RETURN
+119 ;=====================================================
+119 talkword19: 
+119 CALL talkword9
+11A JUMP talkwordteen
+11B talkword20: 
+11B CALL talkphonemeTT2
+11C CALL talkphonemeWW
+11D CALL talkphonemeEH
+11E CALL talkphonemeNN1
+11F talkwordty: 
+11F CALL talkphonemeTT2
+120 CALL talkphonemeIY
+121 RETURN
+122 talkword30: 
+122 CALL talkphonemeTH
+123 CALL talkphonemeER1
+124 JUMP talkwordty
+125 talkword40: 
+125 CALL talkword4
+126 JUMP talkwordty
+127 talkword50: 
+127 CALL talkphonemeFF
+128 CALL talkphonemeIH
+129 CALL talkphonemeFF
+12A JUMP talkwordty
+12B talkword60: 
+12B CALL talkword6
+12C JUMP talkwordty
+12D talkword70: 
+12D CALL talkword7
+12E JUMP talkwordty
+12F talkword80: 
+12F CALL talkword8
+130 JUMP talkwordty
+131 talkword90: 
+131 CALL talkword9
+132 JUMP talkwordty
+133 talkwordhundred: 
+133 CALL talkphonemeHH2
+134 CALL talkphonemeAX
+135 CALL talkphonemeNN1
+136 CALL talkphonemeDD2
+137 CALL talkphonemeRR2
+138 CALL talkphonemeDD1
+139 RETURN
+13A talkworddepth: 
+13A CALL talkphonemeDD2
+13B CALL talkphonemeEH
+13C CALL talkphonemeEH
+13D CALL talkphonemePP
+13E CALL talkphonemeTH
+13F JUMP endword
+140 talkwordpoint: 
+140 CALL talkphonemePP
+141 CALL talkphonemeOY
+142 CALL talkphonemeTT1
+143 JUMP endword
+144 talkwordanchor: 
+144 CALL talkphonemeEY
+145 CALL talkphonemeKK3
+146 CALL talkphonemeAE
+147 JUMP endword
+148 talkwordalarm: 
+148 CALL talkphonemeAE
+149 CALL talkphonemeLL
+14A CALL talkphonemeAR
+14B CALL talkphonemeMM
+14C JUMP endword
+14D talkwordon: 
+14D CALL talkphonemeAO
+14E CALL talkphonemeNG
+14F JUMP endword
+150 talkwordoff: 
+150 CALL talkphonemeAO
+151 CALL talkphonemeFF
+152 CALL talkphonemeFF
+153 JUMP endword
+154 talkwordshallow: 
+154 CALL talkphonemeSH
+155 CALL talkphonemeAE
+156 CALL talkphonemeLL
+157 CALL talkphonemeOW
+158 JUMP endword
+159 talkwordand: 
+159 CALL talkphonemeIH
+15A CALL talkphonemeIH
+15B CALL talkphonemeNN1
+15C CALL talkphonemeDD2
+15D JUMP endword
+15E talkwordwatch: 
+15E CALL talkphonemeWW
+15F CALL talkphonemeAO
+160 CALL talkphonemeTT1
+161 CALL talkphonemeCH
+162 JUMP endword
+163 talkwordlimit: 
+163 CALL talkphonemeLL
+164 CALL talkphonemeIH
+165 CALL talkphonemeMM
+166 CALL talkphonemeIH
+167 CALL talkphonemeTT1
+168 JUMP endword
+169 talkwordset: 
+169 CALL talkphonemeSS
+16A CALL talkphonemeSS
+16B CALL talkphonemeEH
+16C CALL talkphonemeTT2
+16D JUMP endword
+16E talkwordheading: 
+16E CALL talkphonemeHH1
+16F CALL talkphonemeEH
+170 CALL talkphonemeDD2
+171 CALL talkphonemeIH
+172 CALL talkphonemeNG
+173 JUMP endword
+174 talkwordgps: 
+174 CALL talkphonemeJH
+175 CALL talkphonemeIY
+176 CALL talkphonemePP
+177 CALL talkphonemeIY
+178 CALL talkphonemeEH
+179 CALL talkphonemeSS
+17A CALL talkphonemeSS
+17B JUMP endword
+17C talkwordno: 
+17C CALL talkphonemeNN2
+17D CALL talkphonemeOW
+17E JUMP endword
+17F talkworddata: 
+17F CALL talkphonemeDD2
+180 CALL talkphonemeEY
+181 CALL talkphonemeTT2
+182 CALL talkphonemeAX
+183 JUMP endword
+184 talkwordnorth: 
+184 CALL talkphonemeNN2
+185 CALL talkphonemeOR
+186 CALL talkphonemeHH1
+187 JUMP endword
+188 talkwordsouth: 
+188 CALL talkphonemeSS
+189 CALL talkphonemeSS
+18A CALL talkphonemeAW
+18B CALL talkphonemeTH
+18C CALL talkphonemeTH
+18D JUMP endword
+18E talkwordeast: 
+18E CALL talkphonemeIY
+18F CALL talkphonemeSS
+190 CALL talkphonemeSS
+191 CALL talkphonemeTT2
+192 JUMP endword
+193 talkwordwest: 
+193 CALL talkphonemeWW
+194 CALL talkphonemeEH
+195 CALL talkphonemeSS
+196 CALL talkphonemeSS
+197 CALL talkphonemeTT2
+198 JUMP endword
+199 talkwordposition: 
+199 CALL talkphonemePP
+19A CALL talkphonemeIH
+19B CALL talkphonemeZZ
+19C CALL talkphonemeIH
+19D CALL talkphonemeSH
+19E CALL talkphonemeNN1
+19F JUMP endword
+1A0 endword: 
+1A0 CALL talkphonemePA5
+1A1 RETURN
+1A2 say_phoneme: 
+1A2 ;make sure  to complete this subroutine in order for the synthesizer to work
+1A2 ;LOAD s2, 01
+1A2 INPUT s1, start_phoneme_flag;check if start routine
+1A3 COMPARE s1, 01
+1A4 JUMP NZ, say_phoneme
+1A5 OUTPUT s0, phoneme_out
+1A6 LOAD s2, 01
+1A7 OUTPUT s2, done_phoneme_flag
+1A8 LOAD s2, 00
+1A9 OUTPUT s2, done_phoneme_flag
+1AA RETURN
+1AB talkphonemeAA: ; hOt
+1AB LOAD s0, phoneme_AA; can be doubled
+1AC JUMP say_phoneme
+1AD talkphonemeAE: ; hAt
+1AD LOAD s0, phoneme_AE; can be doubled
+1AE JUMP say_phoneme
+1AF talkphonemeAO: ; AUght
+1AF LOAD s0, phoneme_AO; can be doubled
+1B0 JUMP say_phoneme
+1B1 talkphonemeAR: ; alARm
+1B1 LOAD s0, phoneme_AR
+1B2 JUMP say_phoneme
+1B3 talkphonemeAW: ; dOWn
+1B3 LOAD s0, phoneme_AW
+1B4 JUMP say_phoneme
+1B5 talkphonemeAX: ; sUceed
+1B5 LOAD s0, phoneme_AX; can be doubled
+1B6 JUMP say_phoneme
+1B7 talkphonemeAY: ; kIte
+1B7 LOAD s0, phoneme_AY
+1B8 JUMP say_phoneme
+1B9 talkphonemeBB1: ; riB
+1B9 LOAD s0, phoneme_BB1; usually preceed with 10-30 mS silence
+1BA JUMP say_phoneme
+1BB talkphonemeBB2: ; Beast
+1BB LOAD s0, phoneme_BB2; usually preceed with 10-30 mS silence
+1BC JUMP say_phoneme
+1BD talkphonemeCH: ; CHurCH
+1BD LOAD s0, phoneme_CH
+1BE JUMP say_phoneme
+1BF talkphonemeDD1: ; enD
+1BF LOAD s0, phoneme_DD1; usually preceed with 10-30 mS silence
+1C0 JUMP say_phoneme
+1C1 talkphonemeDD2: ; Down
+1C1 LOAD s0, phoneme_DD2; usually preceed with 10-30 mS silence
+1C2 JUMP say_phoneme
+1C3 talkphonemeDH1: ; THis
+1C3 LOAD s0, phoneme_DH1
+1C4 JUMP say_phoneme
+1C5 talkphonemeDH2: ; baTHe
+1C5 LOAD s0, phoneme_DH2
+1C6 JUMP say_phoneme
+1C7 talkphonemeEH: ; End
+1C7 LOAD s0, phoneme_EH; can be doubled
+1C8 JUMP say_phoneme
+1C9 talkphonemeEL: ; angLE
+1C9 LOAD s0, phoneme_EL
+1CA JUMP say_phoneme
+1CB talkphonemeER1: ; lettER
+1CB LOAD s0, phoneme_ER1
+1CC JUMP say_phoneme
+1CD talkphonemeER2: ; fERn
+1CD LOAD s0, phoneme_ER2
+1CE JUMP say_phoneme
+1CF talkphonemeEY: ; trAY
+1CF LOAD s0, phoneme_EY
+1D0 JUMP say_phoneme
+1D1 talkphonemeFF: ; Food
+1D1 LOAD s0, phoneme_FF; usually double for initial
+1D2 JUMP say_phoneme
+1D3 talkphonemeGG1: ; Guest
+1D3 LOAD s0, phoneme_GG1; usually preceed with 10-30 mS silence
+1D4 JUMP say_phoneme
+1D5 talkphonemeGG2: ; Got
+1D5 LOAD s0, phoneme_GG2; usually preceed with 10-30 mS silence
+1D6 JUMP say_phoneme
+1D7 talkphonemeGG3: ; peG
+1D7 LOAD s0, phoneme_GG3; usually preceed with 10-30 mS silence
+1D8 JUMP say_phoneme
+1D9 talkphonemeHH1: ; He
+1D9 LOAD s0, phoneme_HH1; usually double for initial
+1DA JUMP say_phoneme
+1DB talkphonemeHH2: ; Hoe
+1DB LOAD s0, phoneme_HH2; usually double for initial
+1DC JUMP say_phoneme
+1DD talkphonemeIH: ; sIt
+1DD LOAD s0, phoneme_IH; can be doubled
+1DE JUMP say_phoneme
+1DF talkphonemeIY: ; sEE
+1DF LOAD s0, phoneme_IY
+1E0 JUMP say_phoneme
+1E1 talkphonemeJH: ; JudGe
+1E1 LOAD s0, phoneme_JH
+1E2 JUMP say_phoneme
+1E3 talkphonemeKK1: ; Can't
+1E3 LOAD s0, phoneme_KK1; usually preceed with 50-80 mS silence
+1E4 JUMP say_phoneme
+1E5 talkphonemeKK2: ; speaK
+1E5 LOAD s0, phoneme_KK2; usually preceed with 50-80 mS silence
+1E6 JUMP say_phoneme
+1E7 talkphonemeKK3: ; Crane
+1E7 LOAD s0, phoneme_KK3; usually preceed with 50-80 mS silence
+1E8 JUMP say_phoneme
+1E9 talkphonemeLL: ; Like
+1E9 LOAD s0, phoneme_LL
+1EA JUMP say_phoneme
+1EB talkphonemeMM: ; Milk
+1EB LOAD s0, phoneme_MM
+1EC JUMP say_phoneme
+1ED talkphonemeNG: ; aNGer
+1ED LOAD s0, phoneme_NG
+1EE JUMP say_phoneme
+1EF talkphonemeNN1: ; thiN
+1EF LOAD s0, phoneme_NN1
+1F0 JUMP say_phoneme
+1F1 talkphonemeNN2: ; No
+1F1 LOAD s0, phoneme_NN2
+1F2 JUMP say_phoneme
+1F3 talkphonemeOR: ; fORtune
+1F3 LOAD s0, phoneme_OR
+1F4 JUMP say_phoneme
+1F5 talkphonemeOW: ; zOne
+1F5 LOAD s0, phoneme_OW
+1F6 JUMP say_phoneme
+1F7 talkphonemeOY: ; vOIce
+1F7 LOAD s0, phoneme_OY
+1F8 JUMP say_phoneme
+1F9 talkphonemePP: ; Pow
+1F9 LOAD s0, phoneme_PP; usually preceed with 50-80 mS silence
+1FA JUMP say_phoneme
+1FB talkphonemeRR1: ; Read
+1FB LOAD s0, phoneme_RR1
+1FC JUMP say_phoneme
+1FD talkphonemeRR2: ; cRane
+1FD LOAD s0, phoneme_RR2
+1FE JUMP say_phoneme
+1FF talkphonemeSH: ; SHip
+1FF LOAD s0, phoneme_SH; usually double for initial
+200 JUMP say_phoneme
+201 talkphonemeSS: ; veSt
+201 LOAD s0, phoneme_SS; usually double for initial
+202 JUMP say_phoneme
+203 talkphonemeTH: ; THin
+203 LOAD s0, phoneme_TH; usually double for initial
+204 JUMP say_phoneme
+205 talkphonemeTT1: ; parTs
+205 LOAD s0, phoneme_TT1; usually preceed with 50-80 mS silence
+206 JUMP say_phoneme
+207 talkphonemeTT2: ; To
+207 LOAD s0, phoneme_TT2; usually preceed with 50-80 mS silence
+208 JUMP say_phoneme
+209 talkphonemeUH: ; bOOk
+209 LOAD s0, phoneme_UH; may be doubled
+20A JUMP say_phoneme
+20B talkphonemeUW1: ; tO
+20B LOAD s0, phoneme_UW1
+20C JUMP say_phoneme
+20D talkphonemeUW2: ; fOOd
+20D LOAD s0, phoneme_UW2
+20E JUMP say_phoneme
+20F talkphonemeVV: ; Vest
+20F LOAD s0, phoneme_VV
+210 JUMP say_phoneme
+211 talkphonemeWH: ; WHig
+211 LOAD s0, phoneme_WH; usually double for initial
+212 JUMP say_phoneme
+213 talkphonemeWW: ; We
+213 LOAD s0, phoneme_WW
+214 JUMP say_phoneme
+215 talkphonemeXR: ; stARs
+215 LOAD s0, phoneme_XR
+216 JUMP say_phoneme
+217 talkphonemeYR: ; hEAr
+217 LOAD s0, phoneme_YR
+218 JUMP say_phoneme
+219 talkphonemeYY1: ; cUte
+219 LOAD s0, phoneme_YY1
+21A JUMP say_phoneme
+21B talkphonemeYY2: ; Yes
+21B LOAD s0, phoneme_YY2
+21C JUMP say_phoneme
+21D talkphonemeZH: ; pleaSure
+21D LOAD s0, phoneme_ZH
+21E JUMP say_phoneme
+21F talkphonemeZZ: ; Zoo
+21F LOAD s0, phoneme_ZZ
+220 JUMP say_phoneme
+221 talkphonemePA1: ; 10 mS silence
+221 LOAD s0, phoneme_PA1
+222 JUMP say_phoneme
+223 talkphonemePA2: ; 30 mS silence
+223 LOAD s0, phoneme_PA2
+224 JUMP say_phoneme
+225 talkphonemePA3: ; 50 mS silence
+225 LOAD s0, phoneme_PA3
+226 JUMP say_phoneme
+227 talkphonemePA4: ; 100 mS silence
+227 LOAD s0, phoneme_PA4
+228 JUMP say_phoneme
+229 talkphonemePA5: ; 200 mS silence
+229 LOAD s0, phoneme_PA5
+22A JUMP say_phoneme
+22B talkphonemePA6: ; 500 mS silence
+22B CALL talkphonemePA5
+22C CALL talkphonemePA5
+22D CALL talkphonemePA4
+22E JUMP say_phoneme
+
+PASS 5 - Writing reformatted PSM file
+           speech.fmt
+
+PASS 6 - Writing assembler log file
+           speech.log
+
+PASS 7 - Writing coefficient file
+           speech.coe
+
+PASS 8 - Writing VHDL memory definition file
+           speech.vhd
+
+PASS 9 - Writing Verilog memory definition file
+           speech.v
+
+PASS 10 - Writing System Generator memory definition file
+           speech.m
+
+PASS 11 - Writing memory definition files
+           speech.hex
+           speech.dec
+           speech.mem
+
+
+KCPSM3 successful.
+
+KCPSM3 complete.
+
