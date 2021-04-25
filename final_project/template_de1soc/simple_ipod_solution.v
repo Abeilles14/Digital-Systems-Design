@@ -366,11 +366,6 @@ keyboard_control keyboard_input(
 	.read_addr_start(read_addr_start),
   .audio_done_flag(audio_done_flag));
 
-// assign LED[1] = audio_done_flag;
-// assign LED[2] = read_addr_start;  //
-// assign LED[3] = kbd_data_ready;
-// assign LED[4] = read_keyboard_flag;
-
 flash flash_inst(
     .clk_clk                 (CLK_50M),
     .reset_reset_n           (1'b1),

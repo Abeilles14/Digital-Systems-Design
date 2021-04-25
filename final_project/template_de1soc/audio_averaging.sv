@@ -20,7 +20,7 @@ module audio_averaging(
 		counter = 8'b0;
 		sum_sample = 16'b0;
 		avg_sample = 8'b0;
-		state <= IDLE;
+		state = IDLE;
 	end
 
 	always_ff @(posedge clk)

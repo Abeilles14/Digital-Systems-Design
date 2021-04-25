@@ -173,7 +173,6 @@ CONSTANT phoneme_BB2      , 3F    ; phoneme code
 CONSTANT input_data				, 40
 CONSTANT start_phoneme_flag 	, 00
 CONSTANT start_word_flag		, 02
-CONSTANT error_flag				, 20
 
 ;OUTPUTS
 CONSTANT phoneme_out 			, 80
@@ -184,54 +183,214 @@ CONSTANT done_word_flag			, 10
 ;; Infinite loop.
 ;;============================================================================
 
+;REGISTER USE
+
+; s8 = IN input EQUALS (8 bits)
+; s7 = IN input DIGIT 2 ascii
+; s6 = IN input OPERATION (8 bits)
+; s3 = IN input DIGIT 1 ascii, FINAL RESULT (8 bits)
+
+; s5 = IN new input received flag
+; s4 = OUT done audio output flag
+; s0 - s2 = say_phoneme subroutine use
+
  cold_start:
- 	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
- 	COMPARE s5, 01
- 	JUMP Z, get_input
-loop: jump cold_start
+	JUMP get_digit_1				;loop
 
 done_audio:
  	LOAD s4, 01					;done flag
  	OUTPUT s4, done_word_flag
 
- 	LOAD s3, 00					;clear input
-
- 	JUMP cold_start				;loop to cold_start
-
- get_input:
  	LOAD s4, 00					;reset done flag
  	OUTPUT s4, done_word_flag
+
+ 	RETURN				;loop to cold_start
+
+get_digit_1:
+	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
+ 	COMPARE s5, 01
+ 	JUMP NZ, get_digit_1
 
  	INPUT s3, input_data		;get input data
 
  	COMPARE s3, ascii_0		;if zero flag set (input s3 == ascii 0)
- 	JUMP Z, talkword0
+ 	CALL Z, talkword0 		;output phoneme + done audio
+ 	JUMP Z, get_operation
  	COMPARE s3, ascii_1
-  	JUMP Z, talkword1
+  	CALL Z, talkword1
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_2
-  	JUMP Z, talkword2
+  	CALL Z, talkword2
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_3
-  	JUMP Z, talkword3
+  	CALL Z, talkword3
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_4
-  	JUMP Z, talkword4
+  	CALL Z, talkword4
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_5
-  	JUMP Z, talkword5
+  	CALL Z, talkword5
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_6
-  	JUMP Z, talkword6
+  	CALL Z, talkword6
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_7
-  	JUMP Z, talkword7
+  	CALL Z, talkword7
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_8
-  	JUMP Z, talkword8
+  	CALL Z, talkword8
+  	JUMP Z, get_operation
   	COMPARE s3, ascii_9
-  	JUMP Z, talkword9
-  	COMPARE s3, ascii_MINUS
-  	JUMP Z, talkwordminus
-  	COMPARE s3, ascii_PLUS
-  	JUMP Z, talkwordplus
-  	COMPARE s3, ascii_EQUAL
-  	JUMP Z, talkwordequals
+  	CALL Z, talkword9
+  	JUMP Z, get_operation
 
-  	JUMP talkworderror		;else output error
+  	CALL talkworderror		;else output error
+  	JUMP cold_start			;loop
+
+get_operation:
+	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
+ 	COMPARE s5, 01
+ 	JUMP NZ, get_operation		;loop
+
+ 	INPUT s6, input_data		;get input data
+
+ 	COMPARE s6, ascii_MINUS
+  	CALL Z, talkwordminus
+  	JUMP Z, get_digit_2
+  	COMPARE s6, ascii_PLUS
+  	CALL Z, talkwordplus
+  	JUMP Z, get_digit_2
+
+  	CALL talkworderror		;else output error
+  	JUMP get_operation
+
+get_digit_2:
+	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
+ 	COMPARE s5, 01
+ 	JUMP NZ, get_digit_2		;loop
+
+ 	INPUT s7, input_data		;get input data
+
+ 	COMPARE s7, ascii_0		;if zero flag set (input s3 == ascii 0)
+ 	CALL Z, talkword0
+ 	JUMP Z, get_equal
+ 	COMPARE s7, ascii_1
+  	CALL Z, talkword1
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_2
+  	CALL Z, talkword2
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_3
+  	CALL Z, talkword3
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_4
+  	CALL Z, talkword4
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_5
+  	CALL Z, talkword5
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_6
+  	CALL Z, talkword6
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_7
+  	CALL Z, talkword7
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_8
+  	CALL Z, talkword8
+  	JUMP Z, get_equal
+  	COMPARE s7, ascii_9
+  	CALL Z, talkword9
+  	JUMP Z, get_equal
+
+ 	CALL talkworderror		;else output error
+ 	JUMP get_digit_2
+
+get_equal:
+	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
+ 	COMPARE s5, 01
+ 	JUMP NZ, get_equal		;loop
+
+ 	INPUT s8, input_data		;get input data
+
+ 	COMPARE s8, ascii_EQUAL
+  	CALL Z, talkwordequals
+  	JUMP Z, calculate
+
+  	CALL talkworderror		;else output error
+  	JUMP get_equal
+
+calculate:			; s3 +/- s7
+	COMPARE s6, ascii_MINUS
+  	JUMP Z, op_minus			;minus operation
+op_plus:						;plus operation
+	ADD s3, s7
+	SUB s3, 60				;sub 60 from total to get hex sum, not ascii
+	JUMP result
+
+op_minus:
+	SUB s3, s7
+
+	COMPARE s3, 80              ;check left bit for negative
+    JUMP C, result      		;if positive, get result
+
+    CALL talkwordminus			;else call talkwordminus
+
+    XOR s3, FF                  ;take complement & abs value
+    ADD s3, 01
+
+    JUMP result
+
+result:
+	COMPARE s3, 00		;if zero flag set (input s3 == ascii 0)
+ 	CALL Z, talkword0
+ 	COMPARE s3, 01
+  	CALL Z, talkword1
+  	COMPARE s3, 02
+  	CALL Z, talkword2
+  	COMPARE s3, 03
+  	CALL Z, talkword3
+  	COMPARE s3, 04
+  	CALL Z, talkword4
+  	COMPARE s3, 05
+  	CALL Z, talkword5
+  	COMPARE s3, 06
+  	CALL Z, talkword6
+  	COMPARE s3, 07
+  	CALL Z, talkword7
+  	COMPARE s3, 08
+  	CALL Z, talkword8
+  	COMPARE s3, 09
+  	CALL Z, talkword9
+  	COMPARE s3, 0A
+  	CALL Z, talkword10
+  	COMPARE s3, 0B
+  	CALL Z, talkword11
+  	COMPARE s3, 0C
+  	CALL Z, talkword12
+  	COMPARE s3, 0D
+  	CALL Z, talkword13
+  	COMPARE s3, 0E
+  	CALL Z, talkword14
+  	COMPARE s3, 0F
+  	CALL Z, talkword15
+  	COMPARE s3, 10
+  	CALL Z, talkword16
+  	COMPARE s3, 11
+  	CALL Z, talkword17
+  	COMPARE s3, 12
+  	CALL Z, talkword18
+
+  	JUMP reset
+
+reset:
+	LOAD s3, 00
+	LOAD s4, 00
+	LOAD s5, 00
+	LOAD s6, 00
+	LOAD s7, 00
+	LOAD s8, 00
+
+	JUMP cold_start
 
 
 ;;============================================================================
@@ -245,35 +404,41 @@ talkword0:
 	call	talkphonemeEH
 	call	talkphonemeRR2
 	call	talkphonemeOW
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword1:
 	call	talkphonemeWW
 	call	talkphonemeAO
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword2:
 	call	talkphonemeTT2
 	call	talkphonemeUW2
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword3:
 	call	talkphonemeTH
 	call	talkphonemeRR2
 	call	talkphonemeIY
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword4:
 	call	talkphonemeFF
 	call	talkphonemeOR
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword5:
 	call	talkphonemeFF
 	call	talkphonemeAY
 	call	talkphonemeVV
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword6:
 	call	talkphonemeSS
@@ -281,7 +446,8 @@ talkword6:
 	call	talkphonemeKK2
 	call	talkphonemeSS
 	call	talkphonemeSS
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword7:
 	call	talkphonemeSS
@@ -289,24 +455,28 @@ talkword7:
 	call	talkphonemeVV
 	call	talkphonemeAX
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword8:
 	call	talkphonemeEY
 	call	talkphonemeTT1
-	jump done_audio
+	;call 	done_audio
+	return
 
 talkword9:
 	call	talkphonemeNN2
 	call	talkphonemeAY
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword10:
 	call	talkphonemeTT2
 	call	talkphonemeEH
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword11:
 	call	talkphonemeIH
@@ -315,7 +485,8 @@ talkword11:
 	call	talkphonemeVV
 	call	talkphonemeEH
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword12:
 	call	talkphonemeTT2
@@ -323,7 +494,8 @@ talkword12:
 	call	talkphonemeEH
 	call	talkphonemeEL
 	call	talkphonemeVV
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword13:
 	call	talkphonemeTH
@@ -334,7 +506,8 @@ talkwordteen:
 	call	talkphonemeTT2
 	call	talkphonemeIY
 	call	talkphonemeNN1
-	jump done_audio
+	call 	done_audio
+	return
 
 talkword14:
 	call	talkword4
@@ -358,12 +531,6 @@ talkword18:
 	call	talkword8
 	JUMP	talkwordteen
 
-talkworderror:
-	call talkphonemeEH
-	call talkphonemeXR
-	call talkphonemeOR
-	jump done_audio
-
 talkwordplus:
 	call talkphonemePP
 	call talkphonemeLL
@@ -371,7 +538,8 @@ talkwordplus:
 	call talkphonemeAX
 	call talkphonemeSS
 	call talkphonemeSS
-	jump done_audio
+	call done_audio
+	return
 
 talkwordminus:
 	call talkphonemeMM
@@ -382,7 +550,8 @@ talkwordminus:
     call talkphonemeAX
     call talkphonemeSS
     call talkphonemeSS	
-	jump done_audio
+	call done_audio
+	return
 
 talkwordequals:
 	call talkphonemeIY
@@ -393,7 +562,15 @@ talkwordequals:
 	call talkphonemeAX
 	call talkphonemeEL
 	call talkphonemeZZ
-	jump done_audio
+	call done_audio
+	return
+
+talkworderror:
+	call talkphonemeEH
+	call talkphonemeXR
+	call talkphonemeOR
+	call done_audio
+	return
 
 ;=====================================================
 
