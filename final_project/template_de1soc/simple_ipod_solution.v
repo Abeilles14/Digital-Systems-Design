@@ -254,9 +254,8 @@ logic silent_flag, picoblaze_start_flag, picoblaze_done_flag, visualizer_flag, d
 logic enc_disparity, dec_disparity, disparity_err, K_char;
 logic [9:0] enc_audio;
 
-//keyboard
-logic [7:0] valid_character;
-logic invalid_char_flag, audio_done_flag, audio_start_flag;
+//keyboard and calculator
+logic audio_done_flag, audio_start_flag;
 
 //FLASH READ only
 assign flash_mem_write = 1'b0;
@@ -332,9 +331,7 @@ audio_averaging visualizer(
   .start_averaging_flag(visualizer_flag),
   .input_audio(audio_out),
   .silent_flag(silent_flag),
-  .led_out(ledtemp));//LED[9:2]));
-
-logic ledtemp;
+  .led_out(LED[9:2]));
 
 encoder_8b10b encoder (
   .SBYTECLK(CLK_50M),
@@ -366,17 +363,13 @@ keyboard_control keyboard_input(
 	.clk(clk_7200hz_sync),
 	.read_keyboard_flag(read_keyboard_flag),
 	.character(kbd_received_ascii_code),
-  .valid_char(valid_character),
-  .error_flag(invalid_char_flag),
 	.read_addr_start(read_addr_start),
-  .audio_done_flag(audio_done_flag),
-  .led0(LED[0]));
+  .audio_done_flag(audio_done_flag));
 
-logic led1;
-assign LED[1] = audio_done_flag;
-assign LED[2] = read_addr_start;  //
-assign LED[3] = kbd_data_ready;
-assign LED[4] = read_keyboard_flag;
+// assign LED[1] = audio_done_flag;
+// assign LED[2] = read_addr_start;  //
+// assign LED[3] = kbd_data_ready;
+// assign LED[4] = read_keyboard_flag;
 
 flash flash_inst(
     .clk_clk                 (CLK_50M),
@@ -402,11 +395,10 @@ wire [7:0] audio_data;
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   .clk(CLK_50M),
   .input_data(kbd_received_ascii_code),//valid_character),
-  .error_flag(invalid_char_flag),
   .interrupt_flag(start_read_flag),
   .phoneme_out(phoneme_sel),
   .start_phoneme_flag(picoblaze_start_flag),
-  .start_word_flag(read_keyboard_flag),//read_addr_start),
+  .start_word_flag(read_keyboard_flag),
   .done_phoneme_flag(picoblaze_done_flag),
   .done_word_flag(audio_done_flag)
   ); //interrupt routine flag
@@ -749,8 +741,8 @@ end
 assign Seven_Seg_Data[0] = div_clk_7200hz[3:0];
 assign Seven_Seg_Data[1] = div_clk_7200hz[7:4];
 assign Seven_Seg_Data[2] = div_clk_7200hz[11:8];
-assign Seven_Seg_Data[3] = valid_character[3:0];//div_clk_7200hz[15:12];
-assign Seven_Seg_Data[4] = valid_character[7:4];//div_clk_7200hz[19:16];
+assign Seven_Seg_Data[3] = div_clk_7200hz[15:12];
+assign Seven_Seg_Data[4] = div_clk_7200hz[19:16];
 
 assign actual_7seg_output =  scope_sampling_clock_count;
 
