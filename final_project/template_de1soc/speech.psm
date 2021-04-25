@@ -169,121 +169,69 @@ CONSTANT phoneme_GG2      , 3D    ; phoneme code
 CONSTANT phoneme_EL       , 3E    ; phoneme code
 CONSTANT phoneme_BB2      , 3F    ; phoneme code
 
-CONSTANT phoneme_out 	, 80
-CONSTANT done_flag 		, 00
-CONSTANT start_flag 	, 01
+;INPUTS
+CONSTANT input_data				, 40
+CONSTANT start_phoneme_flag 	, 00
+CONSTANT start_word_flag		, 02
+CONSTANT error_flag				, 20
 
+;OUTPUTS
+CONSTANT phoneme_out 			, 80
+CONSTANT done_phoneme_flag 		, 01
+CONSTANT done_word_flag			, 10
 
 ;;============================================================================
 ;; Infinite loop.
 ;;============================================================================
 
- cold_start: 
- 	CALL talkphonemePA6
-	CALL talkphonemePA6
-    CALL talkword0
-	CALL talkphonemePA6
-	CALL talkword1
-	CALL talkphonemePA6
-	CALL talkword2
-	CALL talkphonemePA6
-	CALL talkword3
-	CALL talkphonemePA6
-	CALL talkword4
-	CALL talkphonemePA6
-	CALL talkword5
-	CALL talkphonemePA6
-	CALL talkword6
-	CALL talkphonemePA6
-	CALL talkword7
-	CALL talkphonemePA6
-	CALL talkword8
-	CALL talkphonemePA6
-	CALL talkword9
-	CALL talkphonemePA6
-	CALL talkword10
-	CALL talkphonemePA6
-	CALL talkword11
-	CALL talkphonemePA6
-	CALL talkword12
-	CALL talkphonemePA6
-	CALL talkword13
-	CALL talkphonemePA6
-	CALL talkword14
-	CALL talkphonemePA6
-	CALL talkword15
-	CALL talkphonemePA6
-	CALL talkword16
-	CALL talkphonemePA6
-	CALL talkword17
-	CALL talkphonemePA6
-	CALL talkword18
-	CALL talkphonemePA6
-	CALL talkword19
-	CALL talkphonemePA6
-	CALL talkword20
-	CALL talkphonemePA6
+ cold_start:
+ 	INPUT s5, start_word_flag	;wait for start flag, key stroke entered
+ 	COMPARE s5, 01
+ 	JUMP Z, get_input
+loop: jump cold_start
 
- loop: JUMP cold_start ; loop forever
+done_audio:
+ 	LOAD s4, 01					;done flag
+ 	OUTPUT s4, done_word_flag
 
-    ;following words are not said, feel free to play with them for fun
-	  
-	CALL talkphonemePA6
-	CALL talkword30
-	CALL talkphonemePA6
-	CALL talkword40
-	CALL talkphonemePA6
-	CALL talkword50
-	CALL talkphonemePA6
-	CALL talkword60
-	CALL talkphonemePA6
-	CALL talkword70
-	CALL talkphonemePA6
-	CALL talkword80
-	CALL talkphonemePA6
-	CALL talkword90
-	CALL talkphonemePA6
-	CALL talkwordhundred
-	CALL talkworddepth
-	CALL talkphonemePA6
-	CALL talkwordpoint
-	CALL talkphonemePA6
-	CALL talkwordanchor
-	CALL talkphonemePA6
-	CALL talkwordalarm
-	CALL talkphonemePA6
-	CALL talkwordon
-	CALL talkphonemePA6
-	CALL talkwordoff
-	CALL talkphonemePA6
-	CALL talkwordshallow
-	CALL talkphonemePA6
-	CALL talkwordand
-	CALL talkphonemePA6
-	CALL talkwordwatch
-	CALL talkphonemePA6
-	CALL talkwordgps
-	CALL talkphonemePA6
-	CALL talkwordlimit
-	CALL talkphonemePA6
-	CALL talkwordset
-	CALL talkphonemePA6
-	CALL talkwordheading
-	CALL talkphonemePA6
-	CALL talkwordno
-	CALL talkphonemePA6
-	CALL talkwordnorth
-	CALL talkphonemePA6
-	CALL talkwordsouth
-	CALL talkphonemePA6
-	CALL talkwordeast
-	CALL talkphonemePA6
-	CALL talkwordwest
-	CALL talkphonemePA6
-	CALL talkwordposition
-	CALL talkphonemePA6
-	
-            loop2: JUMP cold_start ; loop forever
+ 	LOAD s3, 00					;clear input
+
+ 	JUMP cold_start				;loop to cold_start
+
+ get_input:
+ 	LOAD s4, 00					;reset done flag
+ 	OUTPUT s4, done_word_flag
+
+ 	INPUT s3, input_data		;get input data
+
+ 	COMPARE s3, ascii_0		;if zero flag set (input s3 == ascii 0)
+ 	JUMP Z, talkword0
+ 	COMPARE s3, ascii_1
+  	JUMP Z, talkword1
+  	COMPARE s3, ascii_2
+  	JUMP Z, talkword2
+  	COMPARE s3, ascii_3
+  	JUMP Z, talkword3
+  	COMPARE s3, ascii_4
+  	JUMP Z, talkword4
+  	COMPARE s3, ascii_5
+  	JUMP Z, talkword5
+  	COMPARE s3, ascii_6
+  	JUMP Z, talkword6
+  	COMPARE s3, ascii_7
+  	JUMP Z, talkword7
+  	COMPARE s3, ascii_8
+  	JUMP Z, talkword8
+  	COMPARE s3, ascii_9
+  	JUMP Z, talkword9
+  	COMPARE s3, ascii_MINUS
+  	JUMP Z, talkwordminus
+  	COMPARE s3, ascii_PLUS
+  	JUMP Z, talkwordplus
+  	COMPARE s3, ascii_EQUAL
+  	JUMP Z, talkwordequals
+
+  	JUMP talkworderror		;else output error
 
 
 ;;============================================================================
@@ -297,35 +245,35 @@ talkword0:
 	call	talkphonemeEH
 	call	talkphonemeRR2
 	call	talkphonemeOW
-	return
+	jump done_audio
 
 talkword1:
 	call	talkphonemeWW
 	call	talkphonemeAO
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword2:
 	call	talkphonemeTT2
 	call	talkphonemeUW2
-	return
+	jump done_audio
 
 talkword3:
 	call	talkphonemeTH
 	call	talkphonemeRR2
 	call	talkphonemeIY
-	return
+	jump done_audio
 
 talkword4:
 	call	talkphonemeFF
 	call	talkphonemeOR
-	return
+	jump done_audio
 
 talkword5:
 	call	talkphonemeFF
 	call	talkphonemeAY
 	call	talkphonemeVV
-	return
+	jump done_audio
 
 talkword6:
 	call	talkphonemeSS
@@ -333,7 +281,7 @@ talkword6:
 	call	talkphonemeKK2
 	call	talkphonemeSS
 	call	talkphonemeSS
-	return
+	jump done_audio
 
 talkword7:
 	call	talkphonemeSS
@@ -341,24 +289,24 @@ talkword7:
 	call	talkphonemeVV
 	call	talkphonemeAX
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword8:
 	call	talkphonemeEY
 	call	talkphonemeTT1
-	return
+	jump done_audio
 
 talkword9:
 	call	talkphonemeNN2
 	call	talkphonemeAY
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword10:
 	call	talkphonemeTT2
 	call	talkphonemeEH
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword11:
 	call	talkphonemeIH
@@ -367,7 +315,7 @@ talkword11:
 	call	talkphonemeVV
 	call	talkphonemeEH
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword12:
 	call	talkphonemeTT2
@@ -375,17 +323,18 @@ talkword12:
 	call	talkphonemeEH
 	call	talkphonemeEL
 	call	talkphonemeVV
-	return
+	jump done_audio
 
 talkword13:
 	call	talkphonemeTH
 	call	talkphonemeER2
+	JUMP    talkwordteen
 
 talkwordteen:
 	call	talkphonemeTT2
 	call	talkphonemeIY
 	call	talkphonemeNN1
-	return
+	jump done_audio
 
 talkword14:
 	call	talkword4
@@ -413,7 +362,7 @@ talkworderror:
 	call talkphonemeEH
 	call talkphonemeXR
 	call talkphonemeOR
-	return
+	jump done_audio
 
 talkwordplus:
 	call talkphonemePP
@@ -422,7 +371,7 @@ talkwordplus:
 	call talkphonemeAX
 	call talkphonemeSS
 	call talkphonemeSS
-	return
+	jump done_audio
 
 talkwordminus:
 	call talkphonemeMM
@@ -433,7 +382,7 @@ talkwordminus:
     call talkphonemeAX
     call talkphonemeSS
     call talkphonemeSS	
-	return 		;JUMP back to fsm
+	jump done_audio
 
 talkwordequals:
 	call talkphonemeIY
@@ -444,7 +393,7 @@ talkwordequals:
 	call talkphonemeAX
 	call talkphonemeEL
 	call talkphonemeZZ
-	return
+	jump done_audio
 
 ;=====================================================
 
@@ -651,17 +600,18 @@ endword:
 
 say_phoneme:  
 	              ;make sure  to complete this subroutine in order for the synthesizer to work
-	LOAD s2, 01
-	INPUT s1, done_flag		;check if start routine
+	;LOAD s2, 01
+	INPUT s1, start_phoneme_flag		;check if start routine
 	COMPARE s1, 01
 	JUMP NZ, say_phoneme
 				  
 	OUTPUT s0, phoneme_out
-	OUTPUT s2, start_flag
 
+	LOAD s2, 01
+	OUTPUT s2, done_phoneme_flag
  	LOAD s2, 00
+	OUTPUT s2, done_phoneme_flag
 
-	OUTPUT s2, start_flag
     RETURN
 
 

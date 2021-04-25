@@ -369,10 +369,8 @@ keyboard_control keyboard_input(
   .valid_char(valid_character),
   .error_flag(invalid_char_flag),
 	.read_addr_start(read_addr_start),
-  .picoblaze_done_flag(picoblaze_done_flag),
   .audio_done_flag(audio_done_flag),
-  .led0(LED[0]),
-  .led1(led1));
+  .led0(LED[0]));
 
 logic led1;
 assign LED[1] = audio_done_flag;
@@ -403,7 +401,7 @@ wire [7:0] audio_data;
 //using picoblaze
 picoblaze_template #(.clk_freq_in_hz(25000000)) picoblaze_template_inst(
   .clk(CLK_50M),
-  .input_data(valid_character),
+  .input_data(kbd_received_ascii_code),//valid_character),
   .error_flag(invalid_char_flag),
   .interrupt_flag(start_read_flag),
   .phoneme_out(phoneme_sel),
@@ -751,8 +749,8 @@ end
 assign Seven_Seg_Data[0] = div_clk_7200hz[3:0];
 assign Seven_Seg_Data[1] = div_clk_7200hz[7:4];
 assign Seven_Seg_Data[2] = div_clk_7200hz[11:8];
-assign Seven_Seg_Data[3] = div_clk_7200hz[15:12];
-assign Seven_Seg_Data[4] = div_clk_7200hz[19:16];
+assign Seven_Seg_Data[3] = valid_character[3:0];//div_clk_7200hz[15:12];
+assign Seven_Seg_Data[4] = valid_character[7:4];//div_clk_7200hz[19:16];
 
 assign actual_7seg_output =  scope_sampling_clock_count;
 

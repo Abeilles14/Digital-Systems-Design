@@ -3,27 +3,25 @@
 
 module keyboard_control
 	(input logic clk,
-	 input logic read_keyboard_flag,		//sync with 7200hz clk
+	 input logic read_keyboard_flag,		//key stroke detected
 	 input logic [7:0] character,			//keyboard input ascii
 	 output logic [7:0] valid_char,			//keyboard output ascii
 	 output logic error_flag,				//if char not valid
 	 output logic read_addr_start,			//play/pause
-	 input logic picoblaze_done_flag,
 	 input logic audio_done_flag,
-	 output logic led0,
-	 output logic led1);
+	 output logic led0);
 
-	logic [3:0] state;
+	logic [4:0] state;
 
-	parameter IDLE = 4'b0000;
-	parameter WAIT_DIGIT_1 = 4'b0001;
-	parameter WAIT_SIGN = 4'b0010;
-	parameter WAIT_DIGIT_2 = 4'b0011;
-	parameter WAIT_EQUAL = 4'b0100;
-	parameter CALCULATE = 4'b0101;
-	parameter DONE = 4'b0110;
+	parameter IDLE = 5'b000_00;
+	parameter WAIT_DIGIT_1 = 5'b001_00;
+	parameter WAIT_AUDIO = 5'b010_01;
 
-	parameter WAIT_AUDIO = 4'b0111;
+	parameter WAIT_SIGN = 5'b011_00;
+	parameter WAIT_DIGIT_2 = 5'b100_00;
+	parameter WAIT_EQUAL = 5'b101_00;
+	parameter CALCULATE = 5'b110_00;
+	parameter DONE = 5'b111_10;
 
 	parameter character_0 =8'h30;
 	parameter character_1 =8'h31;
@@ -45,47 +43,46 @@ module keyboard_control
 
 	initial begin
 		led0 = 1'b0;
-		led1 = 1'b0;
 		read_addr_start = 1'b0;
 		valid_char = 8'hxx;
         state = IDLE;		//initially start forward enabled
     end
 
+    assign read_addr_start = state[0];
+
 	always_ff @(posedge clk)
 	begin
 		case(state)
 			IDLE: begin
-				read_addr_start <= 1'b0;
-				valid_char <= 8'hxx;
-
 				if(read_keyboard_flag)
+				begin
+					valid_char <= character;
 					state <= WAIT_DIGIT_1;
+				end
 				else
 					state <= IDLE;
 			end
 			WAIT_DIGIT_1: begin
 				led0 <= ~led0;
-				read_addr_start <= 1'b1;
-				valid_char <= character;
 				state <= WAIT_AUDIO;
 			end
 			WAIT_AUDIO: begin
-				read_addr_start <= 1'b1;
 				if(audio_done_flag)
 				begin
-					led1 <= ~led1;
+					valid_char <= 8'hxx;
 					state <= DONE;
 				end
 				else
+				begin
+					valid_char <= valid_char;
 					state <= WAIT_AUDIO;
+				end
 			end
 			DONE: begin
-				read_addr_start <= 1'b0;
 				valid_char <= 8'hxx;
 				state <= IDLE;
 			end
 			default: begin
-				read_addr_start <= 1'b0;
 				valid_char <= 8'hxx;
 				state <= IDLE;
 			end

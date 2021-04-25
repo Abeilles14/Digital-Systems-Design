@@ -2,28 +2,38 @@ module keyboard_control_tb();
 	logic clk;
 	logic read_keyboard_flag;
 	logic [7:0] character;
+	logic [7:0] valid_char;
+	logic error_flag;
 	logic read_addr_start;
-	logic dir;
-	logic reset;
+	logic audio_done_flag;
+	output logic led0;
 
-	parameter character_B =8'h42;
-	parameter character_D =8'h44;
-	parameter character_E =8'h45;
-	parameter character_F =8'h46;
-	parameter character_R =8'h52;
+	parameter character_0 =8'h30;
+	parameter character_1 =8'h31;
+	parameter character_2 =8'h32;
+	parameter character_3 =8'h33;
+	parameter character_4 =8'h34;
+	parameter character_5 =8'h35;
+	parameter character_6 =8'h36;
+	parameter character_7 =8'h37;
+	parameter character_8 =8'h38;
+	parameter character_9 =8'h39;
 
-	keyboard_control DUT(
-		.clk(clk),
-		.read_keyboard_flag(read_keyboard_flag),
-		.character(character),
-		.read_addr_start(read_addr_start),
-		.dir(dir),
-		.reset(reset));
+keyboard_control DUT(
+	.clk(clk),
+	.read_keyboard_flag(read_keyboard_flag),
+	.character(kbd_received_ascii_code),
+	.valid_char(valid_character),
+	.error_flag(invalid_char_flag),
+	.read_addr_start(read_addr_start),
+	.audio_done_flag(audio_done_flag),
+	.led0(LED[0]));
 
 	initial				//initial block
 	begin
-		reset = 1'b1;	//initially at reset state
-		dir = 1'b1;
+		error_flag = 1'b0;
+
+		audio_done_flag = 1'b1;
 
     	clk = 0;		//simulates clk every 5ps
     	#5;
@@ -36,35 +46,18 @@ module keyboard_control_tb();
     	end
   	end
 
-  	initial				//initial block
-	begin
-    	read_keyboard_flag = 0;		//simulates clk every 15ps
-    	#15;
-    	forever
-    	begin
-      		read_keyboard_flag = 1 ;			//simulate clk
-      		#15;
-      		read_keyboard_flag = 0 ;
-      		#15;
-    	end
-  	end
-
 	initial begin
-		character = character_E;		//playing forward
-		#30;
-
-		character = character_D;		//pause forward
-		#30;
-
-		character = character_B;		//pause backward
-		#30;
-
-		character = character_E;		//playing backward
-		#30;
-
-		character = character_R;		//restart backward
-		#30;
-
+		#10;
+		read_keyboard_flag = 1'b1;
+		character = character_9;
+		#20;
+		read_keyboard_flag = 1'b0;
+		audio_done_flag = 1'b1;
+		#10;
+		audio_done_flag = 1'b0
+		#10;
+		read_keyboard_flag = 1'b1;
+		character = character_4;
+		#5000;
 	end
-
 endmodule
