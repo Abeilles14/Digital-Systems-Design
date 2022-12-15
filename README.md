@@ -134,3 +134,37 @@ The signals were shown on the VGA screen. a DDS and LFSR were instantiated and c
 
 A 5-bit LFSR running at a clock rate of 1 Hz, generated using a frequency divider, and synchronized using a fast-to-slow synchronizer to handle the clock domain crossing logic. A DDS was instantiated to generate a 3 Hz carrier sine wave. The LFSR was then used to modulate the DDS carrier sine to generate ASK (OOK) and BPSK signals.  
 The modulated signals and DDS outputs and LFSR were connected through muxes controlled by the Nios, to the VGA oscilloscope for display. To generate the FSK signal, the LFSR, LFSR clock, and DDS signalsy were connected to the Qsys using the Nios and interrupts. Through out the process, appropriate clock crossing logic was implemented to handle instances of clock domain crossing.
+
+## Final Project
+
+In this final project acting as the course's final exam, a talking calculator was created using code that emulates the SPO256 speech synthesizer controlled by a Picoblaze processor, and will be able to pronounce any words based on their phonetic decomposition into phonemes. The speed of the speech will be controlled by the buttons and the calculator will be controlled via the keyboard. The calculator functionality was implemented in the Picoblaze processor in Assembly.
+
+### Phonemes
+The audio samples of the phonemes were sampled at a rate of 7200 Hz. This is also the nominal rate at
+which they need to be played back.
+
+The phonemes will be stored in the flash memory. The Picoblaze processor will interface to FSMs that read that flash memory in order to play phonemes to form words.
+
+The narrator_ctrl.v file contains a registered MUX which provides the outputs "start_address", "end_address", and "silent" that correspond to each phoneme code. The signals "start_address" and "end_address" are the start address and end address in the flash memory containing the audio data of the phoneme. There are five phonemes (PA1 to PA5) which are silence phonemes. These correspond to the "silent" signal being turned on and this signal should be used to silence the audio for the duration of the read from flash for these phonemes.
+
+### Audio Samples
+Layout of the audio: the audio is 8 bit audio, with four 8-bit samples per 32-bit word in flash, as follows:
+
+```
+Word Address 0:|Sample 3(8-bits) |Sample 2(8-bits) |Sample 1(8-bits)|Sample 0(8-bits)|
+Word Address 1:|Sample 7(8-bits) |Sample 6(8-bits) |Sample 5(8-bits)|Sample 4(8-bits)|
+Word Address 2:|Sample 11(8-bits)|Sample 10(8-bits)|Sample 9(8-bits)|Sample 8(8-bits)|
+```
+
+Sample 0 is in bits [7:0], sample 1 is in bits [15:8], sample 2 is in bits [23:16], sample 3 is in bits [31:24], etcetera.
+
+### Volume Intensity Meter
+Additionally, an LED display showing the averaged intensity of the audio signal, identical to Lab 3 except calculated via an FSM in Verilog rather than in the Picoblaze.  
+* The absolute value of the 8-bit audio samples was taken
+* The sum of absolute values of the 256 audio samples was taken
+* Every 256 audio samples get the average of the previous 256 samples by dividing the sum of those samples by 256 using shift right by the correct number of bits
+* The LEDs light up to the value of the most significant binary digit of the average. For example, if the average of the absolute values is, in binary, 00101101, then since the highest bit that is "1" is bit #5 (where bit #0 is the LSB), the LEDs should be XXXXXX00 (where "X" is on and "0" is off)
+
+### 8b10b Coding and Decoding
+An 8b10b serial link was partially emulated to practice using 8b10b codes. The 8 bit audio data were encoded it using 8b10b coding then decoded The decoded audio data (which should be identical to the original data) is sent to the audio.
+The "silent" signal should also be passed through the 8b10b encode/decode process as a control character, the K28.5 character. When this character is detected after decoding, the audio is muted.
